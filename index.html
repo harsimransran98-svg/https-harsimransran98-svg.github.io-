@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bazozo.in | Premium Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2 family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background-color: #0b0b0b; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Sticky placeholders should not conflict with standard pages */
+        #navbar-placeholder { width: 100%; position: fixed; top: 0; z-index: 2000; }
+
+        /* --- THE CINEMATIC SCROLL EXPERIENCE --- */
+        .scroll-container {
+            position: relative;
+            width: 100%;
+            /* Length controls how long the user has to scroll through the animation steps */
+            height: 300vh; 
+            background-color: #000000;
+        }
+
+        /* The viewport window that locks to the screen */
+        .sticky-viewport {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Center Showcase Object (Your Product) */
+        .product-showcase {
+            position: absolute;
+            width: 85%;
+            max-width: 380px;
+            z-index: 2;
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        .product-showcase img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(255,255,255,0.05));
+        }
+
+        /* Text Presentation Layout */
+        .text-step {
+            position: absolute;
+            width: 85%;
+            max-width: 450px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            z-index: 5;
+            padding: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Align steps differently to mimic layout variations */
+        .step-1 { left: 8%; top: 25%; text-align: left; }
+        .step-2 { right: 8%; bottom: 25%; text-align: right; }
+
+        .text-step h2 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .text-step p {
+            font-size: 16px;
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+
+        /* When trigger class gets applied by JavaScript */
+        .text-step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- CALL TO ACTION ZONE --- */
+        .action-zone {
+            background: #0b0b0b;
+            padding: 100px 5%;
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .action-zone h3 { font-size: 28px; margin-bottom: 20px; color: #ffffff; }
+
+        .buy-button { 
+            display: inline-block; 
+            background-color: #00E5E5; 
+            color: #1A2B49; 
+            font-weight: 700; 
+            font-size: 18px; 
+            padding: 15px 40px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            box-shadow: 0 4px 15px rgba(0, 229, 229, 0.4); 
+            transition: transform 0.2s ease; 
+        }
+        .buy-button:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="scroll-container">
+        <div class="sticky-viewport">
+            
+            <div class="product-showcase" id="moving-product">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" alt="Sofi Pod">
+            </div>
+
+            <div class="text-step step-1" id="text1">
+                <h2>long life</h2>
+                <p>Designed with exceptional architecture components, optimizing performance values smoothly across daily cycles.</p>
+            </div>
+
+            <div class="text-step step-2" id="text2">
+                <h2>connected</h2>
+                <p>Advanced ecosystem integration allows seamless management and cloud telemetry variables instantly.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <section class="action-zone">
+        <h3>Ready to experience the future?</h3>
+        <a href="#" class="buy-button">Buy Now</a>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        // Synchronously fetch structural layouts
+        fetch('navbar.html').then(res => res.text()).then(data => document.getElementById('navbar-placeholder').innerHTML = data);
+        fetch('footer.html').then(res => res.text()).then(data => document.getElementById('footer-placeholder').innerHTML = data);
+
+        // Calculate Scroll Ranges and map animations
+        const container = document.querySelector('.scroll-container');
+        const product = document.getElementById('moving-product');
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+
+        window.addEventListener('scroll', () => {
+            const containerTop = container.offsetTop;
+            const containerHeight = container.offsetHeight - window.innerHeight;
+            const scrolled = window.scrollY - containerTop;
+            
+            // Percentage tracking inside scroll frame (0 to 1)
+            let progress = scrolled / containerHeight;
+            if (progress < 0) progress = 0;
+            if (progress > 1) progress = 1;
+
+            if (scrolled >= 0 && scrolled <= containerHeight) {
+                // Subtle rotation effect on the product as user moves up or down
+                const rotationDegrees = progress * 45; 
+                product.style.transform = `rotate(${rotationDegrees}deg) scale(${1 + progress * 0.1})`;
+                
+                // Track Text step triggers based on scroll milestones
+                if (progress > 0.15 && progress < 0.45) {
+                    text1.classList.add('active');
+                } else {
+                    text1.classList.remove('active');
+                }
+
+                if (progress > 0.55 && progress < 0.85) {
+                    text2.classList.add('active');
+                } else {
+                    text2.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
