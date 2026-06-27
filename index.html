@@ -3,189 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bazozo.in | Premium Showcase</title>
+    <title>bazozo.in | Premium Store</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2 family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        body { background-color: #0b0b0b; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        body { background-color: #F8F9FA; color: #333333; display: flex; flex-direction: column; min-height: 100vh; padding-bottom: 70px; /* Space for sticky mobile button */ }
         
-        /* Sticky placeholders should not conflict with standard pages */
-        #navbar-placeholder { width: 100%; position: fixed; top: 0; z-index: 2000; }
+        #navbar-placeholder { width: 100%; position: sticky; top: 0; z-index: 2000; }
 
-        /* --- THE CINEMATIC SCROLL EXPERIENCE --- */
-        .scroll-container {
+        /* --- IMAGE SLIDER MECHANISM --- */
+        .slider-wrapper {
             position: relative;
-            width: 100%;
-            /* Length controls how long the user has to scroll through the animation steps */
-            height: 300vh; 
-            background-color: #000000;
+            max-width: 600px;
+            width: 95%;
+            margin: 20px auto 10px auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            background: #fff;
         }
 
-        /* The viewport window that locks to the screen */
-        .sticky-viewport {
-            position: sticky;
-            top: 0;
+        .slider-container {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             width: 100%;
-            height: 100vh;
+        }
+
+        .slide-item {
+            min-width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
-        /* Center Showcase Object (Your Product) */
-        .product-showcase {
-            position: absolute;
-            width: 85%;
-            max-width: 380px;
-            z-index: 2;
-            transition: transform 0.1s ease-out;
-            pointer-events: none;
-        }
-
-        .product-showcase img {
+        .slide-item img {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 30px rgba(255,255,255,0.05));
+            max-height: 400px;
+            object-fit: contain;
         }
 
-        /* Text Presentation Layout */
-        .text-step {
+        /* Slider Controls */
+        .slider-btn {
             position: absolute;
-            width: 85%;
-            max-width: 450px;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            z-index: 5;
-            padding: 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(26, 43, 73, 0.8);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 10;
+        }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #CBD5E1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .dot.active { background: #1A2B49; width: 20px; border-radius: 4px; }
+
+        /* --- PRODUCT DESCRIPTION CONTAINER --- */
+        .details-box {
+            max-width: 600px;
+            width: 95%;
+            margin: 15px auto;
+            background: #FFFFFF;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
         }
 
-        /* Align steps differently to mimic layout variations */
-        .step-1 { left: 8%; top: 25%; text-align: left; }
-        .step-2 { right: 8%; bottom: 25%; text-align: right; }
+        .product-brand { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .product-title { color: #1A2B49; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+        
+        .price-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .current-price { font-size: 22px; font-weight: 700; color: #1A2B49; }
+        .old-price { font-size: 16px; color: #94A3B8; text-decoration: line-through; }
+        .discount-tag { background: #DCFCE7; color: #16A34A; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 14px; }
 
-        .text-step h2 {
-            font-size: 36px;
+        .desc-heading { font-weight: 700; color: #1A2B49; margin-bottom: 8px; font-size: 16px; border-top: 1px dashed #E2E8F0; padding-top: 15px; }
+        .desc-text { color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
+
+        /* Video Area */
+        .video-heading { font-weight: 700; color: #1A2B49; margin-bottom: 12px; font-size: 16px; }
+        .video-frame-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .video-frame-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* The Standard Static Buy Button */
+        .btn-anchor-zone { text-align: center; margin: 30px 0 10px 0; }
+        .static-buy-btn {
+            display: inline-block;
+            width: 100%;
+            background-color: #00E5E5;
+            color: #1A2B49;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+            font-size: 18px;
+            padding: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 229, 229, 0.3);
+            transition: transform 0.2s ease;
         }
 
-        .text-step p {
-            font-size: 16px;
-            color: #a0a0a0;
-            line-height: 1.6;
-        }
-
-        /* When trigger class gets applied by JavaScript */
-        .text-step.active {
+        /* --- FIXED BOTTOM STICKY BUTTON (MOBILE INSPIRED) --- */
+        .sticky-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #FFFFFF;
+            padding: 12px 16px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            z-index: 1500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             opacity: 1;
             transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        /* --- CALL TO ACTION ZONE --- */
-        .action-zone {
-            background: #0b0b0b;
-            padding: 100px 5%;
+        .sticky-bottom-bar.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(100%);
+        }
+
+        .sticky-buy-btn {
+            width: 100%;
+            max-width: 560px;
+            background-color: #1A2B49;
+            color: #FFFFFF;
             text-align: center;
-            z-index: 10;
-            position: relative;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(26, 43, 73, 0.2);
         }
-
-        .action-zone h3 { font-size: 28px; margin-bottom: 20px; color: #ffffff; }
-
-        .buy-button { 
-            display: inline-block; 
-            background-color: #00E5E5; 
-            color: #1A2B49; 
-            font-weight: 700; 
-            font-size: 18px; 
-            padding: 15px 40px; 
-            text-decoration: none; 
-            border-radius: 50px; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            box-shadow: 0 4px 15px rgba(0, 229, 229, 0.4); 
-            transition: transform 0.2s ease; 
-        }
-        .buy-button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
     <div id="navbar-placeholder"></div>
 
-    <div class="scroll-container">
-        <div class="sticky-viewport">
-            
-            <div class="product-showcase" id="moving-product">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" alt="Sofi Pod">
+    <div class="slider-wrapper">
+        <button class="slider-btn prev-btn" id="prevSlide">&#10094;</button>
+        <div class="slider-container" id="slideTrack">
+            <div class="slide-item">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" alt="Product Image 1">
             </div>
-
-            <div class="text-step step-1" id="text1">
-                <h2>long life</h2>
-                <p>Designed with exceptional architecture components, optimizing performance values smoothly across daily cycles.</p>
+            <div class="slide-item">
+                <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=800&q=80" alt="Product Image 2">
             </div>
-
-            <div class="text-step step-2" id="text2">
-                <h2>connected</h2>
-                <p>Advanced ecosystem integration allows seamless management and cloud telemetry variables instantly.</p>
+            <div class="slide-item">
+                <img src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=800&q=80" alt="Product Image 3">
             </div>
-
         </div>
+        <button class="slider-btn next-btn" id="nextSlide">&#10095;</button>
     </div>
 
-    <section class="action-zone">
-        <h3>Ready to experience the future?</h3>
-        <a href="#" class="buy-button">Buy Now</a>
-    </section>
+    <div class="slider-dots" id="dotsContainer">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+    </div>
+
+    <main class="details-box">
+        <p class="product-brand">Bazozo Originals</p>
+        <h2 class="product-title">Premium Minimalist Chronograph</h2>
+        
+        <div class="price-row">
+            <span class="current-price">₹652</span>
+            <span class="old-price">₹4,499</span>
+            <span class="discount-tag">86% OFF</span>
+        </div>
+
+        <h3 class="desc-heading">Product Details</h3>
+        <p class="desc-text">
+            Featuring a clean minimalist dial layout with structured quartz movement synchronization. Weather-sealed chassis architecture coupled with ergonomic strap metrics optimized perfectly for premium daily comfort assets.
+        </p>
+
+        <h3 class="video-heading">Product Video Overview</h3>
+        <div class="video-frame-wrapper">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+
+        <div class="btn-anchor-zone" id="buyAnchor">
+            <a href="https://example.com/buy-now-sample-link" class="static-buy-btn">Buy Now</a>
+        </div>
+    </main>
+
+    <div class="sticky-bottom-bar" id="mobileStickyBar">
+        <a href="https://example.com/buy-now-sample-link" class="sticky-buy-btn">Add to Bag / Buy Now</a>
+    </div>
 
     <div id="footer-placeholder"></div>
 
     <script>
-        // Synchronously fetch structural layouts
+        // Fetch global fragments asynchronously
         fetch('navbar.html').then(res => res.text()).then(data => document.getElementById('navbar-placeholder').innerHTML = data);
         fetch('footer.html').then(res => res.text()).then(data => document.getElementById('footer-placeholder').innerHTML = data);
 
-        // Calculate Scroll Ranges and map animations
-        const container = document.querySelector('.scroll-container');
-        const product = document.getElementById('moving-product');
-        const text1 = document.getElementById('text1');
-        const text2 = document.getElementById('text2');
+        /* --- CAROUSEL LOGIC --- */
+        const track = document.getElementById('slideTrack');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        const totalSlides = 3;
+
+        function updateSlider(index) {
+            currentSlide = index;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach(d => d.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
+        }
+
+        nextBtn.addEventListener('click', () => {
+            let nextIndex = (currentSlide + 1) % totalSlides;
+            updateSlider(nextIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            let prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider(prevIndex);
+        });
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => updateSlider(idx));
+        });
+
+        /* --- STICKY CONVERSION BUTTON DETECTOR --- */
+        const stickyBar = document.getElementById('mobileStickyBar');
+        const buyAnchor = document.getElementById('buyAnchor');
 
         window.addEventListener('scroll', () => {
-            const containerTop = container.offsetTop;
-            const containerHeight = container.offsetHeight - window.innerHeight;
-            const scrolled = window.scrollY - containerTop;
-            
-            // Percentage tracking inside scroll frame (0 to 1)
-            let progress = scrolled / containerHeight;
-            if (progress < 0) progress = 0;
-            if (progress > 1) progress = 1;
+            const anchorPosition = buyAnchor.getBoundingClientRect().top;
+            const viewHeight = window.innerHeight;
 
-            if (scrolled >= 0 && scrolled <= containerHeight) {
-                // Subtle rotation effect on the product as user moves up or down
-                const rotationDegrees = progress * 45; 
-                product.style.transform = `rotate(${rotationDegrees}deg) scale(${1 + progress * 0.1})`;
-                
-                // Track Text step triggers based on scroll milestones
-                if (progress > 0.15 && progress < 0.45) {
-                    text1.classList.add('active');
-                } else {
-                    text1.classList.remove('active');
-                }
-
-                if (progress > 0.55 && progress < 0.85) {
-                    text2.classList.add('active');
-                } else {
-                    text2.classList.remove('active');
-                }
+            // If the permanent Buy Now button is visible on the screen, hide the floating bottom panel
+            if (anchorPosition < viewHeight - 40) {
+                stickyBar.classList.add('hidden');
+            } else {
+                stickyBar.classList.remove('hidden');
             }
         });
     </script>
