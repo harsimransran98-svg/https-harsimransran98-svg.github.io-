@@ -1,48 +1,88 @@
 <nav class="navbar">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <a href="index.html" class="logo">Bazozo.in</a>
+    
     <ul class="nav-links">
-        <a href="index.html" class="logo"><i class="fa-solid fa-bag-shopping" style="color: #00E5E5; margin-right: 8px;"></i>Bazozo.in</a>
-
+        <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact Us</a></li>
     </ul>
+
+    <div class="cart-icon-container">
+        <a href="#" class="cart-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+            </svg>
+        </a>
+    </div>
 </nav>
 
 <style>
+    /* Premium Flexbox Alignment Engine */
     .navbar {
         background-color: #1A2B49;
-        padding: 15px;
+        padding: 15px 20px;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-between; /* Pushes Logo left, Cart right, Links distribute */
         align-items: center;
         position: sticky;
         top: 0;
-        z-index: 1000;
+        z-index: 2000;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        width: 100%;
     }
+
     .logo {
         color: #FFFFFF;
         font-weight: 700;
-        font-size: 24px;
+        font-size: 22px;
         text-decoration: none;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
     }
+
     .nav-links {
         display: flex;
         list-style: none;
-        gap: 25px;
+        gap: 15px; /* Perfect spacing for mobile screens */
+        padding: 0 10px;
     }
+
     .nav-links a {
         color: #FFFFFF;
         text-decoration: none;
-        font-weight: 550;
-        font-size: 14px;
-        font-family: roboto;
+        font-weight: 400;
+        font-size: 15px;
         transition: color 0.3s ease;
     }
+
     .nav-links a:hover {
         color: #00E5E5;
+    }
+
+    /* Shopping Cart Wrapper */
+    .cart-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-shrink: 0;
+    }
+
+    .cart-link {
+        color: #FFFFFF; /* Pure White Icon Vibe */
+        display: flex;
+        align-items: center;
+        transition: color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .cart-link:hover {
+        color: #00E5E5;
+    }
+
+    /* Small Screen Optimization to keep everything in one line */
+    @media (max-width: 400px) {
+        .logo { font-size: 19px; }
+        .nav-links { gap: 10px; }
+        .nav-links a { font-size: 13px; }
     }
 </style>
