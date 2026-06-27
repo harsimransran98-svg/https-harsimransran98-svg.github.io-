@@ -3,206 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bazozo.in | Premium Products</title>
-    <!-- Importing Roboto Font from Google Fonts -->
+    <title>bazozo.in | Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Color Variables (60/30/10 Rule) */
-        :root {
-            --bg-color: #F8F9FA;       /* 60% Dominant Background */
-            --primary-trust: #1A2B49;  /* 30% Navy Menu/Text Structure */
-            --eye-catcher: #00E5E5;    /* 10% Vibrant Pop for Button */
-            --text-dark: #333333;
-            --white: #FFFFFF;
-        }
-
-        /* Global Resets */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* --- NAVIGATION MENU BAR --- */
-        .navbar {
-            background-color: var(--primary-trust);
-            padding: 15px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            color: var(--white);
-            font-weight: 700; /* Roboto Bold */
-            font-size: 24px;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 400;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--eye-catcher); /* Subtle glow on hover */
-        }
-
-        /* --- MAIN BODY SECTION --- */
-        .main-container {
-            flex: 1;
-            max-width: 800px;
-            width: 90%;
-            margin: 40px auto;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-
-        .product-title {
-            color: var(--primary-trust);
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-
-        /* Sample Product Image Box */
-        .product-image-container {
-            width: 100%;
-            max-height: 400px;
-            overflow: hidden;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Video Container (Responsive 16:9 Aspect Ratio) */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 35px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Eye-Catching Buy Now Button */
-        .buy-button {
-            display: inline-block;
-            background-color: var(--eye-catcher);
-            color: var(--primary-trust); /* Dark text on bright background for high contrast readability */
-            font-weight: 700;
-            font-size: 18px;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 50px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0, 229, 229, 0.4);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .buy-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 229, 229, 0.6);
-        }
-
-        .buy-button:active {
-            transform: translateY(1px);
-        }
-
-        /* --- FOOTER BAR --- */
-        footer {
-            background-color: var(--primary-trust);
-            color: var(--white);
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            margin-top: auto;
-            border-top: 3px solid var(--eye-catcher);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background-color: #F8F9FA; color: #333333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .main-container { flex: 1; max-width: 800px; width: 90%; margin: 40px auto; background: #FFFFFF; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        .product-title { color: #1A2B49; margin-bottom: 20px; font-size: 28px; }
+        .product-image-container { width: 100%; max-height: 400px; overflow: hidden; border-radius: 8px; margin-bottom: 30px; }
+        .product-image { width: 100%; height: 100%; object-fit: cover; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; margin-bottom: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .buy-button { display: inline-block; background-color: #00E5E5; color: #1A2B49; font-weight: 700; font-size: 18px; padding: 15px 40px; text-decoration: none; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 229, 0.4); transition: transform 0.2s ease; }
+        .buy-button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Menu Bar -->
-    <nav class="navbar">
-        <a href="#" class="logo">bazozo.in</a>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact Us</a></li>
-        </ul>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
-    <!-- Main Content Body -->
     <main class="main-container">
         <h2 class="product-title">Featured Product Showcase</h2>
-        
-        <!-- Sample Product Image -->
         <div class="product-image-container">
-            <!-- Replace the URL inside src="" with your actual product image link later -->
             <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" alt="Sample Product" class="product-image">
         </div>
-
-        <!-- Embedded YouTube Video -->
         <div class="video-container">
-            <!-- Replace 'dQw4w9WgXcQ' with your actual YouTube video ID -->
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
         </div>
-
-        <!-- Eye-Catching Buy Now Button -->
-        <a href="https://example.com/buy-now-sample-link" class="buy-button">Buy Now</a>
+        <a href="#" class="buy-button">Buy Now</a>
     </main>
 
-    <!-- Footer Bar -->
-    <footer>
-        <p>&copy; 2026 Bazozo.in. All rights reserved.</p>
-    </footer>
+    <div id="footer-placeholder"></div>
 
+    <script>
+        // Load the Menu Bar Component
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('navbar-placeholder').innerHTML = data);
+
+        // Load the Footer Component
+        fetch('footer.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+    </script>
 </body>
 </html>
-
