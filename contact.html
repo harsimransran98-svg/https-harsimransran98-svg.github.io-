@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bazozo.in | Contact Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background-color: #F8F9FA; color: #333333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .main-container { flex: 1; max-width: 500px; width: 90%; margin: 40px auto; background: #FFFFFF; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .page-title { color: #1A2B49; margin-bottom: 25px; text-align: center; font-size: 26px; }
+        
+        /* --- FORM DESIGN --- */
+        .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-weight: 700; color: #1A2B49; font-size: 14px; }
+        
+        .form-group input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid #E2E8F0; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus { border-color: #00E5E5; }
+        
+        .submit-btn { 
+            background-color: #00E5E5; 
+            color: #1A2B49; 
+            font-weight: 700; 
+            font-size: 16px; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 229, 229, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 229, 229, 0.5); }
+        .submit-btn:active { transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-container">
+        <h2 class="page-title">Contact Us</h2>
+        
+        <form class="contact-form" action="https://formsubmit.co/harsimransran198@gmail.com" method="POST">
+            
+            <input type="hidden" name="_subject" value="New Bazozo.in Form Submission!">
+            
+            <input type="hidden" name="_next" value="https://bazozo.in">
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="Name" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="Mobile" placeholder="Enter mobile number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="Email" placeholder="Enter email address" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Details</button>
+        </form>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        // Inject the modular navbar
+        fetch('navbar.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('navbar-placeholder').innerHTML = data);
+
+        // Inject the modular footer
+        fetch('footer.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('footer-placeholder').innerHTML = data);
+    </script>
+</body>
+</html>
