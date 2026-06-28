@@ -3,14 +3,20 @@
 </footer>
 
 <style>
-    footer {
-        background-color: #1A2B49;
-        color: #FFFFFF;
-        text-align: center;
-        padding: 20px 20px 85px 20px; /* Added extra bottom padding right here */
-        font-size: 14px;
-        margin-top: auto;
-        border-top: 3px solid #00E5E5;
-        width: 100%;
-    }
+footer {
+    background-color: #1A2B49;
+    color: #FFFFFF;
+    text-align: center;
+    /* Reduced padding: 15px top/bottom, 20px left/right */
+    padding: 15px 20px; 
+    font-size: 14px;
+    border-top: 3px solid #00E5E5;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't cause horizontal scrolling */
+}
+
+/* Clear default margins from the paragraph tag inside the footer */
+footer p {
+    margin: 0;
+}
 </style>
