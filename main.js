@@ -77,6 +77,7 @@ services.forEach((s,i) => {
 /* ---------------- render: filters ---------------- */
 const filterRow = document.getElementById('filterRow');
 let activeCat = 'all';
+let filterDragMoved = false;
 categories.forEach(c => {
   const btn = document.createElement('button');
   btn.className = 'chip' + (c.key==='all' ? ' active' : '');
@@ -84,6 +85,7 @@ categories.forEach(c => {
   btn.style.setProperty('--chip-color', c.color);
   btn.innerHTML = (c.key!=='all' ? `<span class="cdot" style="background:${c.color}"></span>` : '') + c.label;
   btn.addEventListener('click', () => {
+    if(filterDragMoved) return; // ignore the click that ends a real drag gesture
     activeCat = c.key;
     document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
     btn.classList.add('active');
@@ -101,23 +103,18 @@ filterRow.addEventListener('wheel', e => {
   }
 }, { passive:false });
 
-let filterDragging = false, filterDragStartX = 0, filterDragStartScroll = 0, filterDragMoved = false;
-filterRow.addEventListener('pointerdown', e => {
+let filterDragging = false, filterDragStartX = 0, filterDragStartScroll = 0;
+filterRow.addEventListener('mousedown', e => {
   filterDragging = true; filterDragMoved = false;
   filterDragStartX = e.clientX; filterDragStartScroll = filterRow.scrollLeft;
-  filterRow.setPointerCapture(e.pointerId);
 });
-filterRow.addEventListener('pointermove', e => {
+window.addEventListener('mousemove', e => {
   if(!filterDragging) return;
   const dx = e.clientX - filterDragStartX;
-  if(Math.abs(dx) > 4) filterDragMoved = true;
-  filterRow.scrollLeft = filterDragStartScroll - dx;
+  if(Math.abs(dx) > 6) filterDragMoved = true;
+  if(filterDragMoved) filterRow.scrollLeft = filterDragStartScroll - dx;
 });
-filterRow.addEventListener('pointerup', () => { filterDragging = false; });
-filterRow.addEventListener('pointercancel', () => { filterDragging = false; });
-filterRow.addEventListener('click', e => {
-  if(filterDragMoved){ e.preventDefault(); e.stopPropagation(); }
-}, true);
+window.addEventListener('mouseup', () => { filterDragging = false; });
 
 /* ---------------- render: project grid (paginated) ---------------- */
 const projGrid = document.getElementById('projGrid');
