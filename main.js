@@ -93,6 +93,32 @@ categories.forEach(c => {
   filterRow.appendChild(btn);
 });
 
+/* let a plain vertical mouse wheel scroll this horizontal row, and support click-drag */
+filterRow.addEventListener('wheel', e => {
+  if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+    e.preventDefault();
+    filterRow.scrollLeft += e.deltaY;
+  }
+}, { passive:false });
+
+let filterDragging = false, filterDragStartX = 0, filterDragStartScroll = 0, filterDragMoved = false;
+filterRow.addEventListener('pointerdown', e => {
+  filterDragging = true; filterDragMoved = false;
+  filterDragStartX = e.clientX; filterDragStartScroll = filterRow.scrollLeft;
+  filterRow.setPointerCapture(e.pointerId);
+});
+filterRow.addEventListener('pointermove', e => {
+  if(!filterDragging) return;
+  const dx = e.clientX - filterDragStartX;
+  if(Math.abs(dx) > 4) filterDragMoved = true;
+  filterRow.scrollLeft = filterDragStartScroll - dx;
+});
+filterRow.addEventListener('pointerup', () => { filterDragging = false; });
+filterRow.addEventListener('pointercancel', () => { filterDragging = false; });
+filterRow.addEventListener('click', e => {
+  if(filterDragMoved){ e.preventDefault(); e.stopPropagation(); }
+}, true);
+
 /* ---------------- render: project grid (paginated) ---------------- */
 const projGrid = document.getElementById('projGrid');
 const projCount = document.getElementById('projCount');
@@ -210,26 +236,47 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ---- hero intro timeline ---- */
-if(prefersReduced){
-  gsap.set(['.eyebrow', '.hero h1 .line-inner', '.hero-sub', '.hero-bottom'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.eyebrow', {opacity:0, y:16, duration:0.6})
-    .from('.hero h1 .line-inner', {yPercent:110, duration:0.85, stagger:0.1}, '-=0.35')
-    .from('.hero-sub', {opacity:0, y:18, duration:0.6}, '-=0.4')
-    .from('.hero-bottom .dial-wrap', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.hero-bottom .scroll-cue', {opacity:0, y:18, duration:0.6}, '-=0.5');
-
-  /* brief pin-and-dissolve as the user starts scrolling past the hero */
-  ScrollTrigger.create({
-    trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1
-  });
-  gsap.to(['.hero-content','.hero-bottom'], {
-    opacity:0, y:-40, scale:0.94, ease:'none',
-    scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 }
+/* ---- shrink any hero headline word that would overflow its mask container ---- */
+function fitHeroLines(){
+  document.querySelectorAll('.hero h1 .line').forEach(line => {
+    const inner = line.querySelector('.line-inner');
+    inner.style.fontSize = '';
+    const containerWidth = line.clientWidth;
+    const textWidth = inner.scrollWidth;
+    if(containerWidth > 0 && textWidth > containerWidth){
+      const baseSize = parseFloat(getComputedStyle(inner).fontSize);
+      inner.style.fontSize = (baseSize * (containerWidth / textWidth) * 0.97) + 'px';
+    }
   });
 }
+window.addEventListener('resize', fitHeroLines);
+
+/* ---- hero intro timeline (deferred until webfonts are ready, so the fit-check above
+   measures final text metrics and the intro animation never visibly jumps sizes) ---- */
+function startHeroIntro(){
+  fitHeroLines();
+  if(prefersReduced){
+    gsap.set(['.eyebrow', '.hero h1 .line-inner', '.hero-sub', '.hero-bottom'], {opacity:1, y:0, clearProps:'transform'});
+  } else {
+    gsap.timeline({defaults:{ease:'power3.out'}})
+      .from('.eyebrow', {opacity:0, y:16, duration:0.6})
+      .from('.hero h1 .line-inner', {yPercent:110, duration:0.85, stagger:0.1}, '-=0.35')
+      .from('.hero-sub', {opacity:0, y:18, duration:0.6}, '-=0.4')
+      .from('.hero-bottom .dial-wrap', {opacity:0, y:18, duration:0.6}, '-=0.35')
+      .from('.hero-bottom .scroll-cue', {opacity:0, y:18, duration:0.6}, '-=0.5');
+
+    /* brief pin-and-dissolve as the user starts scrolling past the hero */
+    ScrollTrigger.create({
+      trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1
+    });
+    gsap.to(['.hero-content','.hero-bottom'], {
+      opacity:0, y:-40, scale:0.94, ease:'none',
+      scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 }
+    });
+  }
+}
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(startHeroIntro); }
+else { startHeroIntro(); }
 
 /* one-time binding pass for static elements (nav links, craft/service cards, chips) */
 bindCursorTargets();
