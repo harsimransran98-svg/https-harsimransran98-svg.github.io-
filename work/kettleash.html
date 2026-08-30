@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kettle & Ash — Case Study by Bazozo</title>
+<meta name="description" content="Kettle & Ash's storefront walks visitors through the brew guide before they ever add a bag to cart.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/kettleash.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#c17a4a; --site-hero-image:url('../images/kettleash.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Kettle & Ash</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Craft Coffee Roastery</div>
+    <h1>Roasted in small batches, always</h1>
+    <p>Kettle & Ash's storefront walks visitors through the brew guide before they ever add a bag to cart.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Kettle & Ash roasts twice a week, in batches small enough that the roaster tastes every one personally. The site was built to teach before it sells — a brew guide first, a shop second.</p>
+      <p>Every bean page includes origin notes, roast date, and the exact grind/ratio the roastery recommends, because a bad pour ruins good beans.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Brew Guide Flow</h3><p>A step-by-step scroll teaches pour-over, French press, and espresso ratios before checkout.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Origin Notes</h3><p>Every bag links back to the farm, altitude, and processing method behind it.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Subscribe & Roast</h3><p>A rolling subscription ships beans within 48 hours of roasting.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Get this week's roast</h2>
+    <p class="reveal">Small batches sell out — usually within the week.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Shop the roast</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

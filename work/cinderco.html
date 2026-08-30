@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinder & Co — Case Study by Bazozo</title>
+<meta name="description" content="Cinder & Co walks visitors through finished homes room by room, in the order a resident actually moves through them.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/cinderco.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#c98a5c; --site-hero-image:url('../images/cinderco.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Cinder & Co</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Interior Design Studio</div>
+    <h1>Rooms that finish the sentence</h1>
+    <p>Cinder & Co walks visitors through finished homes room by room, in the order a resident actually moves through them.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Cinder & Co designs full homes, not single rooms in isolation — so the portfolio is structured as a walkthrough, not a grid of disconnected shots.</p>
+      <p>Each project page follows the same sequence a homeowner experiences: entry, living space, kitchen, private rooms, then the small details that make it feel finished.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Room-by-Room Journeys</h3><p>Every project scrolls in the actual sequence a visitor would walk through the home.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Material Boards</h3><p>Fabric, paint, and finish selections are documented per room, not just per project.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Before & After</h3><p>Full renovation projects include an honest before/after comparison, not just hero shots.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Start your project</h2>
+    <p class="reveal">Cinder & Co takes on six full-home projects per year.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Inquire about availability</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

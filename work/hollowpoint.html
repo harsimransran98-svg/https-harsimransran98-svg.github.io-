@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hollow Point — Case Study by Bazozo</title>
+<meta name="description" content="An audio-reactive showcase for a music producer — visuals move with the track, not around it.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/hollowpoint.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#d1495b; --site-hero-image:url('../images/hollowpoint.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Hollow Point</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Music Producer Showcase</div>
+    <h1>Beats that react to the room</h1>
+    <p>An audio-reactive showcase for a music producer — visuals move with the track, not around it.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Hollow Point produces for a small roster of independent artists. This showcase syncs its visual pulse to the actual waveform of each track, not a canned animation loop.</p>
+      <p>Every reel on the site is a finished, released track — nothing here is a demo or a sketch.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Audio-Reactive Visuals</h3><p>Background motion is driven by the real frequency data of the playing track.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Credits, Not Just Covers</h3><p>Every track links to full production and mix credits, not just cover art.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Direct Licensing</h3><p>Sync licensing requests go straight to the producer, no agency layer.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">License a track</h2>
+    <p class="reveal">Full catalog available for sync licensing.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Browse the catalog</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

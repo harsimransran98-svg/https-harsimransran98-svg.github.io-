@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ironclad Fitness — Case Study by Bazozo</title>
+<meta name="description" content="Ironclad's membership site is driven by kinetic typography — the copy moves the way a workout does.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/ironcladfitness.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#d65c3f; --site-hero-image:url('../images/ironcladfitness.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Ironclad Fitness</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Gym Membership</div>
+    <h1>Strength, stated plainly</h1>
+    <p>Ironclad's membership site is driven by kinetic typography — the copy moves the way a workout does.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Ironclad is a strength-focused gym with one location and no fluff — no juice bar, no towel service, just equipment and coaching. The site's kinetic type mirrors that intensity.</p>
+      <p>Membership tiers are listed with exact access hours and coaching inclusions, no vague 'premium experience' language.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Kinetic Type System</h3><p>Headlines animate with the same intensity the gym trains with — no soft fades.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Transparent Tiers</h3><p>Every membership tier lists exact hours, equipment access, and coaching inclusions.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Coach Bios</h3><p>Every coach's certification and specialty is listed, not just a headshot and first name.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Start your membership</h2>
+    <p class="reveal">First week is always free, no card required.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Claim your free week</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

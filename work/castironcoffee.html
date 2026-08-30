@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cast Iron Coffee — Case Study by Bazozo</title>
+<meta name="description" content="Cast Iron Coffee's site centers on a live map — every location, hours, and current wait time.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/castironcoffee.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#b5915c; --site-hero-image:url('../images/castironcoffee.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Cast Iron Coffee</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Multi-Location Café</div>
+    <h1>Find your nearest cup</h1>
+    <p>Cast Iron Coffee's site centers on a live map — every location, hours, and current wait time.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Cast Iron runs six café locations across the city, each with its own hours and seating quirks. Rather than a generic locations list, the site centers on a live map with real-time status per café.</p>
+      <p>Every location page includes seating capacity, wifi policy, and whether it's currently a good spot for a laptop session or a quick coffee.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Live Location Map</h3><p>Real-time hours and status for all six cafés on one interactive map.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Seating & Wifi Notes</h3><p>Every location honestly notes seating capacity and laptop-friendliness.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Roast Rotation</h3><p>Each café's current single-origin pour-over rotation is listed and updated weekly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Find your café</h2>
+    <p class="reveal">Six locations, all with today's roast listed live.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">View the map</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

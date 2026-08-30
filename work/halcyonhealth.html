@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halcyon Health — Case Study by Bazozo</title>
+<meta name="description" content="Halcyon books appointments through a calm, deliberate motion system — nothing about the site rushes the visitor.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/halcyonhealth.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#7fc9b8; --site-hero-image:url('../images/halcyonhealth.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Halcyon Health</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Wellness Clinic</div>
+    <h1>Care, paced deliberately</h1>
+    <p>Halcyon books appointments through a calm, deliberate motion system — nothing about the site rushes the visitor.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Halcyon Health is a small wellness clinic focused on longer, unhurried appointments. The booking site mirrors that pace: slow transitions, generous whitespace, no urgency banners.</p>
+      <p>Every practitioner's page includes their actual approach and typical session length, so patients know what to expect before booking.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Calm Motion System</h3><p>Every transition on the site is intentionally slow — the opposite of a typical booking funnel.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Practitioner Profiles</h3><p>Real bios, approach, and session length for every practitioner on staff.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Same-Week Booking</h3><p>Live calendar availability, typically within the same week.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Book an appointment</h2>
+    <p class="reveal">Most first appointments are available within the week.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Check availability</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

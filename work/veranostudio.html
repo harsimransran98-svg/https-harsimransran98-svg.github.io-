@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verano Studio — Case Study by Bazozo</title>
+<meta name="description" content="Verano's seasonal lookbook, built as one cinematic scroll — full-bleed imagery pacing, no clutter, no noise.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/veranostudio.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#e0a85c; --site-hero-image:url('../images/veranostudio.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Verano Studio</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Fashion Label · Lookbook Site</div>
+    <h1>Worn slowly, seen clearly</h1>
+    <p>Verano's seasonal lookbook, built as one cinematic scroll — full-bleed imagery pacing, no clutter, no noise.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Verano Studio designs in small seasonal batches, not collections chasing a calendar. Every piece is photographed the way it's meant to be worn — in motion, in daylight, without a studio backdrop pretending otherwise.</p>
+      <p>This site exists to slow the visitor down for exactly as long as the clothes deserve: one scroll, one story, one drop at a time.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Lookbook Scroll</h3><p>A single continuous scroll paces every look like a film reel, not a grid.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Seasonal Drops</h3><p>Each collection gets its own microsite section, archived after the season ends.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Editorial Pacing</h3><p>Typography and whitespace do the selling — no banners, no pop-ups.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Step into the new collection</h2>
+    <p class="reveal">Verano's current drop is live for two weeks only.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">View the collection</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

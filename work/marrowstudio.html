@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marrow Studio — Case Study by Bazozo</title>
+<meta name="description" content="Marrow's booking site runs on a grainy film aesthetic — the same texture the collective tattoos in.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/marrowstudio.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#8a5c8a; --site-hero-image:url('../images/marrowstudio.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Marrow Studio</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Tattoo Collective</div>
+    <h1>Ink that outlives the trend</h1>
+    <p>Marrow's booking site runs on a grainy film aesthetic — the same texture the collective tattoos in.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Marrow is six artists sharing one studio and one waitlist. The site exists mainly to manage that waitlist honestly — real availability, real wait times, no fake urgency.</p>
+      <p>Every artist's portfolio is shot on film, scanned, and left ungraded, because that's closer to how the work actually looks on skin.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Grain-True Galleries</h3><p>Portfolio shots keep their film grain — no smoothing filters over healed work.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Real Waitlists</h3><p>Live booking windows per artist, updated weekly, no fake countdown timers.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Aftercare Library</h3><p>A full aftercare guide ships with every booking confirmation automatically.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Join the waitlist</h2>
+    <p class="reveal">Openings post every Sunday night.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Check availability</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>

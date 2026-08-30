@@ -109,6 +109,10 @@ function renderProjects(){
     card.className = 'proj-card';
     card.setAttribute('data-cursor-label','Open');
     card.style.setProperty('--tag-color', meta.color);
+    const isWeb = p.cat === 'web';
+    const openLine = isWeb
+      ? `<a class="proj-open" href="work/${slugFor(p)}.html" target="_blank" rel="noopener">Visit live site</a>`
+      : `<div class="proj-open">Open live demo</div>`;
     card.innerHTML = `
       <div class="proj-top">
         <span class="proj-mono mono">${meta.mono} · ${String(p.idx).padStart(3,'0')}</span>
@@ -116,8 +120,8 @@ function renderProjects(){
       </div>
       <div class="proj-title">${p.title}</div>
       <div class="proj-desc">${p.desc}</div>
-      <div class="proj-open">Open live demo</div>`;
-    card.addEventListener('click', () => openDemo(p));
+      ${openLine}`;
+    if(!isWeb){ card.addEventListener('click', () => openDemo(p)); }
     projGrid.appendChild(card);
   });
   loadMoreBtn.hidden = visibleCount >= filtered.length;

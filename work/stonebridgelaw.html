@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stonebridge Law — Case Study by Bazozo</title>
+<meta name="description" content="A restrained, editorial site for a law firm that would rather be understood than impressive.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://bazozo.in/work/stonebridgelaw.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../work.css">
+<style>:root{ --site-accent:#9aa5b1; --site-hero-image:url('../images/stonebridgelaw.jpg'); }</style>
+</head>
+<body>
+
+<header class="msite-nav">
+  <span class="brand">Stonebridge Law</span>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</header>
+
+<section class="msite-hero">
+  <div class="wrap">
+    <div class="msite-kicker"><span class="dot"></span>Law Firm</div>
+    <h1>Counsel without the theatre</h1>
+    <p>A restrained, editorial site for a law firm that would rather be understood than impressive.</p>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">About</span>
+    <h2 class="msite-section-title reveal">The story behind the work</h2>
+    <div class="msite-about reveal">
+      <p>Stonebridge handles commercial disputes and contract law for small and mid-sized businesses. The site is deliberately quiet — no stock photos of handshakes, no stock gavel imagery.</p>
+      <p>Every practice area page explains, in plain language, what a client should actually expect from engagement — timeline, cost structure, and likely outcomes.</p>
+    </div>
+  </div>
+</section>
+
+<section class="msite-section">
+  <div class="wrap">
+    <span class="msite-section-kicker">What sets it apart</span>
+    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
+    <div class="msite-features reveal">
+      <div class="msite-feature"><span class="num mono">01</span><h3>Plain-Language Practice Pages</h3><p>Legal jargon is translated into what it actually means for a client's timeline and budget.</p></div>
+      <div class="msite-feature"><span class="num mono">02</span><h3>Case Outcome Notes</h3><p>Anonymized past outcomes are published by practice area for realistic expectations.</p></div>
+      <div class="msite-feature"><span class="num mono">03</span><h3>Fixed-Fee Estimates</h3><p>Where possible, a fixed-fee range is quoted upfront, not billed hourly and hidden.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="msite-cta">
+  <div class="wrap">
+    <h2 class="reveal">Request a consultation</h2>
+    <p class="reveal">Initial consultations are always fixed-fee.</p>
+    <a class="msite-cta-btn reveal" href="../index.html#contact">Book a consultation</a>
+  </div>
+</section>
+
+<footer class="msite-footer">
+  <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>Case study by <a href="../index.html">Bazozo</a> — illustrative portfolio sample</span>
+    <span><a href="../index.html#work">← Back to Bazozo</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('.reveal').forEach(el => {
+  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
+  gsap.set(el, {opacity:0, y:28});
+  ScrollTrigger.create({
+    trigger: el, start:'top 90%', once:true,
+    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
+  });
+});
+</script>
+</body>
+</html>
