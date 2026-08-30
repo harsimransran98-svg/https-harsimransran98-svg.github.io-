@@ -160,6 +160,31 @@ const dialProgress = document.getElementById('dialProgress');
 const eyebrowDot = document.getElementById('eyebrowDot');
 const CIRC = 276;
 
+/* reserve fixed widths for the rotating dial text so its cycling never reflows the hero layout */
+function reserveDialWidths(){
+  if(!heroSwap || !dialCurrent) return;
+  const swapProbe = heroSwap.cloneNode(false);
+  swapProbe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; display:inline-block; min-width:0;';
+  heroSwap.parentNode.insertBefore(swapProbe, heroSwap.nextSibling);
+  const curProbe = dialCurrent.cloneNode(false);
+  curProbe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; min-width:0;';
+  dialCurrent.parentNode.insertBefore(curProbe, dialCurrent.nextSibling);
+  let maxSwapW = 0, maxCurW = 0;
+  dialCats.forEach(c => {
+    swapProbe.textContent = c.label.toLowerCase();
+    maxSwapW = Math.max(maxSwapW, swapProbe.getBoundingClientRect().width);
+    curProbe.textContent = c.label;
+    maxCurW = Math.max(maxCurW, curProbe.getBoundingClientRect().width);
+  });
+  swapProbe.remove();
+  curProbe.remove();
+  heroSwap.style.display = 'inline-block';
+  heroSwap.style.minWidth = Math.ceil(maxSwapW) + 'px';
+  dialCurrent.style.minWidth = Math.ceil(maxCurW) + 'px';
+}
+reserveDialWidths();
+window.addEventListener('resize', reserveDialWidths);
+
 function setDial(i){
   const c = dialCats[i];
   document.documentElement.style.setProperty('--live-accent', c.color);
