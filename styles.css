@@ -302,6 +302,15 @@ hr.rule{ border:none; border-top:1px solid var(--line); }
 .proj-title{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:19px; }
 .proj-desc{ color:var(--ink-dim); font-size:14.5px; line-height:1.55; }
 
+.load-more-row{ display:flex; justify-content:center; margin-top:48px; }
+.load-more{
+  font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+  border:1px solid var(--line-strong); padding:14px 30px; border-radius:999px; background:transparent; color:var(--ink);
+  transition:border-color .25s ease, background .25s ease;
+}
+.load-more:hover{ border-color:var(--brass); background:rgba(231,184,92,0.08); }
+.load-more[hidden]{ display:none; }
+
 /* ---------- contact ---------- */
 .contact-wrap{ text-align:left; }
 .contact-title{ font-size:clamp(38px,7vw,88px); text-transform:uppercase; max-width:900px; }

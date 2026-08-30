@@ -87,20 +87,23 @@ categories.forEach(c => {
     activeCat = c.key;
     document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
     btn.classList.add('active');
+    visibleCount = 12;
     renderProjects();
   });
   filterRow.appendChild(btn);
 });
 
-/* ---------------- render: project grid (all matching projects shown at once) ---------------- */
+/* ---------------- render: project grid (paginated) ---------------- */
 const projGrid = document.getElementById('projGrid');
 const projCount = document.getElementById('projCount');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+let visibleCount = 12;
 
 function renderProjects(){
   const filtered = activeCat === 'all' ? projects : projects.filter(p => p.cat === activeCat);
-  projCount.textContent = `Showing all ${filtered.length} of ${projects.length} total across the studio`;
+  projCount.textContent = `Showing ${Math.min(visibleCount, filtered.length)} of ${filtered.length} — ${projects.length} total across the studio`;
   projGrid.innerHTML = '';
-  filtered.forEach(p => {
+  filtered.slice(0, visibleCount).forEach(p => {
     const meta = catMap[p.cat];
     const card = document.createElement('div');
     card.className = 'proj-card';
@@ -117,9 +120,11 @@ function renderProjects(){
     card.addEventListener('click', () => openDemo(p));
     projGrid.appendChild(card);
   });
+  loadMoreBtn.hidden = visibleCount >= filtered.length;
   bindCursorTargets();
   animateProjectCards(Array.from(projGrid.children));
 }
+loadMoreBtn.addEventListener('click', () => { visibleCount += 12; renderProjects(); });
 renderProjects();
 
 /* ---------------- hero craft dial cycle ---------------- */
