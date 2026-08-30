@@ -358,5 +358,17 @@ function initHeroGL(){
     setTint(hex){ material.color.set(hex); }
   };
 }
-heroScene = initHeroGL();
-if(heroScene) heroScene.setTint(dialCats[0].color);
+function loadHeroGL(){
+  if(prefersReduced || window.THREE) return;
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+  s.onload = () => {
+    heroScene = initHeroGL();
+    if(heroScene) heroScene.setTint(dialCats[dialIdx].color);
+  };
+  document.body.appendChild(s);
+}
+if(!prefersReduced){
+  if('requestIdleCallback' in window) requestIdleCallback(loadHeroGL, { timeout: 2000 });
+  else window.addEventListener('load', loadHeroGL);
+}

@@ -278,8 +278,7 @@ hr.rule{ border:none; border-top:1px solid var(--line); }
   transition:all .25s ease; background:transparent;
 }
 .chip .cdot{ width:7px; height:7px; border-radius:50%; }
-.chip.active, .chip:hover{ color:var(--bg); border-color:transparent; }
-.chip.active{ background:var(--chip-color, var(--brass)); }
+.chip.active, .chip:hover{ color:var(--bg); border-color:transparent; background:var(--chip-color, var(--brass)); }
 
 .proj-count{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-faint); margin-bottom:28px; }
 
@@ -327,7 +326,7 @@ hr.rule{ border:none; border-top:1px solid var(--line); }
 
 footer{
   border-top:1px solid var(--line); padding:36px 0; display:flex; justify-content:space-between; align-items:center;
-  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-faint); flex-wrap:wrap; gap:12px;
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-dim); flex-wrap:wrap; gap:12px;
 }
 footer a{ color:var(--ink-dim); }
 footer a:hover{ color:var(--brass); }
