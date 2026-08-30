@@ -108,11 +108,13 @@ a{ color:inherit; text-decoration:none; }
 }
 .msite-hero-scrim{
   position:absolute; inset:0; pointer-events:none;
-  background:
-    var(--site-hero-image, none),
-    linear-gradient(to bottom, rgba(10,10,12,.55) 0%, rgba(10,10,12,.9) 78%, var(--site-bg) 100%);
-  background-size:cover; background-position:center;
-  background-blend-mode:normal;
+  background-image:
+    linear-gradient(to right, rgba(10,10,12,.94) 0%, rgba(10,10,12,.8) 45%, rgba(10,10,12,.45) 68%, rgba(10,10,12,.28) 100%),
+    linear-gradient(to bottom, rgba(10,10,12,.55) 0%, rgba(10,10,12,.3) 38%, rgba(10,10,12,.75) 80%, var(--site-bg) 100%),
+    var(--site-hero-image, none);
+  background-size:cover, cover, cover;
+  background-position:center, center, center 32%;
+  background-repeat:no-repeat, no-repeat, no-repeat;
 }
 .msite-kicker{
   font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
