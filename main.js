@@ -132,10 +132,8 @@ function renderProjects(){
     card.className = 'proj-card';
     card.setAttribute('data-cursor-label','Open');
     card.style.setProperty('--tag-color', meta.color);
-    const isWeb = p.cat === 'web';
-    const openLine = isWeb
-      ? `<a class="proj-open" href="work/${slugFor(p)}.html" target="_blank" rel="noopener">Visit live site</a>`
-      : `<div class="proj-open">Open live demo</div>`;
+    const href = p.cat === 'web' ? `work/${slugFor(p)}.html` : `demo/${p.cat}/${slugFor(p)}.html`;
+    const label = p.cat === 'web' ? 'Visit live site' : 'Open live demo';
     card.innerHTML = `
       <div class="proj-top">
         <span class="proj-mono mono">${meta.mono} · ${String(p.idx).padStart(3,'0')}</span>
@@ -143,8 +141,7 @@ function renderProjects(){
       </div>
       <div class="proj-title">${p.title}</div>
       <div class="proj-desc">${p.desc}</div>
-      ${openLine}`;
-    if(!isWeb){ card.addEventListener('click', () => openDemo(p)); }
+      <a class="proj-open" href="${href}" target="_blank" rel="noopener">${label}</a>`;
     projGrid.appendChild(card);
   });
   loadMoreBtn.hidden = visibleCount >= filtered.length;

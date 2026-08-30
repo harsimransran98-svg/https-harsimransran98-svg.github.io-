@@ -6,7 +6,6 @@
 function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31 + s.charCodeAt(i))|0; } return Math.abs(h); }
 const SHAPES = ['toggle','list','tracker','stats','form'];
 function shapeFor(p){ return SHAPES[hashStr(p.title) % SHAPES.length]; }
-function slugFor(p){ return p.title.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,16) || 'demo'; }
 
 function demoHead(project, meta){
   return `<div class="demo-head"><div class="demo-icon" style="background:${meta.color}">${project.title.replace(/[^A-Za-z]/g,'').charAt(0) || 'B'}</div><div><div class="demo-title">${project.title}</div><div class="demo-sub">${project.desc}</div></div></div>`;
@@ -105,36 +104,6 @@ function wireShape(shape){
       if(p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-  });
-}
-
-function siteHTML(project, meta){
-  return `<div class="demo-site">
-    <div class="demo-site-nav"><span style="color:${meta.color}">●</span> ${project.title}<div class="demo-site-nav-links"><span>Work</span><span>About</span><span>Contact</span></div></div>
-    <div class="demo-site-hero">
-      <h3>${project.title}</h3>
-      <p>${project.desc}</p>
-      <button class="demo-btn-primary" data-cta style="background:${meta.color}">Get in touch</button>
-    </div>
-    <div class="demo-site-feats">
-      <div class="demo-feat"><span>01</span><p>Thoughtful, subject-specific design</p></div>
-      <div class="demo-feat"><span>02</span><p>Built for speed and clarity</p></div>
-      <div class="demo-feat"><span>03</span><p>Fully responsive on every device</p></div>
-    </div>
-  </div>`;
-}
-function wireSite(){
-  const cta = document.querySelector('#demoBody [data-cta]');
-  if(!cta) return;
-  cta.addEventListener('click', () => {
-    let toast = document.querySelector('.demo-toast');
-    if(!toast){
-      toast = document.createElement('div');
-      toast.className = 'demo-toast';
-      document.body.appendChild(toast);
-    }
-    toast.textContent = 'Thanks — this is a demo';
-    setTimeout(() => toast.remove(), 2000);
   });
 }
 
@@ -366,19 +335,18 @@ function frameHTML(surface, inner, project, meta){
   return `<div class="frame">${inner}</div>`;
 }
 
-function openDemo(project){
+/* ---------------- resolve category -> surface/shape and render+wire into #demoBody ----------------
+   Used by each standalone demo page (demo/<cat>/<slug>.html) — replaces the old
+   modal-only openDemo(). Every such page has its own <div id="demoBody"></div>
+   inside a "try it live" section for this to render into. */
+function renderLiveDemo(project){
   const meta = catMap[project.cat];
   clearInterval(demoVideoTimer);
   clearInterval(demoGameTimer);
-  document.getElementById('demoTag').textContent = meta.label;
-  document.getElementById('demoTag').style.background = meta.color;
-  document.getElementById('demoModalTitle').textContent = project.title;
   const body = document.getElementById('demoBody');
   let surface, inner, wire;
 
-  if(project.cat === 'web'){
-    surface = 'browser'; inner = siteHTML(project, meta); wire = wireSite;
-  } else if(project.cat === 'video'){
+  if(project.cat === 'video'){
     surface = 'video'; inner = videoHTML(project, meta); wire = () => wireVideo(project);
   } else if(project.cat === 'wordpress'){
     surface = 'browser'; inner = wpAdminHTML(project, meta); wire = wireWpAdmin;
@@ -399,15 +367,4 @@ function openDemo(project){
     body.innerHTML = frameHTML(surface, inner, project, meta);
   }
   wire();
-  document.getElementById('demoOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
-function closeDemo(){
-  clearInterval(demoVideoTimer);
-  clearInterval(demoGameTimer);
-  document.getElementById('demoOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.getElementById('demoClose').addEventListener('click', closeDemo);
-document.getElementById('demoOverlay').addEventListener('click', e => { if(e.target.id === 'demoOverlay') closeDemo(); });
-window.addEventListener('keydown', e => { if(e.key === 'Escape') closeDemo(); });

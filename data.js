@@ -15,6 +15,7 @@ const categories = [
   {key:'iosgames', label:'iOS Games', mono:'IG', color:'#ff3d9a'},
 ];
 const catMap = Object.fromEntries(categories.map(c => [c.key, c]));
+function slugFor(p){ return p.title.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,16) || 'demo'; }
 
 const projects = [
 // Websites (30)
