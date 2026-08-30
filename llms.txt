@@ -1,0 +1,25 @@
+# Bazozo
+
+> Bazozo is an independent, one-person studio run by Harsimranjot Singh, based in India, building for clients worldwide (remote). The studio designs and builds across the full stack of modern digital work.
+
+## Services
+
+- Web design & development (marketing sites, web apps, e-commerce)
+- Video editing (brand films, social content, documentaries)
+- Browser extensions (Chrome, Firefox, Safari)
+- WordPress plugin development
+- Native mobile apps (Android, iOS)
+- Native desktop apps (Windows, macOS)
+- Native mobile games (Android, iOS)
+- SEO, performance optimization, website migration/redesign, and related web services
+
+## Portfolio
+
+Bazozo has shipped 208 projects across the disciplines above. The full list, with descriptions, is listed on the homepage under the "Selected Work" section (https://bazozo.in/#work), organized by category with a working live-demo preview for every single project.
+
+## Contact
+
+- Email: hello@bazozo.in
+- Phone / WhatsApp: +91 73475 00770
+- Location: India (remote, worldwide clients)
+- Website: https://bazozo.in/
