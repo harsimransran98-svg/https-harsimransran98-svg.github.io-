@@ -1,163 +1,192 @@
-/* ==================================================================
-   LIVE DEMO ENGINE — High-Fidelity Authentic Simulators
-   ================================================================== */
-function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31 + s.charCodeAt(i))|0; } return Math.abs(h); }
+/* ---------------- data ---------------- */
+const categories = [
+  {key:'all', label:'All Work', color:'#e7b85c'},
+  {key:'web', label:'Websites', mono:'WB', color:'#e7b85c'},
+  {key:'video', label:'Video Editing', mono:'VE', color:'#ff6b57'},
+  {key:'chrome', label:'Chrome Extensions', mono:'CE', color:'#4285f4'},
+  {key:'firefox', label:'Firefox Add-ons', mono:'FE', color:'#ff7a3d'},
+  {key:'safari', label:'Safari App Extensions', mono:'SE', color:'#5c7cfa'},
+  {key:'wordpress', label:'WordPress Plugins', mono:'WP', color:'#9c6ade'},
+  {key:'android', label:'Android Apps', mono:'AN', color:'#3ed598'},
+  {key:'ios', label:'iOS Apps', mono:'IO', color:'#c9cdd3'},
+  {key:'windows', label:'Windows Applications', mono:'WN', color:'#00b4d8'},
+  {key:'mac', label:'macOS Applications', mono:'MC', color:'#a9adb3'},
+  {key:'androidgames', label:'Android Games', mono:'AG', color:'#b5ff3d'},
+  {key:'iosgames', label:'iOS Games', mono:'IG', color:'#ff3d9a'},
+];
+const catMap = Object.fromEntries(categories.map(c => [c.key, c]));
+function slugFor(p){ return p.title.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,16) || 'demo'; }
 
-function demoHead(project, meta){
-  return `<div class="demo-head"><div class="demo-icon" style="background:${meta.color}">${project.title.replace(/[^A-Za-z]/g,'').charAt(0) || 'B'}</div><div><div class="demo-title">${project.title}</div><div class="demo-sub">${project.desc}</div></div></div>`;
-}
-
-// --- 1. Browser Extension Simulator ---
-function renderExtensionDemo(project, meta) {
-  return `
-    <div class="frame browser-frame">
-      <div class="frame-bar">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <div class="frame-url">🔒 client-site.com</div>
-        <div class="frame-ext-icon" style="background:${meta.color}">${project.title.charAt(0)}</div>
-      </div>
-      <div class="ext-body">
-        <div class="ext-popup" style="border: 1px solid #333; border-radius: 8px; padding: 16px; margin: 20px auto; max-width: 320px; background: #111;">
-          ${demoHead(project, meta)}
-          <div class="ext-metric-box" style="margin: 20px 0; padding: 12px; background: #1a1a1a; border-radius: 6px; text-align: center;">
-            <span style="display: block; font-size: 24px; font-weight: 700; color: ${meta.color};">Active</span>
-            <span style="font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px;">Status</span>
-          </div>
-          <button class="demo-btn-primary" style="background:${meta.color}; width: 100%;">Run ${project.title}</button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// --- 2. Video Editing Simulator ---
-function renderVideoDemo(project, meta) {
-  return `
-    <div class="demo-video">
-      <div class="demo-video-screen" style="background:linear-gradient(135deg, ${meta.color}33, #050506); border-radius: 8px 8px 0 0;">
-        <div class="demo-video-title">${project.title}</div>
-        <div style="position: absolute; top: 12px; right: 12px; font-size: 10px; background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; font-family: monospace;">4K ProRes</div>
-        <button class="demo-play" data-play style="border-color:${meta.color}">▶</button>
-      </div>
-      <div class="demo-video-controls" style="border-radius: 0;">
-        <div class="demo-progress-track"><div class="demo-progress-fill" data-fill style="background:${meta.color}"></div></div>
-        <span class="demo-time mono" data-time>0:00</span>
-      </div>
-      <div class="timeline-editor-mock" style="background: #0a0a0c; padding: 12px; border-radius: 0 0 8px 8px; border: 1px solid #222; border-top: none;">
-        <div style="display: flex; align-items: center; margin-bottom: 6px; font-size: 10px; color: #666;">
-          <span style="width: 30px;">V1</span>
-          <div style="height: 16px; width: 85%; background: ${meta.color}88; border-radius: 3px; border: 1px solid ${meta.color}"></div>
-        </div>
-        <div style="display: flex; align-items: center; font-size: 10px; color: #666;">
-          <span style="width: 30px;">A1</span>
-          <div style="height: 16px; width: 85%; background: #333; border-radius: 3px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 40%; left: 0; right: 0; height: 20%; background: #555;"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// --- 3. Native Mobile Simulator ---
-function renderMobileDemo(project, meta, os) {
-  const h = hashStr(project.title);
-  const isIOS = os === 'ios';
-  return `
-    <div class="frame phone-frame ${isIOS ? 'ios' : 'android'}">
-      ${isIOS ? '<div class="phone-notch"></div>' : ''}
-      <div class="phone-status"><span>9:41</span><span>••• 100%</span></div>
-      <div class="phone-screen native-layout" style="display: flex; flex-direction: column; padding: 20px;">
-        ${demoHead(project, meta)}
-        <div class="native-card" style="background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-          <div class="native-stat" style="color:${meta.color}; font-size: 32px; font-weight: 700; font-family: 'Unbounded', sans-serif;">${(h%400)+40}</div>
-          <div class="native-label" style="font-size: 12px; opacity: 0.6; margin-top: 4px;">Today's Activity</div>
-        </div>
-        <div style="flex-grow: 1;"></div>
-        <button class="demo-btn-primary" style="background:${meta.color}; border-radius: ${isIOS ? '20px' : '8px'};">Launch Action</button>
-      </div>
-      ${isIOS ? '<div class="phone-home"></div>' : ''}
-    </div>
-  `;
-}
-
-// --- 4. Web / Desktop / WordPress Simulator ---
-function renderWebDemo(project, meta) {
-  return `
-    <div class="frame browser-frame">
-      <div class="frame-bar">
-        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-        <div class="frame-url">🔒 bazozo.in/demo</div>
-      </div>
-      <div class="frame-body" style="padding: 40px 20px;">
-        ${demoHead(project, meta)}
-        <div style="margin: 30px 0; padding: 20px; border: 1px dashed #333; border-radius: 8px; text-align: center;">
-          <p style="opacity: 0.7; font-size: 14px; margin-bottom: 20px;">Live interactive ${meta.label} environment.</p>
-          <button class="demo-btn-primary" style="background:${meta.color}; margin: 0 auto;">Initialize Module</button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-/* ---------------- MAIN RENDERER ---------------- */
-let demoVideoTimer = null;
-
-function renderLiveDemo(project) {
-  const meta = catMap[project.cat];
-  clearInterval(demoVideoTimer);
-  const body = document.getElementById('demoBody');
-  
-  let html = '';
-  
-  if (project.cat === 'video') {
-    html = renderVideoDemo(project, meta);
-  } else if (['chrome', 'firefox', 'safari'].includes(project.cat)) {
-    html = renderExtensionDemo(project, meta);
-  } else if (['ios', 'iosgames'].includes(project.cat)) {
-    html = renderMobileDemo(project, meta, 'ios');
-  } else if (['android', 'androidgames'].includes(project.cat)) {
-    html = renderMobileDemo(project, meta, 'android');
-  } else {
-    html = renderWebDemo(project, meta);
-  }
-
-  // BAZOZO BUSINESS CTA: Added to every demo
-  html += `
-    <div class="demo-inquire-cta" style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #222; text-align: center;">
-      <h4 style="font-family: 'Unbounded', sans-serif; font-size: 14px; margin-bottom: 12px; color: #fff;">Need a custom ${meta.label}?</h4>
-      <a href="../../index.html#contact" class="demo-inquire-btn" style="color: ${meta.color}; border: 1px solid ${meta.color}; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block; transition: all 0.2s;">
-        Get an estimate for your project →
-      </a>
-    </div>
-  `;
-
-  body.innerHTML = html;
-
-  // Video Play Logic
-  if (project.cat === 'video') {
-    const btn = body.querySelector('[data-play]');
-    const fill = body.querySelector('[data-fill]');
-    const time = body.querySelector('[data-time]');
-    let playing = false;
-    let elapsed = 0;
-    const total = 30 + (hashStr(project.title) % 30); // 30-60 sec dummy duration
-    
-    if(btn) {
-      btn.addEventListener('click', () => {
-        playing = !playing;
-        btn.textContent = playing ? '❚❚' : '▶';
-        if (playing) {
-          demoVideoTimer = setInterval(() => {
-            elapsed++;
-            if (elapsed >= total) { elapsed = 0; playing = false; btn.textContent = '▶'; clearInterval(demoVideoTimer); }
-            if (fill) fill.style.width = (elapsed / total * 100) + '%';
-            if (time) time.textContent = '0:' + String(elapsed).padStart(2, '0');
-          }, 300);
-        } else {
-          clearInterval(demoVideoTimer);
-        }
-      });
-    }
-  }
-}
+const projects = [
+// Websites (30)
+{cat:'web',title:'Verano Studio',desc:'Fashion label site with a cinematic full-bleed lookbook scroll.'},
+{cat:'web',title:'Nordlys Architecture',desc:'Nordic architecture portfolio with parallax project reveals.'},
+{cat:'web',title:'Kettle & Ash',desc:'Craft coffee roastery store with a brew-guide storytelling flow.'},
+{cat:'web',title:'Aether Labs',desc:'Deep-tech startup site built around a WebGL particle hero.'},
+{cat:'web',title:'Marrow Studio',desc:'Tattoo collective booking site with a grainy film aesthetic.'},
+{cat:'web',title:'Fjord Capital',desc:'Venture fund site with a data-driven, filterable portfolio grid.'},
+{cat:'web',title:'Hollow Point',desc:'Music producer showcase with audio-reactive visual moments.'},
+{cat:'web',title:'Stonebridge Law',desc:'Law firm site with a restrained, editorial layout system.'},
+{cat:'web',title:'Cinder & Co',desc:'Interior design studio with room-by-room scroll journeys.'},
+{cat:'web',title:'Glasshouse Ventures',desc:'Real-estate developer site with 3D building walkthroughs.'},
+{cat:'web',title:'Wax Type Foundry',desc:'Type foundry storefront selling custom display typefaces.'},
+{cat:'web',title:'Nomad Supply Co',desc:'Outdoor gear brand with trail-mapped product storytelling.'},
+{cat:'web',title:'Sable & Stone',desc:'Jewelry brand site built around macro product photography.'},
+{cat:'web',title:'Halcyon Health',desc:'Wellness clinic booking site with calm, deliberate motion design.'},
+{cat:'web',title:'Driftwood Films',desc:'Documentary studio reel site with a fullscreen video hero.'},
+{cat:'web',title:'Ironclad Fitness',desc:'Gym membership site driven by kinetic typography.'},
+{cat:'web',title:'Paperplane Agency',desc:'Creative agency site built around deep case-study pages.'},
+{cat:'web',title:'Salt & Cedar',desc:'Restaurant site with a tasting-menu scroll experience.'},
+{cat:'web',title:'Northline Robotics',desc:'Industrial robotics site with an interactive spec visualizer.'},
+{cat:'web',title:'Cast Iron Coffee',desc:'Multi-location café finder with live map integration.'},
+{cat:'web',title:'Lumen Optics',desc:'Eyewear brand site with a try-before-you-buy AR teaser.'},
+{cat:'web',title:'Terra Nova Farms',desc:'Regenerative farm brand built on seasonal storytelling.'},
+{cat:'web',title:'Vantage Point Realty',desc:'Property listing site with cinematic drone-footage heroes.'},
+{cat:'web',title:'Static Motion',desc:'Motion design studio reel with looping fullscreen showreels.'},
+{cat:'web',title:'Basalt Skincare',desc:'Skincare brand site with an ingredient-origin scroll story.'},
+{cat:'web',title:'The Quiet Room',desc:'Meditation app landing page with ambient soundscape cues.'},
+{cat:'web',title:'Foundry Bike Co',desc:'Custom bicycle builder with a live configurator microsite.'},
+{cat:'web',title:'Marlow & Finch',desc:'Independent bookshop site with reading-list curation features.'},
+{cat:'web',title:'Solstice Energy',desc:'Solar startup site with live impact-metric dashboards.'},
+{cat:'web',title:'Blackletter Press',desc:'Independent publisher site with typographic book reveals.'},
+// Video editing (18)
+{cat:'video',title:'"Afterglow"',desc:'Wedding highlight reel with a warm, film-grain color grade.'},
+{cat:'video',title:'"Concrete Bloom"',desc:'Brand documentary edit for an urban farming startup.'},
+{cat:'video',title:'"Nightline"',desc:'Music video edit built on beat-synced glitch transitions.'},
+{cat:'video',title:'"First Light"',desc:'12-episode travel vlog series edit shot across Iceland.'},
+{cat:'video',title:'"Product Drop"',desc:'30-second launch trailer for a limited sneaker release.'},
+{cat:'video',title:'"Static Hours"',desc:'Short film edit built around a nonlinear flashback structure.'},
+{cat:'video',title:'"Field Notes"',desc:'Nature documentary edit with slow, ambient pacing.'},
+{cat:'video',title:'"Overdrive"',desc:'Automotive commercial cut with high-speed match cuts.'},
+{cat:'video',title:'"The Standup"',desc:'Comedy special edit with punch-in crowd reaction cuts.'},
+{cat:'video',title:'"Skyline Reel"',desc:'Cinematic real-estate tour, drone-to-interior transitions.'},
+{cat:'video',title:'"Founders"',desc:'Startup pitch video series mixing talking-head and b-roll.'},
+{cat:'video',title:'"Afterparty"',desc:'Event recap edit produced for a music festival client.'},
+{cat:'video',title:'"Quiet Hands"',desc:'Craft-maker mini-documentary built around macro b-roll.'},
+{cat:'video',title:'"Payload"',desc:'Gaming montage edit with kinetic HUD-style overlays.'},
+{cat:'video',title:'"Runway"',desc:'Fashion show recap edit cutting runway to backstage.'},
+{cat:'video',title:'"Home Cooked"',desc:'Recipe video series edited with top-down cutting shots.'},
+{cat:'video',title:'"Signal"',desc:'Corporate explainer edit with animated data overlays.'},
+{cat:'video',title:'"Low Tide"',desc:'Surf brand short film built on slow-motion wave sequences.'},
+// Chrome extensions (16)
+{cat:'chrome',title:'TabTether',desc:'Groups and syncs related tabs across windows automatically.'},
+{cat:'chrome',title:'QuoteCatcher',desc:'Highlights page text and saves quotes to a sidebar library.'},
+{cat:'chrome',title:'FocusFrame',desc:'Blocks distracting sites during timed deep-work sessions.'},
+{cat:'chrome',title:'PriceEcho',desc:'Tracks product prices and alerts you the moment they drop.'},
+{cat:'chrome',title:'ReadRail',desc:'Strips page clutter for a clean, focused reading view.'},
+{cat:'chrome',title:'ColorSnap',desc:'Picks and copies exact colors from any webpage.'},
+{cat:'chrome',title:'LinkVault',desc:'Saves links into searchable, tagged collections.'},
+{cat:'chrome',title:'GridSnap',desc:'Snaps browser windows into custom tiled layouts.'},
+{cat:'chrome',title:'FontFinder',desc:'Identifies every font used on the current page instantly.'},
+{cat:'chrome',title:'TabTimer',desc:'Shows exactly how long each open tab has sat idle.'},
+{cat:'chrome',title:'MetaPeek',desc:'Inspects a page\'s SEO tags and metadata at a glance.'},
+{cat:'chrome',title:'ClipQueue',desc:'Queues copied snippets into a running clipboard list.'},
+{cat:'chrome',title:'NightPane',desc:'Applies a smart, readable dark mode to any website.'},
+{cat:'chrome',title:'FormFill Pro',desc:'Fills repetitive forms instantly from saved templates.'},
+{cat:'chrome',title:'ScreenSlice',desc:'Captures full-page scrolling screenshots in one click.'},
+{cat:'chrome',title:'WordCountr',desc:'Live word count and reading-time estimate for any page.'},
+// Firefox extensions (16)
+{cat:'firefox',title:'TabHarbor',desc:'Archives inactive tabs into a searchable harbor list.'},
+{cat:'firefox',title:'PrivacyLatch',desc:'One-click toggle for tracker and fingerprint blocking.'},
+{cat:'firefox',title:'ReaderTone',desc:'Adjusts article contrast and warmth for easier reading.'},
+{cat:'firefox',title:'BookmarkBloom',desc:'Visual, board-style organizer for saved bookmarks.'},
+{cat:'firefox',title:'SessionKeeper',desc:'Saves and restores complete browsing sessions on demand.'},
+{cat:'firefox',title:'InkNote',desc:'Sticky notes pinned directly to specific web pages.'},
+{cat:'firefox',title:'SpeedTrim',desc:'Trims autoplay video and ad payloads for faster loads.'},
+{cat:'firefox',title:'ContainerFlow',desc:'Manages multi-account containers with quick switching.'},
+{cat:'firefox',title:'GlyphGrab',desc:'Extracts and copies icon assets straight from any page.'},
+{cat:'firefox',title:'HistoryMap',desc:'Visualizes browsing history as a connected timeline.'},
+{cat:'firefox',title:'QuietTabs',desc:'Mutes newly opened tabs by default until focused.'},
+{cat:'firefox',title:'CiteRight',desc:'Generates ready-to-use citations from the current page.'},
+{cat:'firefox',title:'PixelRuler',desc:'On-screen ruler and ratio guide built for designers.'},
+{cat:'firefox',title:'FeedStream',desc:'Lightweight RSS reader panel built into the browser.'},
+{cat:'firefox',title:'TypoSpot',desc:'Flags common typos while browsing and drafting text.'},
+{cat:'firefox',title:'ArchiveNow',desc:'Sends the current page straight to a public web archive.'},
+// Safari extensions (16)
+{cat:'safari',title:'TabCompass',desc:'Minimal tab search built for trackpad-first gestures.'},
+{cat:'safari',title:'ReadPane',desc:'Distraction-free reading mode tuned for macOS typography.'},
+{cat:'safari',title:'HandoffTabs',desc:'Sends open tabs between Mac and iPhone instantly.'},
+{cat:'safari',title:'ColorLift',desc:'Extracts a usable color palette from any page\'s imagery.'},
+{cat:'safari',title:'QuietScroll',desc:'Smooths and calms scroll momentum on busy pages.'},
+{cat:'safari',title:'LinkLatch',desc:'Long-press to preview links without leaving the page.'},
+{cat:'safari',title:'FocusVeil',desc:'Dims everything on the page but the active reading column.'},
+{cat:'safari',title:'ClipToNotes',desc:'Sends selected web text directly into Apple Notes.'},
+{cat:'safari',title:'TrackOff',desc:'Lightweight tracker blocking designed to save battery.'},
+{cat:'safari',title:'ScreenTime+',desc:'Per-site time tracking with a weekly usage summary.'},
+{cat:'safari',title:'ZoomKeeper',desc:'Remembers your preferred zoom level for every website.'},
+{cat:'safari',title:'TabFolders',desc:'Organizes open tabs into collapsible folder groups.'},
+{cat:'safari',title:'PastePlain',desc:'Strips formatting from anything copied off the web.'},
+{cat:'safari',title:'NightShelf',desc:'Schedules dark mode automatically by sunrise and sunset.'},
+{cat:'safari',title:'GestureBar',desc:'Adds customizable swipe gestures for page navigation.'},
+{cat:'safari',title:'QuickTranslate',desc:'Inline translation popover for any selected text.'},
+// WordPress plugins (16)
+{cat:'wordpress',title:'SwiftForm Builder',desc:'Drag-and-drop form builder with conditional logic.'},
+{cat:'wordpress',title:'CacheRunner',desc:'Full-page and object caching for faster load times.'},
+{cat:'wordpress',title:'ReviewStack',desc:'Collects and displays structured, filterable product reviews.'},
+{cat:'wordpress',title:'SeoPilot',desc:'On-page SEO scoring with clear, actionable fixes.'},
+{cat:'wordpress',title:'BookingDesk',desc:'Appointment and resource booking calendar system.'},
+{cat:'wordpress',title:'GalleryLoom',desc:'Masonry and lightbox galleries with lazy loading.'},
+{cat:'wordpress',title:'MailBridge',desc:'Connects WordPress forms to major email platforms.'},
+{cat:'wordpress',title:'MembershipGate',desc:'Paywalled content with tiered membership access.'},
+{cat:'wordpress',title:'SpeedTrim WP',desc:'Automatic image compression and lazy-load setup.'},
+{cat:'wordpress',title:'BackupVault',desc:'Scheduled, incremental site backups to cloud storage.'},
+{cat:'wordpress',title:'PopupCraft',desc:'Timed and scroll-triggered popups and promo banners.'},
+{cat:'wordpress',title:'TableForge',desc:'Sortable, filterable data tables from CSV or Sheets.'},
+{cat:'wordpress',title:'ShopSync',desc:'Syncs WooCommerce inventory across marketplaces.'},
+{cat:'wordpress',title:'CommentGuard',desc:'Spam filtering with a clean comment moderation queue.'},
+{cat:'wordpress',title:'RedirectMap',desc:'Bulk 404 detection and redirect management dashboard.'},
+{cat:'wordpress',title:'MultiLang Bridge',desc:'Page-level translation and language switching.'},
+// Android apps (16)
+{cat:'android',title:'Ledgerly',desc:'Personal budgeting app with envelope-style categories.'},
+{cat:'android',title:'TrailMarker',desc:'Offline hiking maps with GPS breadcrumb trails.'},
+{cat:'android',title:'FocusJar',desc:'Pomodoro timer with a visual jar-filling progress cue.'},
+{cat:'android',title:'Pantry Ping',desc:'Tracks pantry stock and expiry-date reminders.'},
+{cat:'android',title:'RideLog',desc:'Motorcycle trip logger with route and fuel-use stats.'},
+{cat:'android',title:'QuietAlarm',desc:'Gradual-wake alarm clock with sleep-cycle tracking.'},
+{cat:'android',title:'HabitGrid',desc:'Habit tracker built around a yearly grid heatmap.'},
+{cat:'android',title:'NoteBeam',desc:'Voice-to-text notes synced across every device.'},
+{cat:'android',title:'CoinKeeper',desc:'Simple expense splitter for shared households.'},
+{cat:'android',title:'GardenLog',desc:'Plant care reminders with growth photo timelines.'},
+{cat:'android',title:'ShiftBoard',desc:'Shift-worker scheduling with overtime calculations.'},
+{cat:'android',title:'PulseCheck',desc:'Guided breathing and heart-rate check-in app.'},
+{cat:'android',title:'CommuteSense',desc:'Predicts commute delays from live transit data.'},
+{cat:'android',title:'RecipeBox',desc:'Offline recipe manager with pantry-based suggestions.'},
+{cat:'android',title:'ScanStack',desc:'Document scanner with automatic edge detection.'},
+{cat:'android',title:'WeightWatch',desc:'Minimal weight and body-metric tracking log.'},
+// iOS apps (16)
+{cat:'ios',title:'Driftlist',desc:'Widget-first to-do app built for the iOS home screen.'},
+{cat:'ios',title:'Nightframe',desc:'Manual camera app with film-inspired presets.'},
+{cat:'ios',title:'Steadyroute',desc:'Running app with pace coaching and live splits.'},
+{cat:'ios',title:'Inkwell',desc:'Distraction-free journaling app with daily prompts.'},
+{cat:'ios',title:'Pocket Ledger',desc:'Cash-based budgeting for iPhone and Apple Watch.'},
+{cat:'ios',title:'FocusDial',desc:'Screen time coach that nudges gently, not harshly.'},
+{cat:'ios',title:'Skyframe',desc:'Weather app with hyperlocal radar animation.'},
+{cat:'ios',title:'HomeSort',desc:'Room-by-room home inventory and warranty tracker.'},
+{cat:'ios',title:'QuietTimer',desc:'Minimal interval timer for workouts and meditation.'},
+{cat:'ios',title:'Storyboard Lite',desc:'Simple shot-list and storyboard app for filmmakers.'},
+{cat:'ios',title:'Tidewatch',desc:'Surf and tide forecast app for coastal spots.'},
+{cat:'ios',title:'Pulseform',desc:'Heart-rate zone trainer synced with Apple Watch.'},
+{cat:'ios',title:'Notekeep',desc:'Handwriting-to-text notes with Apple Pencil support.'},
+{cat:'ios',title:'Fuelog',desc:'Car fuel-efficiency and maintenance tracker.'},
+{cat:'ios',title:'Readloop',desc:'Reading tracker with yearly stats and streaks.'},
+{cat:'ios',title:'Petframe',desc:'Pet health, vaccine, and vet-visit tracker.'},
+// Windows apps (16)
+{cat:'windows',title:'TaskDock',desc:'Floating always-on-top to-do widget for the desktop.'},
+{cat:'windows',title:'ClipVault',desc:'Persistent clipboard history manager with instant search.'},
+{cat:'windows',title:'WinTidy',desc:'One-click desktop and downloads folder organizer.'},
+{cat:'windows',title:'BatteryWatch',desc:'Battery health monitor for laptops with smart alerts.'},
+{cat:'windows',title:'QuickRename',desc:'Bulk file renaming driven by simple pattern rules.'},
+{cat:'windows',title:'ScreenTimeDesk',desc:'Application usage tracker built for focus insights.'},
+{cat:'windows',title:'StartupTrim',desc:'Manages and audits startup program performance impact.'},
+{cat:'windows',title:'NoteDock',desc:'Sticky notes with markdown support and reminders.'},
+{cat:'windows',title:'FileSentry',desc:'Watches folders and auto-sorts new downloads.'},
+{cat:'windows',title:'WinCast',desc:'Local screen recording with lightweight overlays.'},
+{cat:'windows',title:'HotkeyForge',desc:'Custom global hotkey and macro builder.'},
+{cat:'windows',title:'NetPulse',desc:'Real-time bandwidth monitor broken down per app.'},
+{cat:'windows',title:'PrintQueue+',desc:'Simplified print job manager for shared printers.'},
+{cat:'windows',title:'BackupLoop',desc:'Scheduled folder backups to external or cloud drives.'},
+{cat:'windows',title:'WinDim',desc:'Automatic blue-light and brightness scheduling.'},
+{cat:'windows',title:'AppLock',desc:'Password-locks selected apps and folders.'},
+// Mac apps (16)
+{cat:'mac',title:'MenuBar Ledger',desc:'Quick expense entry straight from the macOS menu bar.'},
+{cat:'mac',title:'Focusbar',desc:'Menu-bar Pomodoro timer synced with do-not-
