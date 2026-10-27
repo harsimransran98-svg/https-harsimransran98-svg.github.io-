@@ -1,6 +1,6 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* ---------------- GSAP setup (must run before first renderProjects() call below) ---------------- */
+/* ---------------- GSAP setup ---------------- */
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 gsap.registerPlugin(ScrollTrigger);
 let projScrollTriggers = [];
@@ -18,7 +18,7 @@ function animateProjectCards(cards){
   });
 }
 
-/* ---------------- custom cursor (must also run before first renderProjects() call, since renderProjects -> bindCursorTargets references isTouch) ---------------- */
+/* ---------------- custom cursor ---------------- */
 const isTouch = window.matchMedia('(hover:none), (pointer:coarse)').matches;
 if(isTouch){ document.documentElement.classList.add('no-custom-cursor'); }
 
@@ -43,7 +43,6 @@ function bindCursorTargets(){
 }
 
 /* ---------------- render: timeline ---------------- */
-/* (index.html pre-renders this list statically for no-JS/crawler visibility; clear and rebuild from data.js so JS stays the single source of truth) */
 const tlList = document.getElementById('timelineList');
 tlList.innerHTML = '';
 experience.forEach((e,i) => {
@@ -85,7 +84,7 @@ categories.forEach(c => {
   btn.style.setProperty('--chip-color', c.color);
   btn.innerHTML = (c.key!=='all' ? `<span class="cdot" style="background:${c.color}"></span>` : '') + c.label;
   btn.addEventListener('click', () => {
-    if(filterDragMoved) return; // ignore the click that ends a real drag gesture
+    if(filterDragMoved) return; 
     activeCat = c.key;
     document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
     btn.classList.add('active');
@@ -95,7 +94,6 @@ categories.forEach(c => {
   filterRow.appendChild(btn);
 });
 
-/* let a plain vertical mouse wheel scroll this horizontal row, and support click-drag */
 filterRow.addEventListener('wheel', e => {
   if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
     e.preventDefault();
@@ -160,7 +158,6 @@ const dialProgress = document.getElementById('dialProgress');
 const eyebrowDot = document.getElementById('eyebrowDot');
 const CIRC = 276;
 
-/* reserve fixed widths for the rotating dial text so its cycling never reflows the hero layout */
 function reserveDialWidths(){
   if(!heroSwap || !dialCurrent) return;
   const swapProbe = heroSwap.cloneNode(false);
@@ -242,7 +239,6 @@ if(!prefersReduced && window.Lenis){
   gsap.ticker.lagSmoothing(0);
 }
 
-/* smooth-scroll internal anchor links through Lenis */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const id = a.getAttribute('href');
@@ -255,7 +251,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ---- shrink any hero headline word that would overflow its mask container ---- */
 function fitHeroLines(){
   document.querySelectorAll('.hero h1 .line').forEach(line => {
     const inner = line.querySelector('.line-inner');
@@ -270,9 +265,11 @@ function fitHeroLines(){
 }
 window.addEventListener('resize', fitHeroLines);
 
-/* ---- hero intro timeline (deferred until webfonts are ready, so the fit-check above
-   measures final text metrics and the intro animation never visibly jumps sizes) ---- */
+/* ---------------- HERO INTRO SEQUENCE & FAILSAFE ---------------- */
+let introPlayed = false;
 function startHeroIntro(){
+  if(introPlayed) return;
+  introPlayed = true;
   fitHeroLines();
   if(prefersReduced){
     gsap.set(['.eyebrow', '.hero h1 .line-inner', '.hero-sub', '.hero-bottom'], {opacity:1, y:0, clearProps:'transform'});
@@ -284,7 +281,6 @@ function startHeroIntro(){
       .from('.hero-bottom .dial-wrap', {opacity:0, y:18, duration:0.6}, '-=0.35')
       .from('.hero-bottom .scroll-cue', {opacity:0, y:18, duration:0.6}, '-=0.5');
 
-    /* brief pin-and-dissolve as the user starts scrolling past the hero */
     ScrollTrigger.create({
       trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1
     });
@@ -294,16 +290,18 @@ function startHeroIntro(){
     });
   }
 }
-if(document.fonts && document.fonts.ready){ document.fonts.ready.then(startHeroIntro); }
-else { startHeroIntro(); }
 
-/* one-time binding pass for static elements (nav links, craft/service cards, chips) */
+// Ensure the animation ALWAYS fires, even if fonts fail to load
+if(document.fonts && document.fonts.ready){ 
+  document.fonts.ready.then(startHeroIntro); 
+  setTimeout(startHeroIntro, 800); // Safety fallback
+} else { 
+  startHeroIntro(); 
+}
+
 bindCursorTargets();
 
-/* ==================================================================
-   hero background: Three.js particle scene (mouse-reactive, tinted by
-   the live category accent color from the craft dial)
-   ================================================================== */
+/* ---------------- THREE.JS SCENE ---------------- */
 function makeDotTexture(){
   const size = 64;
   const c = document.createElement('canvas');
@@ -397,6 +395,3 @@ if(!prefersReduced){
   if('requestIdleCallback' in window) requestIdleCallback(loadHeroGL, { timeout: 2000 });
   else window.addEventListener('load', loadHeroGL);
 }
-```[cite: 12]
-
-Once this is pushed, your site will perfectly load everything again, complete with the new high-value business copy and Engagement Models sections on the homepage. Let me know when it's live!
