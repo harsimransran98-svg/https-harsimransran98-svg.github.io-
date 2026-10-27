@@ -1,23 +1,5 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* ---------------- GSAP setup ---------------- */
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-gsap.registerPlugin(ScrollTrigger);
-let projScrollTriggers = [];
-let heroScene = null;
-function animateProjectCards(cards){
-  projScrollTriggers.forEach(st => st.kill());
-  projScrollTriggers = [];
-  if(!cards.length) return;
-  if(prefersReduced){ gsap.set(cards, {opacity:1, y:0}); return; }
-  gsap.set(cards, {opacity:0, y:26});
-  projScrollTriggers = ScrollTrigger.batch(cards, {
-    start:'top 92%',
-    once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.08, overwrite:true})
-  });
-}
-
 /* ---------------- custom cursor ---------------- */
 const isTouch = window.matchMedia('(hover:none), (pointer:coarse)').matches;
 if(isTouch){ document.documentElement.classList.add('no-custom-cursor'); }
@@ -44,85 +26,115 @@ function bindCursorTargets(){
 
 /* ---------------- render: timeline ---------------- */
 const tlList = document.getElementById('timelineList');
-tlList.innerHTML = '';
-experience.forEach((e,i) => {
-  const div = document.createElement('div');
-  div.className = 'tl-item';
-  div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div>`;
-  tlList.appendChild(div);
-});
+if(tlList && typeof experience !== 'undefined') {
+  tlList.innerHTML = '';
+  experience.forEach((e,i) => {
+    const div = document.createElement('div');
+    div.className = 'tl-item';
+    div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div>`;
+    tlList.appendChild(div);
+  });
+}
 
 /* ---------------- render: craft grid ---------------- */
 const craftGrid = document.getElementById('craftGrid');
-craftGrid.innerHTML = '';
-crafts.forEach(c => {
-  const meta = catMap[c.key];
-  const div = document.createElement('div');
-  div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div>`;
-  craftGrid.appendChild(div);
-});
+if(craftGrid && typeof crafts !== 'undefined') {
+  craftGrid.innerHTML = '';
+  crafts.forEach(c => {
+    const meta = catMap[c.key];
+    const div = document.createElement('div');
+    div.className = 'craft-card';
+    div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div>`;
+    craftGrid.appendChild(div);
+  });
+}
 
 /* ---------------- render: services grid ---------------- */
 const serviceGrid = document.getElementById('serviceGrid');
-serviceGrid.innerHTML = '';
-services.forEach((s,i) => {
-  const div = document.createElement('div');
-  div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div>`;
-  serviceGrid.appendChild(div);
-});
+if(serviceGrid && typeof services !== 'undefined') {
+  serviceGrid.innerHTML = '';
+  services.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.className = 'craft-card';
+    div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div>`;
+    serviceGrid.appendChild(div);
+  });
+}
 
 /* ---------------- render: filters ---------------- */
 const filterRow = document.getElementById('filterRow');
 let activeCat = 'all';
 let filterDragMoved = false;
-categories.forEach(c => {
-  const btn = document.createElement('button');
-  btn.className = 'chip' + (c.key==='all' ? ' active' : '');
-  btn.dataset.cat = c.key;
-  btn.style.setProperty('--chip-color', c.color);
-  btn.innerHTML = (c.key!=='all' ? `<span class="cdot" style="background:${c.color}"></span>` : '') + c.label;
-  btn.addEventListener('click', () => {
-    if(filterDragMoved) return; 
-    activeCat = c.key;
-    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-    btn.classList.add('active');
-    visibleCount = 12;
-    renderProjects();
+if(filterRow && typeof categories !== 'undefined') {
+  categories.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (c.key==='all' ? ' active' : '');
+    btn.dataset.cat = c.key;
+    btn.style.setProperty('--chip-color', c.color);
+    btn.innerHTML = (c.key!=='all' ? `<span class="cdot" style="background:${c.color}"></span>` : '') + c.label;
+    btn.addEventListener('click', () => {
+      if(filterDragMoved) return; 
+      activeCat = c.key;
+      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      visibleCount = 12;
+      renderProjects();
+    });
+    filterRow.appendChild(btn);
   });
-  filterRow.appendChild(btn);
-});
 
-filterRow.addEventListener('wheel', e => {
-  if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-    e.preventDefault();
-    filterRow.scrollLeft += e.deltaY;
-  }
-}, { passive:false });
+  filterRow.addEventListener('wheel', e => {
+    if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+      e.preventDefault();
+      filterRow.scrollLeft += e.deltaY;
+    }
+  }, { passive:false });
 
-let filterDragging = false, filterDragStartX = 0, filterDragStartScroll = 0;
-filterRow.addEventListener('mousedown', e => {
-  filterDragging = true; filterDragMoved = false;
-  filterDragStartX = e.clientX; filterDragStartScroll = filterRow.scrollLeft;
-});
-window.addEventListener('mousemove', e => {
-  if(!filterDragging) return;
-  const dx = e.clientX - filterDragStartX;
-  if(Math.abs(dx) > 6) filterDragMoved = true;
-  if(filterDragMoved) filterRow.scrollLeft = filterDragStartScroll - dx;
-});
-window.addEventListener('mouseup', () => { filterDragging = false; });
+  let filterDragging = false, filterDragStartX = 0, filterDragStartScroll = 0;
+  filterRow.addEventListener('mousedown', e => {
+    filterDragging = true; filterDragMoved = false;
+    filterDragStartX = e.clientX; filterDragStartScroll = filterRow.scrollLeft;
+  });
+  window.addEventListener('mousemove', e => {
+    if(!filterDragging) return;
+    const dx = e.clientX - filterDragStartX;
+    if(Math.abs(dx) > 6) filterDragMoved = true;
+    if(filterDragMoved) filterRow.scrollLeft = filterDragStartScroll - dx;
+  });
+  window.addEventListener('mouseup', () => { filterDragging = false; });
+}
 
-/* ---------------- render: project grid (paginated) ---------------- */
+/* ---------------- GSAP setup ---------------- */
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(typeof gsap !== 'undefined') gsap.registerPlugin(ScrollTrigger);
+
+let projScrollTriggers = [];
 const projGrid = document.getElementById('projGrid');
 const projCount = document.getElementById('projCount');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 let visibleCount = 12;
 
+function animateProjectCards(cards){
+  projScrollTriggers.forEach(st => st.kill());
+  projScrollTriggers = [];
+  if(!cards.length) return;
+  if(prefersReduced || typeof gsap === 'undefined'){ 
+    cards.forEach(c => { c.style.opacity = 1; c.style.transform = 'none'; });
+    return; 
+  }
+  
+  // FIXED: Using fromTo ensures they aren't stuck at opacity:0
+  projScrollTriggers = ScrollTrigger.batch(cards, {
+    start:'top 92%',
+    once:true,
+    onEnter: batch => gsap.fromTo(batch, {opacity:0, y:26}, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.08, overwrite:true})
+  });
+}
+
 function renderProjects(){
+  if(!projGrid || typeof projects === 'undefined') return;
   const filtered = activeCat === 'all' ? projects : projects.filter(p => p.cat === activeCat);
-  projCount.textContent = `Showing ${Math.min(visibleCount, filtered.length)} of ${filtered.length} — ${projects.length} total across the studio`;
+  if(projCount) projCount.textContent = `Showing ${Math.min(visibleCount, filtered.length)} of ${filtered.length} — ${projects.length} total across the studio`;
   projGrid.innerHTML = '';
   filtered.slice(0, visibleCount).forEach(p => {
     const meta = catMap[p.cat];
@@ -142,15 +154,17 @@ function renderProjects(){
       <a class="proj-open" href="${href}" target="_blank" rel="noopener">${label}</a>`;
     projGrid.appendChild(card);
   });
-  loadMoreBtn.hidden = visibleCount >= filtered.length;
+  if(loadMoreBtn) loadMoreBtn.hidden = visibleCount >= filtered.length;
   bindCursorTargets();
   animateProjectCards(Array.from(projGrid.children));
+  if(typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
 }
-loadMoreBtn.addEventListener('click', () => { visibleCount += 12; renderProjects(); });
+if(loadMoreBtn) loadMoreBtn.addEventListener('click', () => { visibleCount += 12; renderProjects(); });
 renderProjects();
 
 /* ---------------- hero craft dial cycle ---------------- */
-const dialCats = categories.filter(c => c.key !== 'all');
+let heroScene = null;
+const dialCats = typeof categories !== 'undefined' ? categories.filter(c => c.key !== 'all') : [];
 let dialIdx = 0;
 const heroSwap = document.getElementById('heroSwap');
 const dialCurrent = document.getElementById('dialCurrent');
@@ -159,7 +173,7 @@ const eyebrowDot = document.getElementById('eyebrowDot');
 const CIRC = 276;
 
 function reserveDialWidths(){
-  if(!heroSwap || !dialCurrent) return;
+  if(!heroSwap || !dialCurrent || !dialCats.length) return;
   const swapProbe = heroSwap.cloneNode(false);
   swapProbe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; display:inline-block; min-width:0;';
   heroSwap.parentNode.insertBefore(swapProbe, heroSwap.nextSibling);
@@ -183,56 +197,44 @@ reserveDialWidths();
 window.addEventListener('resize', reserveDialWidths);
 
 function setDial(i){
+  if(!dialCats.length) return;
   const c = dialCats[i];
   document.documentElement.style.setProperty('--live-accent', c.color);
-  heroSwap.textContent = c.label.toLowerCase();
-  dialCurrent.textContent = c.label;
-  dialCurrent.style.color = c.color;
-  const offset = CIRC - (CIRC/dialCats.length)*(i+1);
-  dialProgress.style.strokeDashoffset = offset;
+  if(heroSwap) heroSwap.textContent = c.label.toLowerCase();
+  if(dialCurrent){
+    dialCurrent.textContent = c.label;
+    dialCurrent.style.color = c.color;
+  }
+  if(dialProgress){
+    const offset = CIRC - (CIRC/dialCats.length)*(i+1);
+    dialProgress.style.strokeDashoffset = offset;
+  }
   if(heroScene) heroScene.setTint(c.color);
 }
 setDial(0);
-if(!prefersReduced){
+if(!prefersReduced && dialCats.length){
   setInterval(() => { dialIdx = (dialIdx+1) % dialCats.length; setDial(dialIdx); }, 2400);
 }
 
 /* ---------------- nav scroll state + mobile menu ---------------- */
 const siteNav = document.getElementById('siteNav');
-window.addEventListener('scroll', () => {
-  siteNav.classList.toggle('scrolled', window.scrollY > 40);
-});
+if(siteNav){
+  window.addEventListener('scroll', () => {
+    siteNav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+}
 const burgerBtn = document.getElementById('burgerBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const closeMenu = document.getElementById('closeMenu');
-burgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
-closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+if(burgerBtn && mobileMenu && closeMenu){
+  burgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+  closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+}
 
-/* ---------------- reveal on scroll (GSAP ScrollTrigger, once) ---------------- */
-document.querySelectorAll('.reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 88%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* ---------------- section-header parallax drift ---------------- */
-document.querySelectorAll('.section-head').forEach(el => {
-  if(prefersReduced) return;
-  gsap.fromTo(el, {y:40}, {
-    y:-40, ease:'none',
-    scrollTrigger:{ trigger: el, start:'top bottom', end:'bottom top', scrub:true }
-  });
-});
-
-/* ==================================================================
-   Lenis smooth scroll
-   ================================================================== */
+/* ---------------- Lenis smooth scroll ---------------- */
 let lenis = null;
-if(!prefersReduced && window.Lenis){
+if(!prefersReduced && window.Lenis && typeof gsap !== 'undefined'){
   lenis = new Lenis({ autoRaf:false, smoothWheel:true, duration:1.1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
@@ -254,6 +256,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 function fitHeroLines(){
   document.querySelectorAll('.hero h1 .line').forEach(line => {
     const inner = line.querySelector('.line-inner');
+    if(!inner) return;
     inner.style.fontSize = '';
     const containerWidth = line.clientWidth;
     const textWidth = inner.scrollWidth;
@@ -265,38 +268,68 @@ function fitHeroLines(){
 }
 window.addEventListener('resize', fitHeroLines);
 
-/* ---------------- HERO INTRO SEQUENCE & FAILSAFE ---------------- */
-let introPlayed = false;
-function startHeroIntro(){
-  if(introPlayed) return;
-  introPlayed = true;
+/* ---------------- MASTER ANIMATION INITIALIZER ---------------- */
+function startAnimations(){
   fitHeroLines();
-  if(prefersReduced){
-    gsap.set(['.eyebrow', '.hero h1 .line-inner', '.hero-sub', '.hero-bottom'], {opacity:1, y:0, clearProps:'transform'});
-  } else {
-    gsap.timeline({defaults:{ease:'power3.out'}})
-      .from('.eyebrow', {opacity:0, y:16, duration:0.6})
-      .from('.hero h1 .line-inner', {yPercent:110, duration:0.85, stagger:0.1}, '-=0.35')
-      .from('.hero-sub', {opacity:0, y:18, duration:0.6}, '-=0.4')
-      .from('.hero-bottom .dial-wrap', {opacity:0, y:18, duration:0.6}, '-=0.35')
-      .from('.hero-bottom .scroll-cue', {opacity:0, y:18, duration:0.6}, '-=0.5');
+  
+  if(prefersReduced || typeof gsap === 'undefined'){
+    document.querySelectorAll('.eyebrow, .hero h1 .line-inner, .hero-sub, .hero-bottom').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    return;
+  }
 
+  // 1. Hero Animation
+  gsap.timeline({defaults:{ease:'power3.out'}})
+    .fromTo('.eyebrow', {opacity:0, y:16}, {opacity:1, y:0, duration:0.6})
+    .fromTo('.hero h1 .line-inner', {yPercent:110}, {yPercent:0, duration:0.85, stagger:0.1}, '-=0.35')
+    .fromTo('.hero-sub', {opacity:0, y:18}, {opacity:1, y:0, duration:0.6}, '-=0.4')
+    .fromTo('.hero-bottom .dial-wrap', {opacity:0, y:18}, {opacity:1, y:0, duration:0.6}, '-=0.35')
+    .fromTo('.hero-bottom .scroll-cue', {opacity:0, y:18}, {opacity:1, y:0, duration:0.6}, '-=0.5');
+
+  const heroEl = document.querySelector('.hero');
+  if(heroEl){
     ScrollTrigger.create({
-      trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1
+      trigger: heroEl, start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1
     });
     gsap.to(['.hero-content','.hero-bottom'], {
       opacity:0, y:-40, scale:0.94, ease:'none',
-      scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 }
+      scrollTrigger:{ trigger: heroEl, start:'top top', end:'+=60%', scrub:1 }
     });
   }
+
+  // 2. Setup Scroll Reveals AFTER Hero Pin (so math is correct)
+  // FIXED: Using fromTo prevents elements from staying stuck at opacity 0
+  document.querySelectorAll('.reveal').forEach(el => {
+    gsap.fromTo(el, {opacity:0, y:28}, {
+      opacity:1, y:0, duration:0.8, ease:'power3.out',
+      scrollTrigger:{ trigger: el, start:'top 88%', once:true }
+    });
+  });
+
+  // 3. Parallax Headers
+  document.querySelectorAll('.section-head').forEach(el => {
+    gsap.fromTo(el, {y:40}, {
+      y:-40, ease:'none',
+      scrollTrigger:{ trigger: el, start:'top bottom', end:'bottom top', scrub:true }
+    });
+  });
+
+  // 4. Force ScrollTrigger to recalculate all positions now that everything is built
+  ScrollTrigger.refresh();
 }
 
-// Ensure the animation ALWAYS fires, even if fonts fail to load
-if(document.fonts && document.fonts.ready){ 
-  document.fonts.ready.then(startHeroIntro); 
-  setTimeout(startHeroIntro, 800); // Safety fallback
+// 5. Fail-Safe Initializer: Guarantees animations run even if fonts fail to load
+let animationsStarted = false;
+function initSafely() {
+  if (animationsStarted) return;
+  animationsStarted = true;
+  startAnimations();
+}
+if(document.fonts && document.fonts.ready) { 
+  document.fonts.ready.then(initSafely); 
+  setTimeout(initSafely, 1000); 
 } else { 
-  startHeroIntro(); 
+  initSafely(); 
 }
 
 bindCursorTargets();
@@ -313,7 +346,7 @@ function makeDotTexture(){
   grad.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, size, size);
-  return new THREE.CanvasTexture(c);
+  return typeof THREE !== 'undefined' ? new THREE.CanvasTexture(c) : null;
 }
 
 function initHeroGL(){
@@ -346,7 +379,7 @@ function initHeroGL(){
     opacity: 0.85,
     sizeAttenuation: true,
     depthWrite: false,
-    blending: THREE.AdditiveBlending
+    blending: typeof THREE !== 'undefined' ? THREE.AdditiveBlending : 2
   });
   const points = new THREE.Points(geometry, material);
   scene.add(points);
@@ -387,7 +420,7 @@ function loadHeroGL(){
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
   s.onload = () => {
     heroScene = initHeroGL();
-    if(heroScene) heroScene.setTint(dialCats[dialIdx].color);
+    if(heroScene && dialCats.length) heroScene.setTint(dialCats[dialIdx].color);
   };
   document.body.appendChild(s);
 }
