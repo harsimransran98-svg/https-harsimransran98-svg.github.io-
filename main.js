@@ -49,7 +49,7 @@ tlList.innerHTML = '';
 experience.forEach((e,i) => {
   const div = document.createElement('div');
   div.className = 'tl-item';
-  div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div>`;
+  div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div></div>`;
   tlList.appendChild(div);
 });
 
@@ -60,7 +60,7 @@ crafts.forEach(c => {
   const meta = catMap[c.key];
   const div = document.createElement('div');
   div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div>`;
+  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div></div>`;
   craftGrid.appendChild(div);
 });
 
@@ -70,7 +70,7 @@ serviceGrid.innerHTML = '';
 services.forEach((s,i) => {
   const div = document.createElement('div');
   div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div>`;
+  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div></div>`;
   serviceGrid.appendChild(div);
 });
 
