@@ -9,7 +9,7 @@ function animateProjectCards(cards){
   projScrollTriggers.forEach(st => st.kill());
   projScrollTriggers = [];
   if(!cards.length) return;
-  if(prefersReduced){ gsap.set(cards,a {opacity:1, y:0}); return; }
+  if(prefersReduced){ gsap.set(cards, {opacity:1, y:0}); return; }
   gsap.set(cards, {opacity:0, y:26});
   projScrollTriggers = ScrollTrigger.batch(cards, {
     start:'top 92%',
@@ -27,8 +27,8 @@ const cursorRing = document.getElementById('cursorRing');
 const cursorLabel = document.getElementById('cursorLabel');
 let mx=0,my=0, rx=0, ry=0;
 if(!isTouch){
-  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`; });
-  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`; requestAnimationFrame(cursorLoop); }
+  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; });
+  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; requestAnimationFrame(cursorLoop); }
   cursorLoop();
 }
 function bindCursorTargets(){
