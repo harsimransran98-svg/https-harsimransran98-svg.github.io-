@@ -189,4 +189,106 @@ const projects = [
 {cat:'windows',title:'AppLock',desc:'Password-locks selected apps and folders.'},
 // Mac apps (16)
 {cat:'mac',title:'MenuBar Ledger',desc:'Quick expense entry straight from the macOS menu bar.'},
-{cat:'mac',title:'Focusbar',desc:'Menu-bar Pomodoro timer synced with do-not-
+{cat:'mac',title:'Focusbar',desc:'Menu-bar Pomodoro timer synced with do-not-disturb.'},
+{cat:'mac',title:'DiskSweep',desc:'Visual disk-space analyzer and one-click cleanup tool.'},
+{cat:'mac',title:'ClipboardStack',desc:'Menu-bar clipboard history with pinned favorites.'},
+{cat:'mac',title:'WindowSnap',desc:'Keyboard-driven window tiling and snapping.'},
+{cat:'mac',title:'BatteryBar',desc:'Menu-bar battery health and cycle-count monitor.'},
+{cat:'mac',title:'QuietDock',desc:'Auto-hides dock icons based on the active app.'},
+{cat:'mac',title:'ScreenTimeBar',desc:'Lightweight app-usage tracker in the menu bar.'},
+{cat:'mac',title:'NoteFloat',desc:'Always-on-top floating sticky notes for quick capture.'},
+{cat:'mac',title:'RenameForge',desc:'Batch file renaming with a live preview pane.'},
+{cat:'mac',title:'MailTriage',desc:'Menu-bar inbox triage for fast zero-inbox sweeps.'},
+{cat:'mac',title:'FontBar',desc:'Quick font preview and installer from the menu bar.'},
+{cat:'mac',title:'NetGauge',desc:'Per-app network usage graphs in real time.'},
+{cat:'mac',title:'Wallpaperly',desc:'Scheduled wallpaper rotation from local folders.'},
+{cat:'mac',title:'HandoffNotes',desc:'Syncs quick notes instantly between Mac and iPhone.'},
+{cat:'mac',title:'SleepGuard',desc:'Prevents accidental sleep during long-running tasks.'},
+// Android games (16)
+{cat:'androidgames',title:'Neon Drift',desc:'Arcade racer dodging traffic through a neon-lit city.'},
+{cat:'androidgames',title:'Block Cascade',desc:'Falling-block puzzle with combo chain scoring.'},
+{cat:'androidgames',title:'Pixel Raiders',desc:'Retro top-down dungeon crawler with permadeath runs.'},
+{cat:'androidgames',title:'Tiny Kingdoms',desc:'Idle city-builder with offline progress rewards.'},
+{cat:'androidgames',title:'Reflex Rings',desc:'Fast-paced tap-timing arcade challenge.'},
+{cat:'androidgames',title:'Orbit Smash',desc:'Physics-based planet-smashing puzzle game.'},
+{cat:'androidgames',title:'Word Drift',desc:'Falling-letter word puzzle against the clock.'},
+{cat:'androidgames',title:'Shadow Runner',desc:'Endless runner through a constantly shifting shadow world.'},
+{cat:'androidgames',title:'Colony Tap',desc:'Idle ant-colony builder with layered resource chains.'},
+{cat:'androidgames',title:'Puzzle Forge',desc:'Match-3 puzzler with a blacksmithing crafting twist.'},
+{cat:'androidgames',title:'Skybound Racers',desc:'Airborne obstacle racer with drift-boost mechanics.'},
+{cat:'androidgames',title:'Memory Vault',desc:'Card-matching puzzle with escalating difficulty tiers.'},
+{cat:'androidgames',title:'Tap Legends',desc:'Idle RPG battler driven by tap-to-attack combat.'},
+{cat:'androidgames',title:'Gravity Maze',desc:'Tilt-based ball-rolling maze puzzler.'},
+{cat:'androidgames',title:'Rush Hour Riot',desc:'Traffic-jam sliding puzzle game across 80 levels.'},
+{cat:'androidgames',title:'Farmstead Frenzy',desc:'Time-management farming arcade game.'},
+// iOS games (16)
+{cat:'iosgames',title:'Driftline',desc:'Minimalist one-tap endless runner.'},
+{cat:'iosgames',title:'Cascade Blocks',desc:'Satisfying falling-block puzzle built for quick sessions.'},
+{cat:'iosgames',title:'Lumen Maze',desc:'Light-guided maze puzzler with 100 handcrafted levels.'},
+{cat:'iosgames',title:'Starforge Idle',desc:'Idle spaceship-building incremental game.'},
+{cat:'iosgames',title:'Tap Duel',desc:'Local two-player reflex tapping showdown.'},
+{cat:'iosgames',title:'Glyph Match',desc:'Symbol-matching puzzle with rotating daily challenges.'},
+{cat:'iosgames',title:'Wavelength',desc:'Rhythm-tap game synced to original tracks.'},
+{cat:'iosgames',title:'Orbit Runner',desc:'Gravity-based endless orbit-jumping arcade game.'},
+{cat:'iosgames',title:'Petal Drift',desc:'Calm, meditative falling-petal puzzle game.'},
+{cat:'iosgames',title:'Vault Breaker',desc:'Safe-cracking puzzle game with rotating dial mechanics.'},
+{cat:'iosgames',title:'Skyline Jumpers',desc:'Rooftop-hopping endless runner.'},
+{cat:'iosgames',title:'Chroma Snap',desc:'Color-matching reflex arcade game.'},
+{cat:'iosgames',title:'Puzzle Loop',desc:'Pipe-connecting logic puzzle across 150 levels.'},
+{cat:'iosgames',title:'Nightfall Dash',desc:'Dark-themed obstacle dash with score multipliers.'},
+{cat:'iosgames',title:'Memory Peaks',desc:'Mountain-themed card memory challenge.'},
+{cat:'iosgames',title:'Idle Aquarium',desc:'Relaxing incremental fish-tank builder.'},
+];
+
+// index within category, for the mono readout
+const catCounters = {};
+projects.forEach((p,i) => {
+  catCounters[p.cat] = (catCounters[p.cat]||0)+1;
+  p.idx = catCounters[p.cat];
+  p.id = i;
+});
+
+const experience = [
+  {date:'2024 — Present', role:'Founder & Independent Builder, Bazozo', desc:'Running a solo studio covering web design/dev, video editing, browser & WordPress extensions, and native apps across Android, iOS, Windows and macOS for direct clients worldwide.'},
+  {date:'2022 — 2024', role:'Frontend Engineer (Contract)', desc:'Built and maintained marketing sites and internal tools for agency clients, focused on animation-heavy, high-conversion landing pages.'},
+  {date:'2020 — 2022', role:'Junior Web Developer', desc:'Started out shipping WordPress sites and small e-commerce builds, then moved into custom front-end work as skills grew.'},
+  {date:'2019 — 2020', role:'Freelance Video Editor & Motion Designer', desc:'Edited social and brand video for small businesses and creators, picking up motion design and color grading along the way.'},
+];
+
+const crafts = [
+  {name:'Web Design & Dev', sub:'Marketing sites, web apps, e-commerce', key:'web'},
+  {name:'Video Editing', sub:'Brand films, socials, documentaries', key:'video'},
+  {name:'Chrome Extensions', sub:'Productivity & browser tooling', key:'chrome'},
+  {name:'Firefox Add-ons', sub:'Privacy, reading & tab tools', key:'firefox'},
+  {name:'Safari App Extensions', sub:'macOS & iOS-native browser tools', key:'safari'},
+  {name:'WordPress Plugins', sub:'Forms, commerce, performance', key:'wordpress'},
+  {name:'Android Apps', sub:'Native Kotlin/Java applications', key:'android'},
+  {name:'iOS Apps', sub:'Native Swift/SwiftUI applications', key:'ios'},
+  {name:'Windows Applications', sub:'Native desktop utilities', key:'windows'},
+  {name:'macOS Applications', sub:'Menu-bar tools & native utilities', key:'mac'},
+  {name:'Android Games', sub:'Casual to arcade, built native', key:'androidgames'},
+  {name:'iOS Games', sub:'Casual to arcade, built native', key:'iosgames'},
+];
+
+const services = [
+  {title:'SEO & Technical SEO', desc:'Audits, on-page optimization, and structured data that get sites found.'},
+  {title:'Website Migration', desc:'Domain, host, or platform moves planned for zero downtime.'},
+  {title:'Website Redesign', desc:'Modernizing outdated sites without losing search rankings.'},
+  {title:'Performance Optimization', desc:'Core Web Vitals, load-time, and asset-weight audits and fixes.'},
+  {title:'E-commerce Development', desc:'Product catalogs, checkout flows, and payment integration.'},
+  {title:'CMS Development', desc:'WordPress, headless CMS, and custom admin panels.'},
+  {title:'Landing Page Design', desc:'High-conversion single-page campaigns for launches and ads.'},
+  {title:'UI/UX Design', desc:'Wireframes, prototypes, and reusable design systems.'},
+  {title:'Web App Development', desc:'Dashboards, internal tools, and SaaS product builds.'},
+  {title:'API Integration', desc:'Connecting payment gateways, CRMs, and third-party services.'},
+  {title:'Progressive Web Apps', desc:'Installable, offline-capable experiences from a single codebase.'},
+  {title:'Accessibility Audits', desc:'WCAG compliance reviews with concrete, prioritized fixes.'},
+  {title:'Security Hardening', desc:'SSL setup, header hardening, and malware cleanup.'},
+  {title:'Analytics & Tracking', desc:'GA4, GTM, and conversion/event tracking implementation.'},
+  {title:'Conversion Rate Optimization', desc:'A/B testing and funnel improvements based on real data.'},
+  {title:'Hosting & Domain Setup', desc:'DNS, email routing, and server configuration done right.'},
+  {title:'Website Maintenance', desc:'Ongoing updates, backups, and uptime monitoring.'},
+  {title:'Multilingual Localization', desc:'Multi-language, region-targeted site builds.'},
+  {title:'Legacy System Modernization', desc:'Rebuilding outdated codebases on modern foundations.'},
+  {title:'Speed & SEO Audits', desc:'Full technical reports with clearly prioritized next steps.'},
+];
