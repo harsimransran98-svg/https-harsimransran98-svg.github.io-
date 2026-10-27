@@ -268,7 +268,7 @@ const crafts = [
   {name:'macOS Applications', sub:'Menu-bar tools & native utilities', key:'mac'},
   {name:'Android Games', sub:'Casual to arcade, built native', key:'androidgames'},
   {name:'iOS Games', sub:'Casual to arcade, built native', key:'iosgames'},
-];
+]; 
 
 const services = [
   {title:'SEO & Technical SEO', desc:'Audits, on-page optimization, and structured data that get sites found.'},
