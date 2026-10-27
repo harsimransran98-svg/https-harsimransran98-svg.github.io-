@@ -344,7 +344,7 @@ function renderLiveDemo(project){
   clearInterval(demoVideoTimer);
   clearInterval(demoGameTimer);
   const body = document.getElementById('demoBody');
-  let surface, inner, wire;
+  let surface, inner, wire; 
 
   if(project.cat === 'video'){
     surface = 'video'; inner = videoHTML(project, meta); wire = () => wireVideo(project);
