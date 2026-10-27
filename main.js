@@ -9,7 +9,7 @@ function animateProjectCards(cards){
   projScrollTriggers.forEach(st => st.kill());
   projScrollTriggers = [];
   if(!cards.length) return;
-  if(prefersReduced){ gsap.set(cards, {opacity:1, y:0}); return; }
+  if(prefersReduced){ gsap.set(cards,a {opacity:1, y:0}); return; }
   gsap.set(cards, {opacity:0, y:26});
   projScrollTriggers = ScrollTrigger.batch(cards, {
     start:'top 92%',
@@ -27,8 +27,8 @@ const cursorRing = document.getElementById('cursorRing');
 const cursorLabel = document.getElementById('cursorLabel');
 let mx=0,my=0, rx=0, ry=0;
 if(!isTouch){
-  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; });
-  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; requestAnimationFrame(cursorLoop); }
+  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`; });
+  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`; requestAnimationFrame(cursorLoop); }
   cursorLoop();
 }
 function bindCursorTargets(){
@@ -49,7 +49,7 @@ tlList.innerHTML = '';
 experience.forEach((e,i) => {
   const div = document.createElement('div');
   div.className = 'tl-item';
-  div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div></div>`;
+  div.innerHTML = `<span class="tl-index mono">0${i+1}</span><span class="tl-date mono">${e.date}</span><div><div class="tl-role">${e.role}</div><div class="tl-desc">${e.desc}</div></div>`;
   tlList.appendChild(div);
 });
 
@@ -60,7 +60,7 @@ crafts.forEach(c => {
   const meta = catMap[c.key];
   const div = document.createElement('div');
   div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div></div>`;
+  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div>`;
   craftGrid.appendChild(div);
 });
 
@@ -70,7 +70,7 @@ serviceGrid.innerHTML = '';
 services.forEach((s,i) => {
   const div = document.createElement('div');
   div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div></div>`;
+  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${String(i+1).padStart(2,'0')}</span><span class="craft-dot" style="background:var(--brass)"></span></div><div><div class="craft-name">${s.title}</div><div class="craft-sub">${s.desc}</div></div>`;
   serviceGrid.appendChild(div);
 });
 
