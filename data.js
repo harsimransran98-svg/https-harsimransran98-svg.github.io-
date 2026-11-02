@@ -249,26 +249,28 @@ projects.forEach((p,i) => {
 });
 
 const experience = [
-  {date:'2024 — Present', role:'Founder & Independent Builder, Bazozo', desc:'Running a solo studio covering web design/dev, video editing, browser & WordPress extensions, and native apps across Android, iOS, Windows and macOS for direct clients worldwide.'},
+  {date:'2024 — Present', role:'Founder & Studio Lead, Bazozo Studio', desc:'Leading Bazozo Studio, a Product & Engineering Studio working across four pillars: web & e-commerce, browser extensions & plugins, cross-platform apps, and brand film & motion, for direct clients worldwide.'},
   {date:'2022 — 2024', role:'Frontend Engineer (Contract)', desc:'Built and maintained marketing sites and internal tools for agency clients, focused on animation-heavy, high-conversion landing pages.'},
   {date:'2020 — 2022', role:'Junior Web Developer', desc:'Started out shipping WordPress sites and small e-commerce builds, then moved into custom front-end work as skills grew.'},
   {date:'2019 — 2020', role:'Freelance Video Editor & Motion Designer', desc:'Edited social and brand video for small businesses and creators, picking up motion design and color grading along the way.'},
 ];
 
-const crafts = [
-  {name:'Web Design & Dev', sub:'Marketing sites, web apps, e-commerce', key:'web'},
-  {name:'Video Editing', sub:'Brand films, socials, documentaries', key:'video'},
-  {name:'Chrome Extensions', sub:'Productivity & browser tooling', key:'chrome'},
-  {name:'Firefox Add-ons', sub:'Privacy, reading & tab tools', key:'firefox'},
-  {name:'Safari App Extensions', sub:'macOS & iOS-native browser tools', key:'safari'},
-  {name:'WordPress Plugins', sub:'Forms, commerce, performance', key:'wordpress'},
-  {name:'Android Apps', sub:'Native Kotlin/Java applications', key:'android'},
-  {name:'iOS Apps', sub:'Native Swift/SwiftUI applications', key:'ios'},
-  {name:'Windows Applications', sub:'Native desktop utilities', key:'windows'},
-  {name:'macOS Applications', sub:'Menu-bar tools & native utilities', key:'mac'},
-  {name:'Android Games', sub:'Casual to arcade, built native', key:'androidgames'},
-  {name:'iOS Games', sub:'Casual to arcade, built native', key:'iosgames'},
-]; 
+/* the four core pillars shown in the Craft section.
+   tags with cats link to the matching portfolio filter; counts come from projects */
+const pillars = [
+  {num:"01", title:"Web & E-Commerce", color:"#e7b85c",
+   blurb:"Marketing sites, storefronts and web apps, designed from the brand up and engineered to load fast and rank.",
+   tags:[{label:"Custom Web", cats:["web"]},{label:"WordPress"},{label:"Shopify / Headless"},{label:"Speed & SEO", href:"#services"}]},
+  {num:"02", title:"Browser Extensions & Plugins", color:"#4285f4",
+   blurb:"Tools that live where people already work: the browser toolbar and the WordPress dashboard.",
+   tags:[{label:"Chrome", cats:["chrome"]},{label:"Firefox", cats:["firefox"]},{label:"Safari", cats:["safari"]},{label:"WordPress Plugins", cats:["wordpress"]}]},
+  {num:"03", title:"Cross-Platform Apps", color:"#3ed598",
+   blurb:"Native mobile apps, desktop utilities and casual games for every screen your users carry or sit at.",
+   tags:[{label:"iOS", cats:["ios"]},{label:"Android", cats:["android"]},{label:"macOS", cats:["mac"]},{label:"Windows", cats:["windows"]},{label:"Mobile Games", cats:["androidgames","iosgames"]}]},
+  {num:"04", title:"Brand Film & Motion", color:"#ff6b57",
+   blurb:"Brand films and social edits, plus the scroll-driven and WebGL motion that makes a site feel alive.",
+   tags:[{label:"Video Editing", cats:["video"]},{label:"Interactive Scroll / WebGL"}]},
+];
 
 const services = [
   {title:'SEO & Technical SEO', desc:'Audits, on-page optimization, and structured data that get sites found.'},

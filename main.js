@@ -27,8 +27,8 @@ const cursorRing = document.getElementById('cursorRing');
 const cursorLabel = document.getElementById('cursorLabel');
 let mx=0,my=0, rx=0, ry=0;
 if(!isTouch){
-  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; });
-  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; requestAnimationFrame(cursorLoop); }
+  window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursorDot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`; });
+  function cursorLoop(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`; requestAnimationFrame(cursorLoop); }
   cursorLoop();
 }
 function bindCursorTargets(){
@@ -53,16 +53,49 @@ experience.forEach((e,i) => {
   tlList.appendChild(div);
 });
 
-/* ---------------- render: craft grid ---------------- */
-const craftGrid = document.getElementById('craftGrid');
-craftGrid.innerHTML = '';
-crafts.forEach(c => {
-  const meta = catMap[c.key];
-  const div = document.createElement('div');
-  div.className = 'craft-card';
-  div.innerHTML = `<div class="craft-top"><span class="craft-mono mono">${meta.mono}</span><span class="craft-dot" style="background:${meta.color}"></span></div><div><div class="craft-name">${c.name}</div><div class="craft-sub">${c.sub}</div></div>`;
-  craftGrid.appendChild(div);
+/* ---------------- render: four core pillars ---------------- */
+const pillarGrid = document.getElementById('pillarGrid');
+const countFor = cats => projects.filter(p => cats.includes(p.cat)).length;
+function mk(tag, cls, text){ const n = document.createElement(tag); if(cls) n.className = cls; if(text != null) n.textContent = text; return n; }
+pillarGrid.replaceChildren();
+pillars.forEach(p => {
+  const card = mk('article', 'pillar');
+  card.style.setProperty('--pillar', p.color);
+  const head = mk('div', 'pillar-head');
+  head.append(mk('span', 'pillar-num', p.num), mk('span', 'pillar-count mono'));
+  const tags = mk('ul', 'pillar-tags');
+  let total = 0;
+  p.tags.forEach(t => {
+    const li = document.createElement('li');
+    let el;
+    if(t.cats){
+      const n = countFor(t.cats); total += n;
+      el = mk('button', 'pillar-tag is-link', t.label);
+      el.type = 'button';
+      el.append(mk('span', 'pillar-tag-n mono', String(n)));
+      el.setAttribute('aria-label', `${t.label}: see ${n} portfolio pieces`);
+      el.addEventListener('click', () => showWork(t.cats[0]));
+    } else if(t.href){
+      el = mk('a', 'pillar-tag is-link', t.label); el.href = t.href;
+    } else {
+      el = mk('span', 'pillar-tag', t.label);
+    }
+    li.append(el); tags.append(li);
+  });
+  head.lastChild.textContent = `${total} pieces`;
+  card.append(head, mk('h3', 'pillar-title', p.title), mk('p', 'pillar-blurb', p.blurb), tags);
+  pillarGrid.append(card);
 });
+
+/* jump from a pillar tag to the portfolio, pre-filtered */
+function showWork(cat){
+  const chip = document.querySelector(`.chip[data-cat="${cat}"]`);
+  if(chip) chip.click();
+  const work = document.getElementById('work');
+  if(!work) return;
+  if(typeof lenis !== 'undefined' && lenis) lenis.scrollTo(work, {offset:-76});
+  else work.scrollIntoView({behavior: prefersReduced ? 'auto' : 'smooth', block:'start'});
+}
 
 /* ---------------- render: services grid ---------------- */
 const serviceGrid = document.getElementById('serviceGrid');

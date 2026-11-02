@@ -10,7 +10,9 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
+<link rel="preload" as="image" href="../images/paperplaneagency.jpg" fetchpriority="high">
 <link rel="stylesheet" href="../work.css">
 <style>:root{ --site-accent:#e0985c; --site-hero-image:url('../images/paperplaneagency.jpg'); }</style>
 </head>
@@ -94,10 +96,11 @@
       <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
     </div>
     <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
+      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
       <a href="../index.html#work">← Back to Bazozo</a>
     </div>
   </div>
+</footer>
 
 <script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
