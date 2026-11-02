@@ -420,6 +420,8 @@ function loadHeroGL(){
   if(prefersReduced || window.THREE) return;
   const s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+  s.integrity = 'sha512-334uBDwY0iZ2TklV1OtDtBW9vp7jjP7SWRzT7Ehu1fdtPIjTpCwTSFb8HI/YBau9L1/kRBEOALrS229Kry4yFQ==';
+  s.crossOrigin = 'anonymous';
   s.onload = () => {
     heroScene = initHeroGL();
     if(heroScene) heroScene.setTint(dialCats[dialIdx].color);

@@ -28,7 +28,11 @@
   /* ---------- settings (persisted per viewer) ---------- */
   const DEFAULTS = { autoAudit: true, flagAlt: true, showHeadings: false, badge: true, calm: false };
   let settings = { ...DEFAULTS };
-  try { Object.assign(settings, JSON.parse(localStorage.getItem('metapeek-settings') || '{}')); } catch (e) {}
+  // only copy known keys as booleans, so stored data can never add or override other properties
+  try {
+    const saved = JSON.parse(localStorage.getItem('metapeek-settings') || '{}');
+    if (saved && typeof saved === 'object') Object.keys(DEFAULTS).forEach(k => { if (typeof saved[k] === 'boolean') settings[k] = saved[k]; });
+  } catch (e) {}
   const saveSettings = () => { try { localStorage.setItem('metapeek-settings', JSON.stringify(settings)); } catch (e) {} };
   const calm = () => settings.calm || sysReduced || !hasGsap;
 
