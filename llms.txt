@@ -1,6 +1,6 @@
 # Bazozo
 
-> Independent one-person studio based in India, serving clients worldwide (remote). Builds websites, video editing, browser extensions (Chrome/Firefox/Safari), WordPress plugins, and native apps for Android, iOS, Windows and Mac.
+> Bazozo Studio is a Product & Engineering Studio based in India, serving clients worldwide (remote). Four core pillars: Web & E-Commerce (custom web, WordPress, Shopify/headless, speed & SEO); Browser Extensions & Plugins (Chrome, Firefox, Safari, WordPress plugins); Cross-Platform Apps (iOS, Android, macOS & Windows utilities, mobile games); Brand Film & Motion (video editing, interactive scroll & WebGL).
 
 ## Contact
 - Email: hello@bazozo.in

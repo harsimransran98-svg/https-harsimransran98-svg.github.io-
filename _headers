@@ -1,0 +1,15 @@
+# Security headers for Cloudflare Pages / Netlify. Applies to every path.
+# - GSAP + Three.js load from cdnjs, Lenis from jsDelivr, fonts from Google Fonts.
+# - WhatsApp (wa.me) links are normal navigations; CSP doesn't block those,
+#   so wa.me is listed in form-action only in case a form ever posts there.
+# - 'unsafe-inline' in script-src is still required: every /work and /demo page
+#   has inline <script> blocks and onclick/onload attributes. Moving those into
+#   .js files would let us drop it.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me https://api.whatsapp.com; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000
+  Cross-Origin-Opener-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
