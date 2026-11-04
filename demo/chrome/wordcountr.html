@@ -3,125 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WordCountr — Case Study by Bazozo</title>
-<meta name="description" content="Live word count and reading-time estimate for any page.">
+<title>WordCountr — live word count · Chrome extension by Bazozo Studio</title>
+<meta name="description" content="WordCountr: WordCountr shows a live word count, reading time and readability score for anything you write on the web, and flags the sentences that run too long. Try the live extension simulator. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F6F1E7">
 <link rel="canonical" href="https://bazozo.in/demo/chrome/wordcountr.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F6F1E7;
+  --text:#22201C;
+  --accent:#2F6F4E;
+  --accent-2:#E07A2E;
+  --panel:#FFFDF8;
+  --line:rgba(0,0,0,.1);
+  --dim:color-mix(in srgb, var(--text) 64%, transparent);
+  --menu-bg:#22201C;
+  --menu-text:#F6F1E7;
+  --display:'Young Serif', Georgia, serif;
+  --dw:400;
+  --body:'Hanken Grotesk', system-ui, sans-serif;
+  --mono:'Martian Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input, select, textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+.mono{ font-family:var(--mono); }
+.prog{ position:fixed; z-index:70; top:0; left:0; right:0; height:3px; background:var(--accent); transform:scaleX(0); transform-origin:0 50%; }
+.nav{ position:fixed; z-index:65; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:16px clamp(18px,4vw,48px); transition:background .4s ease, box-shadow .4s ease; }
+.nav.scrolled{ background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:var(--dw); font-size:20px; }
+.logo i{ width:30px; height:30px; border-radius:9px; background:var(--accent); display:grid; place-items:center; font-style:normal; font-family:var(--body); font-weight:800; font-size:14px; color:var(--bg); }
+.nav .sp{ flex:1; }
+.nav .back{ font-size:13px; font-weight:600; opacity:.75; transition:opacity .2s ease; } .nav .back:hover{ opacity:1; }
+.burger{ position:relative; z-index:80; width:48px; height:48px; border-radius:50%; background:var(--accent); display:grid; place-items:center; box-shadow:0 10px 26px -12px var(--accent); transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-radius .4s ease; }
+.burger:hover{ transform:scale(1.08) rotate(-6deg); }
+.burger[aria-expanded="true"]{ border-radius:50%; }
+.burger span{ position:absolute; left:14px; right:14px; height:2px; border-radius:2px; background:var(--bg); transition:transform .6s cubic-bezier(.68,-.6,.32,1.6), opacity .3s ease, right .4s ease; }
+.burger:hover span{ transform:rotate(0); }
+.burger span:nth-child(1){ transform:translateY(-6px); } .burger span:nth-child(3){ transform:translateY(6px); right:22px; }
+.burger:hover span:nth-child(1){ transform:translateY(-6px) ; } .burger:hover span:nth-child(3){ transform:translateY(6px) ; right:14px; }
+.burger[aria-expanded="true"] span:nth-child(1){ transform:rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2){ opacity:0; transform:translateX(12px); }
+.burger[aria-expanded="true"] span:nth-child(3){ transform:rotate(-45deg); right:14px; }
+.menu{ position:fixed; z-index:60; inset:0; background:var(--menu-bg); color:var(--menu-text); display:flex; flex-direction:column; justify-content:center; padding:90px clamp(24px,6vw,80px) 40px; }
+.menu nav{ position:relative; display:flex; flex-direction:column; gap:4px; }
+.menu nav a{ font-family:var(--display); font-weight:var(--dw); font-size:clamp(36px,6.5vw,72px); line-height:1.1; display:flex; align-items:baseline; gap:18px; transition:color .3s ease, transform .4s cubic-bezier(.34,1.56,.64,1); }
+.menu nav a small{ font-family:var(--mono); font-size:13px; opacity:.5; }
+.menu nav a:hover{ color:var(--accent); transform:translateX(14px); }
+.menu .mnote{ position:relative; margin-top:36px; font-size:14px; opacity:.6; max-width:420px; }
+.menu{ clip-path:circle(0% at calc(100% - 44px) 40px); }
+.btn{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; border-radius:999px; font-weight:600; font-size:15px; background:var(--accent); color:#fff; }
+.btn.ghost{ background:transparent; color:var(--text); box-shadow:inset 0 0 0 1.5px var(--line); }
+.btn{ position:relative; } .btn::before, .btn::after{ content:''; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; border:2px solid transparent; } .btn::before{ border-top-color:var(--accent-2); border-right-color:var(--accent-2); transform:scale(0); transform-origin:0 0; transition:transform .45s ease; } .btn::after{ border-bottom-color:var(--accent-2); border-left-color:var(--accent-2); transform:scale(0); transform-origin:100% 100%; transition:transform .45s ease .15s; } .btn:hover::before, .btn:hover::after{ transform:scale(1); } .btn:hover{ background:transparent !important; color:var(--text) !important; box-shadow:inset 0 0 30px -10px var(--accent); }
+.hero{ position:relative; padding:150px 0 90px; overflow:hidden; }
+.orb{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.55; pointer-events:none; }
+.orb.o1{ width:520px; height:520px; right:-120px; top:-80px; background:var(--accent); opacity:0.22; }
+.orb.o2{ width:380px; height:380px; left:-140px; bottom:-120px; background:var(--accent-2); opacity:0.25; }
+.hero .wrap{ position:relative; }
+.kick{ display:inline-flex; align-items:center; gap:10px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); font-size:12.5px; font-weight:600; }
+.kick i{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+.hero h1{ margin-top:22px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(44px,7.4vw,104px); line-height:.98; letter-spacing:-.025em; max-width:14ch; }
+.hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; }
+.hero h1 .w > span{ display:inline-block; }
+.hero .lead{ margin-top:22px; max-width:600px; font-size:18.5px; color:var(--dim); }
+.acts{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+.stats{ display:flex; flex-wrap:wrap; gap:36px; margin-top:48px; padding-top:28px; border-top:1px solid var(--line); }
+.stats b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:30px; color:var(--accent); }
+.stats span{ font-size:13px; color:var(--dim); }
+section.s{ padding:clamp(70px,10vw,130px) 0; }
+.lbl{ display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.lbl::before{ content:''; width:22px; height:1.5px; background:currentColor; }
+.sh{ margin-top:12px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(32px,4.6vw,58px); line-height:1.04; letter-spacing:-.015em; }
+.demo-h{ display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:end; margin-bottom:30px; }
+.demo-h p{ color:var(--dim); font-size:17px; }
+/* the Chrome window */
+.cx{ --cx-bg:#DEE1E6; --cx-bar:#FFFFFF; --cx-omni:#F1F3F4; --cx-ink:#3C4043;
+  position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 50px 100px -50px rgba(0,0,0,.6); background:var(--cx-bg); color:var(--cx-ink); font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; }
+.cx-tabs{ display:flex; align-items:flex-end; gap:2px; height:42px; padding:0 10px; }
+.cx-dots{ display:flex; gap:7px; align-self:center; margin-right:12px; } .cx-dots i{ width:11px; height:11px; border-radius:50%; background:#FF5F57; } .cx-dots i:nth-child(2){ background:#FEBC2E; } .cx-dots i:nth-child(3){ background:#28C840; }
+.cx-tab{ display:flex; align-items:center; gap:8px; width:220px; height:34px; padding:0 12px; border-radius:10px 10px 0 0; font-size:12.5px; opacity:.75; }
+.cx-tab.on{ background:var(--cx-bar); opacity:1; }
+.cx-tab span{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cx-tab b{ font-weight:400; opacity:.6; }
+.cx-tab .fav{ width:14px; height:14px; border-radius:4px; background:var(--accent); flex:none; } .cx-tab .fav.f2{ background:#9AA0A6; border-radius:50%; }
+.cx-plus{ align-self:center; margin-left:6px; font-size:18px; opacity:.7; }
+.cx-bar{ display:flex; align-items:center; gap:6px; height:44px; padding:0 10px; background:var(--cx-bar); border-bottom:1px solid #DADCE0; }
+.cx-nb{ width:30px; height:30px; display:grid; place-items:center; border-radius:50%; opacity:.7; font-size:15px; }
+.cx-omni{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; height:32px; padding:0 14px; border-radius:16px; background:var(--cx-omni); font-size:13.5px; }
+.cx-omni #cxUrl{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cx-star{ opacity:.6; }
+.cx-puz{ width:30px; height:30px; display:grid; place-items:center; opacity:.65; }
+.cx-ext{ position:relative; width:32px; height:32px; border-radius:50%; display:grid; place-items:center; transition:background .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.cx-ext i{ width:20px; height:20px; border-radius:6px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:12px; color:#fff; background:var(--accent); box-shadow:0 0 0 0 var(--accent); animation:cxGlow 2.4s ease-in-out infinite; }
+.cx-ext:hover{ background:rgba(127,127,127,.18); transform:scale(1.1); }
+.cx-ext[aria-expanded="true"]{ background:rgba(127,127,127,.22); } .cx-ext[aria-expanded="true"] i{ animation:none; box-shadow:0 0 14px var(--accent); }
+@keyframes cxGlow{ 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent), 0 0 10px var(--accent); } 50%{ box-shadow:0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent), 0 0 18px var(--accent); } }
+.cx-badge{ position:absolute; right:-3px; bottom:-1px; min-width:16px; height:15px; padding:0 4px; border-radius:8px; background:var(--accent-2); color:#111; font-size:9.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--cx-bar); }
+.cx-av{ width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#F59E0B,#DB2777); margin-left:4px; }
+.cx-view{ position:relative; height:600px; background:#fff; }
+.cx-page{ position:absolute; inset:0; overflow-y:auto; overflow-x:hidden; color:#1F2328; font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; scrollbar-width:thin; }
+.cx-pop{ position:absolute; z-index:20; top:6px; right:12px; width:min(var(--pw), calc(100% - 24px)); max-height:calc(100% - 20px); display:flex; flex-direction:column; border-radius:12px; overflow:hidden; background:var(--panel); color:var(--text); font-family:var(--body); box-shadow:0 18px 50px rgba(0,0,0,.35), 0 0 0 1px var(--line); transform-origin:calc(100% - 40px) 0; }
+.cx-pop::before{ content:''; position:absolute; top:-6px; right:46px; width:12px; height:12px; background:var(--panel); transform:rotate(45deg); }
+.cx-pop-h{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line); }
+.cx-pop-h i{ width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:13px; color:#fff; background:var(--accent); }
+.cx-pop-h b{ font-family:var(--display); font-weight:var(--dw); font-size:15px; }
+.cx-pop-s{ font-size:11.5px; color:var(--dim); }
+.cx-px{ margin-left:auto; width:28px; height:28px; border-radius:50%; font-size:18px; color:var(--dim); } .cx-px:hover{ background:var(--line); color:var(--text); }
+.cx-pop-b{ padding:14px; overflow-y:auto; scrollbar-width:thin; }
+@media(max-width:900px){ .cx-tab:not(.on), .cx-nb:nth-child(2), .cx-star, .cx-puz{ display:none; } .cx-view{ height:560px; } }
+#demo{ position:relative; }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+.feat{ position:relative; padding:28px; border-radius:20px; background:var(--panel); border:1px solid var(--line); overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-color .3s ease; }
+.feat:hover{ transform:translateY(-6px) rotate(-.5deg); border-color:var(--accent); }
+.feat .n{ font-family:var(--mono); font-size:13px; color:var(--accent); }
+.feat h3{ margin-top:14px; font-family:var(--display); font-weight:var(--dw); font-size:24px; line-height:1.15; }
+.feat p{ margin-top:8px; color:var(--dim); }
+.cta{ text-align:center; }
+.cta .sh{ max-width:16ch; margin:12px auto 0; }
+.cta p{ margin:14px auto 30px; color:var(--dim); }
+.foot{ padding:30px 0 calc(34px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); font-size:13px; color:var(--dim); }
+.foot .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+.toast{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--bg); font-size:14px; font-weight:600; box-shadow:0 20px 40px rgba(0,0,0,.3); max-width:calc(100% - 32px); }
+@media(max-width:900px){ .demo-h, .feats{ grid-template-columns:1fr; } .wpa-body{ grid-template-columns:1fr; } .wpa-menu{ display:none; } .nav .back{ display:none; } .wpa-main{ padding:16px 14px 20px; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } .rv{ opacity:1; transform:none; } }
+/* ---------- extension simulator ---------- */
+.wc-app{ min-height:100%; background:#FBF8F2; color:#22201C; font-family:'Hanken Grotesk', sans-serif; }
+.wc-top{ position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:14px; height:50px; padding:0 22px; background:#FBF8F2; border-bottom:1px solid #EAE3D6; font-size:13px; }
+.wc-top b{ font:400 17px 'Young Serif', serif; } .wc-saved{ color:#8A8172; } .wc-share{ margin-left:auto; padding:6px 14px; border-radius:16px; background:#22201C; color:#FBF8F2; font-weight:600; }
+.wc-doc{ max-width:660px; margin:0 auto; padding:34px 28px 80px; }
+.wc-meta{ font-size:12px; color:#8A8172; } .wc-title{ margin:8px 0 18px; font:400 clamp(30px, 4.6vw, 42px)/1.1 'Young Serif', serif; }
+.wc-ed, .wc-review{ font-size:17.5px; line-height:1.75; white-space:pre-wrap; outline:none; caret-color:#2F6F4E; min-height:200px; }
+.wc-ed:focus{ box-shadow:-14px 0 0 -12px #2F6F4E; }
+.wc-ed[hidden], .wc-review[hidden]{ display:none; }
+.wc-ed::selection, .wc-ed *::selection{ background:rgba(224,122,46,.28); }
+.wc-review{ white-space:normal; } .wc-review p{ margin:0 0 1.2em; }
+.wc-ls, .wc-ms{ border-radius:3px; background-repeat:no-repeat; background-size:100% 100%; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+.wc-ls{ background-image:linear-gradient(rgba(224,122,46,.32), rgba(224,122,46,.32)); cursor:help; } .wc-ms{ background-image:linear-gradient(rgba(234,196,73,.25), rgba(234,196,73,.25)); }
+.wc-seg{ display:flex; padding:3px; border-radius:10px; background:#F1EBDF; }
+.wc-seg button{ flex:1; height:30px; border-radius:8px; color:var(--text); font:600 12.5px 'Hanken Grotesk', sans-serif; transition:background .25s ease, color .25s ease; } .wc-seg button[aria-pressed="true"]{ background:var(--accent); color:#fff; }
+.wc-hero{ display:flex; align-items:center; gap:14px; margin:14px 0 10px; }
+.wc-ring{ width:92px; flex:none; } .wc-ring circle{ transition:stroke-dashoffset .5s cubic-bezier(.22,1,.36,1), stroke .3s ease; } .wc-pct{ font:600 14px 'Martian Mono', monospace; fill:var(--text); }
+.wc-ht{ min-width:0; } .wc-num{ display:block; font:400 40px/1 'Young Serif', serif; color:var(--accent); font-variant-numeric:tabular-nums; } .wc-lbl{ display:block; margin:4px 0 8px; font-size:12.5px; color:var(--dim); }
+.wc-goal{ height:28px; padding:0 8px; border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--text); font:600 11.5px 'Hanken Grotesk', sans-serif; } .wc-goal:focus{ outline:none; border-color:var(--accent); }
+.wc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.wc-grid div{ padding:8px 10px; border-radius:10px; background:#F6F1E7; } .wc-grid span{ display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); } .wc-grid b{ font:500 13px 'Martian Mono', monospace; }
+.wc-l{ margin:14px 0 7px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
+.wc-grade{ --g:#2F6F4E; display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:12px; border:1px solid color-mix(in srgb, var(--g) 35%, transparent); background:color-mix(in srgb, var(--g) 7%, transparent); }
+.wc-gl{ flex:none; width:44px; height:44px; display:grid; place-items:center; border-radius:12px; background:var(--g); color:#fff; font:400 24px 'Young Serif', serif; }
+.wc-grade > div{ flex:1; min-width:0; } .wc-grade b{ display:block; font-size:14px; color:var(--g); } .wc-grade small{ font-size:11.5px; color:var(--dim); }
+.wc-meter{ display:block; height:5px; margin-top:6px; border-radius:3px; background:rgba(0,0,0,.07); overflow:hidden; } .wc-meter i{ display:block; height:100%; background:var(--g); transition:width .5s ease; }
+.wc-kw{ display:flex; flex-direction:column; gap:5px; }
+.wc-kr{ display:grid; grid-template-columns:84px 1fr auto; align-items:center; gap:8px; font-size:12.5px; } .wc-kr b{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .wc-kr code{ font:500 10.5px 'Martian Mono', monospace; color:var(--dim); }
+.wc-kb{ height:7px; border-radius:4px; background:#F1EBDF; overflow:hidden; } .wc-kb i{ display:block; height:100%; border-radius:4px; background:linear-gradient(90deg, var(--accent), var(--accent-2)); transition:width .5s ease; }
+.wc-empty{ font-size:12.5px; color:var(--dim); }
+.wc-long{ width:100%; height:36px; margin-top:14px; border-radius:10px; border:1.5px dashed var(--accent-2); color:#B85A17; font:700 12.5px 'Hanken Grotesk', sans-serif; transition:background .2s ease; } .wc-long:hover, .wc-long[aria-pressed="true"]{ background:rgba(224,122,46,.1); }
+.wc-rep{ width:100%; height:40px; margin-top:8px; font-size:13px; }
+@media(max-width:900px){ .wc-doc{ padding:24px 20px 60px; } .wc-ed, .wc-review{ font-size:16.5px; } }
+
+</style>
 </head>
-<body data-theme="4">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
+<body>
+<div class="prog" id="prog"></div>
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><i>W</i>WordCountr</a><span class="sp"></span>
+  <a class="back" href="../../index.html#work">← Bazozo</a>
+  <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 </header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>Chrome Extensions</div>
-    <h1 class="device-title">WordCountr</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Small tool, big difference</p>
-    <div class="device-frame-wrap browser" id="deviceFrameWrap">
-      <div id="demoBody"></div>
+<div class="menu" id="menu" data-variant="1" hidden>
+  <nav aria-label="Site"><a href="#demo-sec"><small>01</small>Try the plugin</a><a href="#features"><small>02</small>Features</a><a href="#cta"><small>03</small>Pricing</a><a href="../../index.html#contact"><small>04</small>Hire Bazozo</a><a href="../../index.html#work"><small>05</small>All work</a></nav>
+  <p class="mnote">Chrome extension · live word count</p>
+</div>
+<main id="top">
+  <section class="hero"><span class="orb o1"></span><span class="orb o2"></span>
+    <div class="wrap">
+      <span class="kick"><i></i>Chrome extension · live word count</span>
+      <h1 id="h1"><span class="w"><span>Every</span></span> <span class="w"><span>word</span></span> <span class="w"><span>counted,</span></span> <span class="w"><span>as</span></span> <span class="w"><span>you</span></span> <span class="w"><span>type.</span></span></h1>
+      <p class="lead">WordCountr shows a live word count, reading time and readability score for anything you write on the web, and flags the sentences that run too long.</p>
+      <div class="acts"><a class="btn pri" href="#demo-sec">Try the extension ↓</a><a class="btn ghost" href="#cta">Add to Chrome</a></div>
+      <div class="stats"><div><b>Live</b><span>updates as you type</span></div><div><b>Readability</b><span>Flesch score</span></div><div><b>Long lines</b><span>flagged for you</span></div></div>
     </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>WordCountr is a lightweight chrome extensions that does exactly what it says: live word count and reading-time estimate for any page. No bloated settings screen, no background trackers, no upsell halfway through onboarding.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>One-Click Install</h4><p>No account, no setup wizard — it just works the moment you add it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Runs Entirely Offline</h4><p>No data ever leaves your browser unless you explicitly export it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Tiny Footprint</h4><p>Built to add negligible memory or CPU overhead, even with dozens of tabs open.</p></div>
+  </section>
+  <section class="s" id="demo-sec" style="padding-top:20px"><div class="wrap">
+    <div class="demo-h"><div class="rv"><span class="lbl">Live in Chrome</span><h2 class="sh">Write against a target</h2></div><p class="rv">Type in the draft and watch the numbers move. Select a passage to count just that, then turn on long-sentence review.</p></div>
+    <div class="cx" id="cx" role="region" aria-label="WordCountr browser simulator">
+      <div class="cx-tabs"><span class="cx-dots" aria-hidden="true"><i></i><i></i><i></i></span><div class="cx-tab on"><i class="fav"></i><span>Draftboard · Untitled essay</span><b aria-hidden="true">×</b></div><div class="cx-tab"><i class="fav f2"></i><span>New Tab</span></div><span class="cx-plus" aria-hidden="true">+</span></div>
+      <div class="cx-bar"><span class="cx-nb" aria-hidden="true">←</span><span class="cx-nb" aria-hidden="true">→</span><span class="cx-nb" aria-hidden="true">↻</span>
+        <div class="cx-omni"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span id="cxUrl">draftboard.app/d/remote-work</span><span class="cx-star" aria-hidden="true">☆</span></div>
+        <span class="cx-puz" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 3a2 2 0 0 1 4 0v2h4a1 1 0 0 1 1 1v4h-2a2 2 0 0 0 0 4h2v4a1 1 0 0 1-1 1h-4v-2a2 2 0 0 0-4 0v2H6a1 1 0 0 1-1-1v-4h2a2 2 0 0 0 0-4H5V6a1 1 0 0 1 1-1h4Z"/></svg></span>
+        <button class="cx-ext" type="button" id="cxExt" aria-expanded="false" aria-controls="cxPop" aria-label="Open WordCountr"><i>W</i><b class="cx-badge" id="cxBadge" hidden></b></button><span class="cx-av" aria-hidden="true"></span></div>
+      <div class="cx-view"><div class="cx-page" id="cxPage" data-lenis-prevent></div>
+        <div class="cx-pop" id="cxPop" role="dialog" aria-label="WordCountr" hidden style="--pw:350px"><div class="cx-pop-h"><i>W</i><b>WordCountr</b><span class="cx-pop-s">live count</span><button class="cx-px" type="button" id="cxPopX" aria-label="Close popup">×</button></div><div class="cx-pop-b" id="cxPopBody"></div></div>
       </div>
     </div>
-  </div>
-</section>
-
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects[63]);
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-chrome');
-</script>
+  </div></section>
+  <section class="s" id="features" style="padding-top:0"><div class="wrap">
+    <span class="lbl rv">Why it works</span><h2 class="sh rv">Built for the browser you already use</h2>
+    <div class="feats"><article class="feat rv"><span class="n">01</span><h3>Counts that keep up</h3><p>Words, characters, sentences and paragraphs update on every keystroke.</p></article><article class="feat rv"><span class="n">02</span><h3>Time, not just words</h3><p>Reading and speaking time, so you know if your talk fits the slot.</p></article><article class="feat rv"><span class="n">03</span><h3>Edit with evidence</h3><p>Readability, keyword density and every sentence over 25 words highlighted.</p></article></div>
+  </div></section>
+  <section class="s cta" id="cta"><div class="wrap">
+    <span class="lbl rv">WordCountr</span><h2 class="sh rv">Hit your word count</h2><p class="rv">Free. Works in any text box.</p>
+    <a class="btn pri rv" href="../../index.html#contact">Add to Chrome →</a>
+  </div></section>
+</main>
+<footer class="foot"><div class="wrap"><span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span><a href="../../index.html#work">← Back to Bazozo</a></div></footer>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="wordcountr.js" defer></script>
 </body>
 </html>

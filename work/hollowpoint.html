@@ -3,173 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hollow Point — Case Study by Bazozo</title>
-<meta name="description" content="An audio-reactive showcase for a music producer — visuals move with the track, not around it.">
+<title>Hollow Point — Spatial sound &amp; motion lab · Built by Bazozo Studio</title>
+<meta name="description" content="Hollow Point: a sound design and 3D motion studio with a live keyframe curve editor, a 3D wireframe that reacts to your easing, and binaural spatial audio. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#08080C">
 <link rel="canonical" href="https://bazozo.in/work/hollowpoint.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="preload" as="image" href="../images/hollowpoint.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#d1495b; --site-hero-image:url('../images/hollowpoint.jpg'); }</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Outfit:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#08080C;
+  --panel:#0F0F16;
+  --panel-2:#15151E;
+  --edge:#24243A;
+  --text:#ECEBF5;
+  --dim:#9493AE;
+  --faint:#5A5975;
+  --accent:#FF2E88;
+  --aqua:#2EF2D0;
+  --display:'Michroma', 'Eurostile', sans-serif;
+  --sans:'Outfit', system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:76px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, select, input{ font:inherit; color:inherit; }
+canvas, svg{ display:block; }
+.wrap{ width:100%; max-width:1340px; margin:0 auto; padding:0 clamp(16px,3.5vw,44px); }
+::selection{ background:var(--accent); color:#fff; }
+:focus-visible{ outline:2px solid var(--aqua); outline-offset:3px; }
+.k{ font-family:var(--display); font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:var(--dim); }
+.k b{ color:var(--aqua); font-weight:400; }
+.bg-grid{ position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:linear-gradient(rgba(46,242,208,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(46,242,208,.05) 1px, transparent 1px); background-size:48px 48px; mask-image:radial-gradient(ellipse at 50% 20%, #000, transparent 70%); }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); transition:background .3s ease; }
+.nav.scrolled{ background:rgba(8,8,12,.82); backdrop-filter:blur(12px); border-bottom:1px solid var(--edge); }
+.nav .wrap{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.logo{ font-family:var(--display); font-size:15px; letter-spacing:.24em; line-height:1; }
+.logo span{ color:var(--accent); }
+.nav-r{ display:flex; align-items:center; gap:12px; }
+/* rotary knob menu button */
+.knob{ position:relative; width:54px; height:54px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at 35% 30%, #2A2A3A, #101018 70%); box-shadow:0 0 0 1px var(--edge), inset 0 1px 0 rgba(255,255,255,.08), 0 8px 20px -10px #000; }
+.knob::before{ content:''; position:absolute; inset:-6px; border-radius:50%; background:conic-gradient(from 225deg, var(--accent) 0deg var(--sweep,0deg), rgba(255,255,255,.08) var(--sweep,0deg) 270deg, transparent 270deg); -webkit-mask:radial-gradient(circle, transparent 29px, #000 30px, #000 31px, transparent 32px); mask:radial-gradient(circle, transparent 29px, #000 30px, #000 31px, transparent 32px); transition:--sweep .6s var(--ease); }
+@property --sweep{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
+.knob .ind{ position:absolute; left:50%; top:7px; width:3px; height:13px; margin-left:-1.5px; border-radius:2px; background:var(--text); transform-origin:50% 20px; transform:rotate(-135deg); transition:transform .6s cubic-bezier(.34,1.56,.64,1), background .3s ease; }
+.knob:hover .ind{ transform:rotate(-100deg); }
+.knob[aria-expanded="true"]{ --sweep:270deg; }
+.knob[aria-expanded="true"] .ind{ transform:rotate(135deg); background:var(--accent); }
+.menu{ position:fixed; inset:0; z-index:75; background:rgba(8,8,12,.96); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; padding:calc(var(--nav-h) + 20px) clamp(16px,3.5vw,44px) 30px; gap:10px; }
+.menu a{ font-family:var(--display); font-size:clamp(28px,6vw,64px); letter-spacing:.08em; line-height:1.15; display:flex; align-items:center; gap:18px; transition:color .2s ease, letter-spacing .4s var(--ease); }
+.menu a small{ font-family:var(--sans); font-size:12px; letter-spacing:.2em; color:var(--aqua); }
+.menu a:hover{ color:var(--accent); letter-spacing:.14em; }
+
+/* drum-pad buttons */
+.pad{ position:relative; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; gap:10px; height:54px; padding:0 24px; border-radius:12px; border:1px solid var(--edge); cursor:pointer;
+  background:linear-gradient(180deg, #1C1C28, #12121A); color:var(--text); font-family:var(--display); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 10px 22px -14px #000; transition:transform .08s ease, box-shadow .25s ease, border-color .25s ease; }
+.pad::after{ content:''; position:absolute; left:var(--x,50%); top:var(--y,50%); width:10px; height:10px; margin:-5px; border-radius:50%; background:var(--accent); opacity:0; transform:scale(0); }
+.pad:hover{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 0 26px -6px var(--accent), inset 0 1px 0 rgba(255,255,255,.07); }
+.pad:active{ transform:scale(.97); }
+.pad.hit::after{ animation:ripple .55s ease-out; }
+@keyframes ripple{ 0%{ opacity:.7; transform:scale(0); } 100%{ opacity:0; transform:scale(30); } }
+.pad.hot{ background:linear-gradient(180deg, #FF4C9C, #E01772); border-color:#FF6FAE; color:#fff; }
+.pad.hot:hover{ box-shadow:0 0 34px -6px var(--accent); }
+.pad[aria-pressed="true"]{ border-color:var(--aqua); color:var(--aqua); box-shadow:0 0 0 1px var(--aqua), 0 0 24px -8px var(--aqua); }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; isolation:isolate; min-height:94svh; padding:calc(var(--nav-h) + 30px) 0 50px; display:grid; align-items:end; overflow:hidden; }
+.hero-img{ position:absolute; inset:0; z-index:-1; }
+.hero-img img{ width:100%; height:100%; object-fit:cover; object-position:60% 40%; opacity:.4; filter:saturate(.7) hue-rotate(-20deg); }
+.hero-img::after{ content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 70% 30%, rgba(255,46,136,.18), transparent 50%), linear-gradient(180deg, rgba(8,8,12,.3), var(--bg) 92%); }
+.hero h1{ font-family:var(--display); font-weight:400; font-size:clamp(34px,6.4vw,96px); line-height:1.02; letter-spacing:.02em; text-transform:uppercase; max-width:13ch; }
+.hero h1 .ln{ display:block; overflow:hidden; }
+.hero h1 .ln > span{ display:block; }
+.hero h1 .acc{ color:var(--accent); }
+.hero-row{ margin-top:28px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+.hero-row p{ max-width:460px; color:var(--dim); font-size:17px; }
+.hero-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+/* ---------- lab ---------- */
+.lab{ padding:clamp(70px,9vw,120px) 0; }
+.sh{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:28px; }
+.sh h2{ font-family:var(--display); font-weight:400; font-size:clamp(26px,4vw,52px); line-height:1.1; letter-spacing:.03em; text-transform:uppercase; }
+.sh h2 span{ color:var(--accent); }
+.sh p{ max-width:420px; color:var(--dim); }
+.lab-grid{ display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr); gap:14px; }
+.card{ background:var(--panel); border:1px solid var(--edge); border-radius:18px; overflow:hidden; }
+.ch{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--edge); }
+.ch .t{ font-family:var(--display); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); }
+.ch .t b{ color:var(--text); font-weight:400; }
+.curve-wrap{ padding:14px 16px 6px; }
+#curve{ width:100%; height:auto; touch-action:none; }
+#curve .grid{ stroke:var(--edge); stroke-width:1; }
+#curve .axis-t{ font:500 9px var(--sans); fill:var(--faint); letter-spacing:.1em; }
+#curve .lin{ stroke:rgba(236,235,245,.15); stroke-dasharray:3 5; stroke-width:1; }
+#curve .path{ fill:none; stroke:url(#cg); stroke-width:3.5; stroke-linecap:round; filter:drop-shadow(0 0 8px rgba(255,46,136,.45)); }
+#curve .arm{ stroke:rgba(236,235,245,.45); stroke-width:1.2; }
+#curve .end{ fill:var(--text); }
+#curve .h{ fill:var(--bg); stroke-width:3; cursor:grab; }
+#curve .h.a{ stroke:var(--accent); } #curve .h.b{ stroke:var(--aqua); }
+#curve .h:active{ cursor:grabbing; }
+#curve .ph{ fill:#fff; }
+#curve .ph-line{ stroke:rgba(255,255,255,.3); stroke-width:1; }
+.readout{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:0 16px 12px; }
+.readout code{ font-family:ui-monospace, monospace; font-size:13px; color:var(--aqua); background:rgba(46,242,208,.08); padding:6px 10px; border-radius:8px; }
+.copy{ border:1px solid var(--edge); background:var(--panel-2); border-radius:8px; padding:6px 10px; font-size:12px; color:var(--dim); cursor:pointer; }
+.copy:hover{ color:var(--text); border-color:var(--aqua); }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 14px; }
+.chip{ height:34px; padding:0 12px; border-radius:999px; border:1px solid var(--edge); background:var(--panel-2); font-size:12.5px; font-weight:500; cursor:pointer; transition:border-color .2s ease, color .2s ease, background .2s ease; }
+.chip:hover{ border-color:var(--accent); }
+.chip[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.ctl{ padding:0 16px 16px; display:grid; gap:12px; }
+.ctl label{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--dim); }
+.ctl label b{ color:var(--text); font-weight:500; font-variant-numeric:tabular-nums; }
+input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:26px; background:transparent; cursor:pointer; }
+input[type=range]::-webkit-slider-runnable-track{ height:4px; border-radius:4px; background:linear-gradient(90deg, var(--accent) var(--p,40%), #262636 var(--p,40%)); }
+input[type=range]::-moz-range-track{ height:4px; border-radius:4px; background:#262636; }
+input[type=range]::-moz-range-progress{ height:4px; border-radius:4px; background:var(--accent); }
+input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; margin-top:-7px; border-radius:50%; background:#fff; box-shadow:0 0 0 4px rgba(255,46,136,.3); }
+input[type=range]::-moz-range-thumb{ width:16px; height:16px; border-radius:50%; background:#fff; border:none; }
+.stage{ position:relative; aspect-ratio:16/10; background:radial-gradient(ellipse at 50% 60%, #15152A, #08080C 70%); }
+.stage canvas{ width:100%; height:100%; }
+.stage-hud{ position:absolute; left:14px; top:12px; display:grid; gap:2px; font-size:11.5px; color:var(--dim); font-variant-numeric:tabular-nums; pointer-events:none; }
+.stage-hud b{ color:var(--text); font-weight:500; }
+.radar{ position:absolute; right:14px; top:12px; width:120px; height:120px; border-radius:50%; background:rgba(8,8,12,.7); border:1px solid var(--edge); }
+.radar canvas{ width:100%; height:100%; }
+.meters{ position:absolute; right:14px; bottom:12px; display:flex; gap:6px; align-items:flex-end; height:100px; }
+.meter{ width:10px; height:100%; border-radius:3px; background:#1A1A26; position:relative; overflow:hidden; }
+.meter i{ position:absolute; left:0; right:0; bottom:0; height:0; background:linear-gradient(0deg, var(--aqua), #FFE45C 75%, var(--accent)); }
+.meters span{ font-size:9.5px; color:var(--faint); writing-mode:vertical-rl; transform:rotate(180deg); }
+.stage-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:12px 16px; border-top:1px solid var(--edge); }
+.stage-bar .sp{ flex:1; }
+.note{ padding:0 16px 14px; font-size:12.5px; color:var(--faint); }
+
+/* credits + cta */
+.credits{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:30px; }
+.credit{ padding:24px; border-radius:18px; background:var(--panel); border:1px solid var(--edge); transition:border-color .3s ease, transform .4s var(--ease); }
+.credit:hover{ border-color:var(--accent); transform:translateY(-4px); }
+.credit .tag{ font-family:var(--display); font-size:9.5px; letter-spacing:.2em; color:var(--aqua); }
+.credit h3{ margin-top:14px; font-family:var(--display); font-weight:400; font-size:18px; letter-spacing:.06em; text-transform:uppercase; }
+.credit p{ margin-top:8px; font-size:14.5px; color:var(--dim); }
+.cta{ text-align:center; padding:clamp(100px,13vw,170px) 0; border-top:1px solid var(--edge); }
+.cta h2{ font-family:var(--display); font-weight:400; font-size:clamp(32px,6vw,84px); line-height:1.08; letter-spacing:.03em; text-transform:uppercase; }
+.cta h2 span{ color:var(--accent); }
+.cta p{ margin:20px auto 30px; max-width:440px; color:var(--dim); }
+.foot{ border-top:1px solid var(--edge); padding:24px 0 calc(24px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:500; }
+.foot a:hover{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:1000px){ .lab-grid{ grid-template-columns:1fr; } .credits{ grid-template-columns:1fr; } }
+@media(max-width:560px){ .nav-r .pad{ display:none; } .radar{ width:84px; height:84px; } .meters{ height:70px; } }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition-duration:.01ms !important; } .rv{ opacity:1; transform:none; } }
+</style>
 </head>
 <body>
+<div class="bg-grid" aria-hidden="true"></div>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">HOLLOW<span>/</span>POINT</a>
+    <div class="nav-r">
+      <a class="pad" href="#lab" style="height:46px;padding:0 18px">Open lab</a>
+      <button class="knob" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span class="ind"></span></button>
+    </div>
   </div>
 </header>
+<nav class="menu" id="menu" aria-label="Main" hidden>
+  <a href="#lab"><small>01</small>Motion lab</a>
+  <a href="#credits"><small>02</small>Credits</a>
+  <a href="#contact"><small>03</small>Contact</a>
+  <a href="../index.html#work"><small>←</small>Bazozo</a>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Music Producer Showcase</div>
-    <h1><span class="word"><span class="word-inner">Beats</span></span> <span class="word"><span class="word-inner">that</span></span> <span class="word"><span class="word-inner">react</span></span> <span class="word"><span class="word-inner">to</span></span> <span class="word"><span class="word-inner">the</span></span> <span class="word"><span class="word-inner">room</span></span></h1>
-    <p>An audio-reactive showcase for a music producer — visuals move with the track, not around it.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Hollow Point produces for a small roster of independent artists. This showcase syncs its visual pulse to the actual waveform of each track, not a canned animation loop.</p>
-      <p>Every reel on the site is a finished, released track — nothing here is a demo or a sketch.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Audio-Reactive Visuals</h3><p>Background motion is driven by the real frequency data of the playing track.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Credits, Not Just Covers</h3><p>Every track links to full production and mix credits, not just cover art.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Direct Licensing</h3><p>Sync licensing requests go straight to the producer, no agency layer.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">License a track</h2>
-    <p class="reveal">Full catalog available for sync licensing.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Browse the catalog</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+<main id="top">
+  <section class="hero">
+    <div class="hero-img" aria-hidden="true"><img src="../images/hollowpoint.jpg" alt="" width="1920" height="1280"></div>
+    <div class="wrap">
+      <span class="k rv-h"><b>●</b> Sound design · Spatial audio · 3D motion</span>
+      <h1 style="margin-top:18px"><span class="ln"><span>Motion you</span></span><span class="ln"><span class="acc">can hear.</span></span></h1>
+      <div class="hero-row rv-h">
+        <p>Hollow Point designs sound and motion together for games, film titles and installations. Every curve that moves an object also moves its sound.</p>
+        <div class="hero-actions"><a class="pad hot" href="#lab">Try the lab</a><a class="pad" href="#credits">Credits</a></div>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <section class="lab" id="lab">
+    <div class="wrap">
+      <div class="sh"><h2 class="rv">Keyframe &amp; <span>spatial audio lab.</span></h2><p class="rv">Shape the easing curve, then hit play with headphones on. The object, its speed and its position around your head all follow your curve.</p></div>
+      <div class="lab-grid">
+        <div class="card rv">
+          <div class="ch"><span class="t">Graph editor · <b>Value curve</b></span><span class="k">Frame 0 → 48</span></div>
+          <div class="curve-wrap"><svg id="curve" viewBox="0 0 320 320" role="img" aria-label="Easing curve editor: drag the pink and aqua handles">
+            <defs><linearGradient id="cg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FF2E88"/><stop offset="1" stop-color="#2EF2D0"/></linearGradient></defs>
+          </svg></div>
+          <div class="readout"><code id="bez">cubic-bezier(0.65, 0, 0.35, 1)</code><button class="copy" id="copyBtn" type="button">Copy</button></div>
+          <div class="chips" role="group" aria-label="Easing presets">
+            <button class="chip" type="button" data-e="0.65,0,0.35,1" aria-pressed="true">Ease in-out</button>
+            <button class="chip" type="button" data-e="0.25,0.1,0.25,1">Ease</button>
+            <button class="chip" type="button" data-e="0.34,1.56,0.64,1">Back out</button>
+            <button class="chip" type="button" data-e="0.9,0,0.1,1">Snap</button>
+            <button class="chip" type="button" data-e="0,0,1,1">Linear</button>
+          </div>
+          <div class="ctl">
+            <label for="dur"><span>Duration</span><b id="durOut">2.4 s</b></label>
+            <input type="range" id="dur" min="6" max="50" value="24" aria-label="Animation duration">
+          </div>
+        </div>
+        <div class="card rv">
+          <div class="ch"><span class="t">Viewport · <b id="pathName">Orbit the listener</b></span><span class="k" id="fpsOut">60 fps</span></div>
+          <div class="stage">
+            <canvas id="stage" width="1280" height="800"></canvas>
+            <div class="stage-hud"><span>Progress <b id="hudP">0%</b></span><span>Value <b id="hudV">0.00</b></span><span>Velocity <b id="hudS">0.00</b></span><span>Azimuth <b id="hudA">0°</b></span></div>
+            <div class="radar" aria-hidden="true"><canvas id="radar" width="240" height="240"></canvas></div>
+            <div class="meters" aria-label="Output level meters"><span>L</span><div class="meter"><i id="mL"></i></div><div class="meter"><i id="mR"></i></div><span>R</span></div>
+          </div>
+          <div class="stage-bar">
+            <button class="pad hot" id="audioBtn" type="button" aria-pressed="false">Play with sound</button>
+            <span class="sp"></span>
+            <span role="group" aria-label="Motion path" style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="chip" type="button" data-path="orbit" aria-pressed="true">Orbit</button>
+              <button class="chip" type="button" data-path="fly" aria-pressed="false">Fly-by</button>
+              <button class="chip" type="button" data-path="dive" aria-pressed="false">Dive</button>
+            </span>
+          </div>
+          <p class="note" id="note">Headphones recommended: the sound is positioned with a binaural (HRTF) panner, so you hear it move around you.</p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <section class="lab" id="credits" style="padding-top:0">
+    <div class="wrap">
+      <div class="sh"><h2 class="rv">Selected <span>credits.</span></h2><p class="rv">Sound and motion designed as one deliverable, not handed between teams.</p></div>
+      <div class="credits">
+        <article class="credit rv"><span class="tag">Game · 2025</span><h3>Glasshouse</h3><p>Full spatial soundscape and UI motion system for an indie puzzle game.</p></article>
+        <article class="credit rv"><span class="tag">Title sequence · 2024</span><h3>Northern Lines</h3><p>Main titles where every typographic hit is timed to the score.</p></article>
+        <article class="credit rv"><span class="tag">Installation · 2023</span><h3>Room Tone</h3><p>A 16-speaker gallery piece that follows visitors around the room.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="wrap">
+      <span class="k rv">Booking spring sessions</span>
+      <h2 class="rv" style="margin-top:16px">Let's make it <span>move.</span></h2>
+      <p class="rv">Send a cut, a build or a sketch. We'll come back with a sound and motion pass.</p>
+      <a class="pad hot rv" href="../index.html#contact">Start a project</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="hollowpoint.js" defer></script>
 </body>
 </html>

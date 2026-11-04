@@ -119,7 +119,7 @@ if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
   stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
 }
 
-renderLiveDemo(projects[133]);
+renderLiveDemo(projects.find(p => p.cat === 'ios' && slugFor(p) === 'focusdial'));
 const __bf = document.querySelector('.browser-frame');
 if(__bf) __bf.classList.add('browser-ios');
 </script>

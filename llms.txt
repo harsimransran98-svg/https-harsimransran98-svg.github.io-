@@ -15,6 +15,7 @@ SEO & technical SEO, website migration, website redesign, performance optimizati
 Websites, video editing, Chrome extensions, Firefox Add-ons, Safari App Extensions, WordPress Plugins, Android apps, iOS apps, Windows Applications, macOS Applications, Android games, iOS games.
 
 ## Portfolio
-- [Full portfolio — 208 completed projects, each with a live interactive demo](https://bazozo.in/#work)
+- [Full portfolio — 209 projects, each with a live site or interactive demo](https://bazozo.in/#work)
+- [Baaz Records — live client site for an independent Punjabi music label](https://baazrecords.in/)
 - [About Bazozo](https://bazozo.in/#about)
 - [Craft & process](https://bazozo.in/#craft)

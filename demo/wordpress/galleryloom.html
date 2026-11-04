@@ -3,180 +3,342 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GalleryLoom — Case Study by Bazozo</title>
-<meta name="description" content="Masonry and lightbox galleries with lazy loading.">
+<title>GalleryLoom — Gutenberg block suite &amp; block theme · Built by Bazozo Studio</title>
+<meta name="description" content="GalleryLoom: a live Site Editor simulator of a custom WordPress block theme and Gutenberg block suite. Switch typography presets, colour palettes and header layouts, drag sections into a new order and preview on desktop, tablet and phone. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F6F2EB">
 <link rel="canonical" href="https://bazozo.in/demo/wordpress/galleryloom.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Playfair+Display:wght@600;800&family=Lora:wght@400;500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#F6F2EB;
+  --text:#1C1917;
+  --accent:#E2553A;
+  --accent-2:#3858E9;
+  --card:#FFFDF9;
+  --dim:#57534E;
+  --faint:#A8A29E;
+  --line:rgba(28,25,23,.1);
+  --ed-ink:#1E1E1E;
+  --ed-line:#E0E0E0;
+  --ed-mut:#757575;
+  --sans:'Inter', system-ui, sans-serif;
+  --serif:'Fraunces', Georgia, serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.5; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent-2); outline-offset:2px; }
+
+/* ---------- page chrome ---------- */
+.top{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); padding-top:calc(18px + env(safe-area-inset-top,0px)); }
+.brand{ font-weight:700; font-size:18px; letter-spacing:-.02em; }
+.brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; border-radius:999px; background:var(--text); color:var(--bg); font-size:13.5px; font-weight:600; transition:transform .35s var(--spring), box-shadow .3s ease, background .3s ease; }
+.back:hover{ transform:translateY(-2px) rotate(-1.5deg); background:var(--accent); box-shadow:0 10px 24px -10px var(--accent); }
+.wrap{ max-width:1320px; margin:0 auto; padding:0 clamp(16px,3vw,40px); }
+.intro{ display:grid; grid-template-columns:1fr auto; gap:20px 40px; align-items:end; padding:6px 0 22px; }
+.kick{ font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.intro h1{ margin-top:8px; font-family:var(--serif); font-size:clamp(42px,5.6vw,74px); font-weight:800; letter-spacing:-.04em; line-height:.92; }
+.intro h1 em{ font-weight:400; color:var(--accent); }
+.intro p{ margin-top:12px; color:var(--dim); max-width:560px; font-size:15.5px; }
+.try{ display:flex; flex-wrap:wrap; gap:6px; max-width:560px; justify-content:flex-end; }
+.try-h{ width:100%; text-align:right; font-size:12px; font-weight:600; color:var(--faint); }
+.try-h b{ color:var(--accent); }
+.chipt{ display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 12px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:12.5px; color:var(--dim); transition:all .35s var(--spring); }
+.chipt i{ width:14px; height:14px; border-radius:50%; border:1.5px solid var(--faint); position:relative; }
+.chipt.done{ color:var(--text); border-color:var(--accent); box-shadow:0 6px 16px -10px var(--accent); }
+.chipt.done i{ background:var(--accent); border-color:var(--accent); }
+.chipt.done i::after{ content:''; position:absolute; left:3.5px; top:1.5px; width:3.5px; height:6.5px; border-right:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(45deg); }
+
+/* ---------- editor stage ---------- */
+.stage-wrap{ width:min(100%, 1200px); margin-inline:auto; border-radius:12px; overflow-x:auto; overflow-y:hidden; box-shadow:0 0 0 1px var(--line), 0 40px 90px -40px rgba(28,25,23,.45); scrollbar-width:thin; background:#fff; }
+.stage-box{ position:relative; width:calc(1200px * var(--s,1)); height:calc(720px * var(--s,1)); }
+.stage{ position:absolute; top:0; left:0; width:1200px; height:720px; transform:scale(var(--s,1)); transform-origin:0 0; overflow:hidden; font-size:13px; isolation:isolate; background:#fff; color:var(--ed-ink); display:grid; grid-template-rows:60px 1fr; grid-template-columns:260px 1fr 284px; font-family:var(--sans); }
+.bar{ grid-column:1 / -1; display:flex; align-items:center; gap:4px; border-bottom:1px solid var(--ed-line); padding-right:12px; background:#fff; }
+.wlogo{ width:60px; height:60px; background:var(--ed-ink); display:grid; place-items:center; color:#fff; }
+.ib{ width:36px; height:36px; border-radius:2px; display:grid; place-items:center; color:var(--ed-ink); transition:background .15s ease; }
+.ib:hover{ color:var(--accent-2); }
+.ib[aria-pressed="true"]{ background:var(--ed-ink); color:#fff; }
+.ib:disabled{ opacity:.3; cursor:default; }
+.ib svg{ width:22px; height:22px; }
+.ins{ background:var(--accent-2); color:#fff; margin:0 6px 0 10px; width:32px; height:32px; }
+.ins:hover{ color:#fff; background:#2145E6; }
+.doc{ flex:1; display:flex; justify-content:center; }
+.doc span{ display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:2px; background:#F0F0F0; font-size:13px; }
+.doc b{ font-weight:600; }
+.doc i{ font-style:normal; color:var(--ed-mut); }
+.dev{ display:flex; border:1px solid var(--ed-line); border-radius:2px; margin-right:8px; }
+.dev button{ width:36px; height:32px; display:grid; place-items:center; color:var(--ed-mut); }
+.dev button[aria-pressed="true"]{ color:var(--ed-ink); background:#F0F0F0; }
+.dev svg{ width:18px; height:18px; }
+.save{ height:36px; padding:0 14px; border-radius:2px; background:var(--accent-2); color:#fff; font-weight:500; font-size:13px; transition:background .15s ease, box-shadow .2s ease; }
+.save:hover{ background:#2145E6; box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--accent-2); }
+.save .dirty{ display:inline-block; width:6px; height:6px; border-radius:50%; background:#fff; margin-left:6px; vertical-align:2px; }
+.lv{ border-right:1px solid var(--ed-line); overflow-y:auto; padding:12px 8px; scrollbar-width:thin; }
+.lv h3, .styles h3{ font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ed-ink); margin:0 8px 8px; }
+.lv-hint{ font-size:11.5px; color:var(--ed-mut); margin:0 8px 10px; }
+.li{ position:relative; display:flex; align-items:center; gap:8px; height:38px; padding:0 6px 0 8px; border-radius:2px; font-size:13px; background:#fff; touch-action:none; user-select:none; transition:background .15s ease, box-shadow .2s ease; }
+.li:hover{ background:#F0F0F0; }
+.li[aria-selected="true"]{ background:var(--accent-2); color:#fff; }
+.li .grip{ cursor:grab; color:#949494; display:grid; place-items:center; width:16px; }
+.li[aria-selected="true"] .grip{ color:rgba(255,255,255,.7); }
+.li .grip svg{ width:12px; height:16px; }
+.li .ic{ width:18px; height:18px; flex:none; }
+.li .nm{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.li .acts{ display:flex; gap:1px; opacity:0; transition:opacity .15s ease; }
+.li:hover .acts, .li[aria-selected="true"] .acts, .li:focus-within .acts{ opacity:1; }
+.li .acts button{ width:24px; height:24px; border-radius:2px; display:grid; place-items:center; color:inherit; }
+.li .acts button:hover{ background:rgba(0,0,0,.08); }
+.li[aria-selected="true"] .acts button:hover{ background:rgba(255,255,255,.18); }
+.li .acts svg{ width:16px; height:16px; }
+.li.off .nm{ opacity:.45; text-decoration:line-through; }
+.li.pinned .grip{ visibility:hidden; }
+.li.dragging{ z-index:5; box-shadow:0 10px 24px rgba(0,0,0,.18); background:#fff; color:var(--ed-ink); cursor:grabbing; }
+.li-gap{ height:38px; margin:2px 0; border-radius:2px; border:2px dashed var(--accent-2); background:rgba(56,88,233,.06); }
+.lvl{ position:relative; display:flex; flex-direction:column; gap:2px; }
+.canvas{ position:relative; background:#E8E8E8; overflow:hidden; display:flex; justify-content:center; padding:20px 0; }
+.frame{ position:relative; height:100%; background:#fff; box-shadow:0 2px 16px rgba(0,0,0,.12); overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; container-type:inline-size; container-name:site; transition:width .55s cubic-bezier(.65,0,.35,1), border-radius .4s ease; }
+.frame.tablet{ border-radius:14px; }
+.frame.mobile{ border-radius:26px; }
+
+/* ---------- the site being edited ---------- */
+.site{ --s-bg:#FBF8F3; --s-ink:#1C1917; --s-acc:#E2553A; --s-soft:#F1EBE2; --s-head:'Fraunces', Georgia, serif; --s-body:'Inter', sans-serif; --s-hw:800; --s-ls:-.03em; --s-case:none;
+  background:var(--s-bg); color:var(--s-ink); font-family:var(--s-body); font-size:13px; min-height:100%; transition:background .5s ease, color .5s ease; }
+.site h1, .site h2, .site h3, .site .logo{ font-family:var(--s-head); font-weight:var(--s-hw); letter-spacing:var(--s-ls); text-transform:var(--s-case); }
+.blk{ position:relative; transition:outline-color .2s ease; outline:2px solid transparent; outline-offset:-2px; cursor:pointer; }
+.blk:hover{ outline:1px solid rgba(56,88,233,.6); }
+.blk.sel{ outline:2px solid var(--accent-2); }
+.blk .btag{ position:absolute; z-index:3; top:-1px; left:-1px; display:none; align-items:center; gap:6px; height:26px; padding:0 9px; background:var(--accent-2); color:#fff; font-family:var(--sans); font-size:11.5px; font-weight:500; letter-spacing:0; text-transform:none; }
+.blk.sel .btag{ display:inline-flex; }
+.hdr{ display:grid; align-items:center; gap:10px 16px; padding:16px 26px; border-bottom:1px solid color-mix(in srgb, var(--s-ink) 10%, transparent); }
+.logo{ font-size:20px; display:flex; align-items:center; gap:7px; white-space:nowrap; }
+.logo i{ width:16px; height:16px; border-radius:50%; background:var(--s-acc); box-shadow:6px 0 0 color-mix(in srgb, var(--s-acc) 45%, transparent); flex:none; }
+.hnav{ display:flex; gap:16px; font-size:12.5px; font-weight:500; }
+.hbtn{ justify-self:end; padding:8px 14px; border-radius:999px; background:var(--s-ink); color:var(--s-bg); font-size:12px; font-weight:600; white-space:nowrap; }
+.burger{ display:none; width:30px; height:30px; justify-self:end; place-items:center; }
+.burger i{ display:block; width:18px; height:2px; background:var(--s-ink); box-shadow:0 -6px 0 var(--s-ink), 0 6px 0 var(--s-ink); }
+.hdr.classic{ grid-template-columns:auto 1fr auto; } .hdr.classic .hnav{ justify-content:flex-end; }
+.hdr.centered{ grid-template-columns:1fr; justify-items:center; } .hdr.centered .hbtn{ display:none; } .hdr.centered .logo{ font-size:26px; }
+.hdr.split{ grid-template-columns:1fr auto 1fr; } .hdr.split .hnav{ order:-1; } .hdr.split .logo{ justify-self:center; }
+.hdr.minimal{ grid-template-columns:1fr auto; } .hdr.minimal .hnav, .hdr.minimal .hbtn{ display:none; } .hdr.minimal .burger{ display:grid; }
+.hero{ padding:40px 26px 30px; display:grid; grid-template-columns:1.1fr 1fr; gap:24px; align-items:center; }
+.hero h1{ font-size:46px; line-height:.95; }
+.hero h1 em{ font-style:italic; font-weight:400; color:var(--s-acc); }
+.hero p{ margin-top:12px; font-size:13.5px; opacity:.75; max-width:280px; }
+.hero .go{ display:inline-block; margin-top:16px; padding:10px 16px; border-radius:999px; background:var(--s-acc); color:#fff; font-weight:600; font-size:12.5px; }
+.hero .art{ aspect-ratio:4/5; border-radius:120px 120px 14px 14px; background:radial-gradient(circle at 60% 30%, #FDE68A, transparent 40%), linear-gradient(170deg, #F59E0B, #B45309 45%, #422006); position:relative; overflow:hidden; }
+.hero .art::after{ content:''; position:absolute; left:-10%; right:-10%; bottom:-10%; height:45%; background:color-mix(in srgb, var(--s-ink) 85%, transparent); border-radius:50% 50% 0 0; }
+.sec{ padding:30px 26px; }
+.sec h2{ font-size:28px; line-height:1.05; margin-bottom:6px; }
+.sec .lead{ font-size:12.5px; opacity:.65; margin-bottom:16px; }
+.gal.masonry{ columns:3; column-gap:10px; }
+.gal.masonry .tile{ break-inside:avoid; margin-bottom:10px; }
+.gal.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.gal.grid .tile .ph{ aspect-ratio:1 !important; }
+.tile{ position:relative; border-radius:10px; overflow:hidden; cursor:zoom-in; }
+.tile .ph{ display:block; width:100%; transition:transform .5s ease; }
+.tile:hover .ph{ transform:scale(1.05); }
+.tile span{ position:absolute; left:8px; bottom:8px; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,.45); color:#fff; font-size:10.5px; backdrop-filter:blur(4px); }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.feat{ padding:16px; border-radius:14px; background:var(--s-soft); transition:background .5s ease; }
+.feat b{ display:block; font-family:var(--s-head); font-size:17px; font-weight:var(--s-hw); letter-spacing:var(--s-ls); margin:8px 0 4px; }
+.feat p{ font-size:12px; opacity:.7; }
+.feat .dot{ width:30px; height:30px; border-radius:50%; background:var(--s-acc); opacity:.9; }
+.quote{ text-align:center; padding:40px 40px; background:var(--s-soft); transition:background .5s ease; }
+.quote q{ display:block; font-family:var(--s-head); font-size:24px; line-height:1.2; font-style:italic; quotes:'“' '”'; }
+.quote span{ display:block; margin-top:12px; font-size:12px; opacity:.6; }
+.tiers{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.tier{ padding:16px; border-radius:14px; border:1px solid color-mix(in srgb, var(--s-ink) 14%, transparent); }
+.tier.pop{ background:var(--s-ink); color:var(--s-bg); border-color:var(--s-ink); }
+.tier small{ font-size:11px; opacity:.6; }
+.tier b{ display:block; font-family:var(--s-head); font-size:26px; font-weight:var(--s-hw); margin:4px 0 8px; }
+.tier ul{ list-style:none; font-size:11.5px; opacity:.8; display:grid; gap:4px; }
+.cta{ margin:0 26px 30px; padding:30px; border-radius:20px; background:var(--s-acc); color:#fff; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.cta h2{ font-size:26px; margin:0; }
+.cta span{ padding:10px 16px; border-radius:999px; background:#fff; color:var(--s-ink); font-weight:600; font-size:12.5px; white-space:nowrap; }
+.sfoot{ padding:18px 26px; font-size:11.5px; opacity:.6; display:flex; justify-content:space-between; border-top:1px solid color-mix(in srgb, var(--s-ink) 10%, transparent); }
+@container site (max-width:520px){
+  .hero{ grid-template-columns:1fr; } .hero h1{ font-size:38px; } .hero .art{ aspect-ratio:16/10; border-radius:90px 90px 14px 14px; }
+  .gal.masonry{ columns:2; } .gal.grid{ grid-template-columns:repeat(2,1fr); }
+  .feats, .tiers{ grid-template-columns:1fr; }
+  .hdr.split, .hdr.classic{ grid-template-columns:1fr auto; } .hdr.split .hnav, .hdr.classic .hnav{ display:none; } .hdr.split .logo{ justify-self:start; }
+  .cta{ flex-direction:column; align-items:flex-start; }
+}
+@container site (max-width:360px){
+  .hero h1{ font-size:32px; } .hdr .hbtn{ display:none; } .hdr .burger{ display:grid; } .hdr.centered .burger{ display:none; } .hdr.centered .hnav{ font-size:11px; gap:10px; }
+  .quote q{ font-size:19px; } .quote{ padding:30px 22px; }
+}
+.lightbox{ position:absolute; inset:0; z-index:10; background:rgba(10,10,12,.88); display:grid; place-items:center; backdrop-filter:blur(4px); }
+.lightbox .lp{ width:70%; max-width:420px; aspect-ratio:4/5; border-radius:12px; box-shadow:0 30px 60px rgba(0,0,0,.6); }
+.lightbox .cap{ position:absolute; bottom:22px; left:0; right:0; text-align:center; color:#fff; font-size:13px; }
+.lightbox button{ position:absolute; top:50%; width:40px; height:40px; margin-top:-20px; border-radius:50%; background:rgba(255,255,255,.14); color:#fff; font-size:20px; transition:background .2s ease, transform .3s var(--spring); }
+.lightbox button:hover{ background:rgba(255,255,255,.3); transform:scale(1.1); }
+.lightbox .pv{ left:18px; } .lightbox .nx{ right:18px; } .lightbox .cl{ top:30px; right:18px; margin:0; }
+
+/* styles sidebar */
+.styles{ border-left:1px solid var(--ed-line); overflow-y:auto; padding:14px 14px 20px; scrollbar-width:thin; }
+.styles .tabs2{ display:flex; border-bottom:1px solid var(--ed-line); margin:-14px -14px 14px; }
+.styles .tabs2 span{ flex:1; padding:14px; font-size:13px; font-weight:500; color:var(--ed-mut); text-align:center; }
+.styles .tabs2 span.on{ color:var(--ed-ink); box-shadow:inset 0 -3px 0 var(--accent-2); }
+.grp{ margin-bottom:18px; }
+.types{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.type{ padding:10px 10px 8px; border-radius:4px; border:1px solid var(--ed-line); text-align:left; transition:border-color .15s ease, box-shadow .2s ease, transform .3s var(--spring); }
+.type:hover{ border-color:#949494; transform:translateY(-1px); }
+.type[aria-pressed="true"]{ border-color:var(--accent-2); box-shadow:0 0 0 1px var(--accent-2); }
+.type b{ display:block; font-size:26px; line-height:1; }
+.type span{ display:block; margin-top:4px; font-size:11px; color:var(--ed-mut); }
+.pals{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.pal{ height:44px; border-radius:4px; border:1px solid var(--ed-line); overflow:hidden; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; transition:transform .3s var(--spring), box-shadow .2s ease; }
+.pal:hover{ transform:translateY(-2px); }
+.pal[aria-pressed="true"]{ box-shadow:0 0 0 2px #fff, 0 0 0 3.5px var(--accent-2); }
+.pal i{ display:block; }
+.pal i:first-child{ grid-row:1 / 3; }
+.palname{ font-size:11.5px; color:var(--ed-mut); margin-top:6px; }
+.hdrs{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.hl{ padding:8px; border-radius:4px; border:1px solid var(--ed-line); transition:border-color .15s ease, box-shadow .2s ease, transform .3s var(--spring); text-align:left; }
+.hl:hover{ border-color:#949494; transform:translateY(-1px); }
+.hl[aria-pressed="true"]{ border-color:var(--accent-2); box-shadow:0 0 0 1px var(--accent-2); }
+.hl svg{ width:100%; height:30px; display:block; }
+.hl span{ display:block; font-size:11px; color:var(--ed-mut); margin-top:4px; }
+.segs{ display:flex; border:1px solid var(--ed-ink); border-radius:2px; }
+.segs button{ flex:1; height:30px; font-size:12px; font-weight:500; transition:background .15s ease, color .15s ease; }
+.segs button[aria-pressed="true"]{ background:var(--ed-ink); color:#fff; }
+.snack{ position:absolute; z-index:20; left:276px; bottom:16px; padding:12px 16px; border-radius:2px; background:var(--ed-ink); color:#fff; font-size:13px; box-shadow:0 8px 20px rgba(0,0,0,.25); display:flex; gap:14px; align-items:center; }
+.snack button{ color:#9DB1FF; font-weight:600; font-size:13px; }
+.modal{ position:absolute; z-index:30; inset:0; background:rgba(0,0,0,.35); display:grid; place-items:center; }
+.mbox{ width:560px; max-height:86%; display:flex; flex-direction:column; background:#fff; border-radius:4px; box-shadow:0 20px 50px rgba(0,0,0,.3); }
+.mbox h3{ display:flex; justify-content:space-between; align-items:center; padding:16px 20px; font-size:15px; border-bottom:1px solid var(--ed-line); }
+.mbox h3 button{ font-size:20px; color:var(--ed-mut); }
+.mbox pre{ flex:1; overflow:auto; margin:0; padding:16px 20px; font-family:'DM Mono', ui-monospace, monospace; font-size:11.5px; line-height:1.6; background:#1E1E1E; color:#D4D4D4; }
+.mbox .mf{ display:flex; justify-content:flex-end; gap:8px; padding:12px 20px; border-top:1px solid var(--ed-line); }
+.mbox .mf button{ height:34px; padding:0 14px; border-radius:2px; font-size:13px; font-weight:500; border:1px solid var(--accent-2); color:var(--accent-2); }
+.mbox .mf .p{ background:var(--accent-2); color:#fff; }
+
+/* below */
+.below{ display:grid; grid-template-columns:1.2fr 1fr; gap:24px; padding:30px 0 70px; }
+.sh{ font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+.spec{ border:1px solid var(--line); border-radius:16px; overflow:hidden; background:var(--card); }
+.spec div{ display:grid; grid-template-columns:120px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; }
+.spec div:last-child{ border-bottom:none; }
+.spec dt{ font-size:12px; font-weight:600; color:var(--faint); padding-top:1px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.metric{ padding:16px; border-radius:16px; background:var(--card); border:1px solid var(--line); }
+.metric b{ display:block; font-family:var(--serif); font-size:30px; font-weight:800; letter-spacing:-.03em; color:var(--accent); }
+.metric span{ font-size:12px; color:var(--faint); }
+.cta2{ display:inline-flex; align-items:center; gap:10px; margin-top:16px; height:50px; padding:0 24px; border-radius:999px; background:var(--text); color:var(--bg); font-weight:600; font-size:15px; transition:transform .35s var(--spring), box-shadow .3s ease, background .3s ease; }
+.cta2:hover{ transform:translateY(-2px) rotate(-1deg); background:var(--accent); box-shadow:0 16px 34px -14px var(--accent); }
+.hint{ margin-top:12px; font-size:13px; color:var(--dim); }
+.mobile-note{ display:none; font-size:12.5px; color:var(--dim); margin-top:10px; }
+.foot{ text-align:center; padding:20px 16px calc(28px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--dim); border-top:1px solid var(--line); }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--accent); }
+@media(max-width:900px){ .intro, .below{ grid-template-columns:1fr; } .try{ justify-content:flex-start; } .try-h{ text-align:left; } .mobile-note{ display:block; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+</style>
 </head>
-<body data-theme="6">
+<body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../../index.html#work">Work</a>
-      <a href="../../index.html#about">About</a>
-      <a href="../../index.html#craft">Craft</a>
-      <a href="../../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
-  </div>
+<header class="top">
+  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
+  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
 </header>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../../index.html#work">Work</a>
-  <a href="../../index.html#about">About</a>
-  <a href="../../index.html#craft">Craft</a>
-  <a href="../../index.html#services">Services</a>
-  <a href="../../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>WordPress Plugins</div>
-    <h1><span class="word"><span class="word-inner">Built</span></span> <span class="word"><span class="word-inner">for</span></span> <span class="word"><span class="word-inner">WordPress,</span></span> <span class="word"><span class="word-inner">not</span></span> <span class="word"><span class="word-inner">against</span></span> <span class="word"><span class="word-inner">it</span></span></h1>
-    <p>Masonry and lightbox galleries with lazy loading.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the build</h2>
-    <div class="msite-about reveal">
-      <p>GalleryLoom is a WordPress plugin built around one job: masonry and lightbox galleries with lazy loading. No dashboard nagging, no premium upsell banners, no unrelated features bolted on.</p>
-      <p>It follows WordPress's own conventions closely enough to feel native — the settings screen below is the real thing, not a mockup.</p>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <span class="kick">Block theme · 14 custom Gutenberg blocks · theme.json</span>
+      <h1>Gallery<em>Loom</em></h1>
+      <p>A custom block theme a studio can restyle without calling a developer. This is the Site Editor, live: change the type, the colours and the header, drag sections into a new order and check every screen size.</p>
     </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">Try it live</span>
-    <h2 class="msite-section-title reveal">See it in action</h2>
-    <div class="msite-demo-wrap reveal">
-      <div id="demoBody"></div>
+    <div class="try" id="tryList" aria-label="Try it checklist">
+      <div class="try-h">try it · <b id="tryCount">0/5</b></div>
+      <span class="chipt" data-t="type"><i></i>Switch the typography preset</span>
+      <span class="chipt" data-t="header"><i></i>Change the header layout</span>
+      <span class="chipt" data-t="reorder"><i></i>Drag a section to reorder</span>
+      <span class="chipt" data-t="palette"><i></i>Try another colour palette</span>
+      <span class="chipt" data-t="device"><i></i>Preview on a phone</span>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Native Admin UI</h3><p>Matches core WordPress design patterns, so there's nothing new to learn.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>No Bloat</h3><p>Ships with exactly the code it needs and not a single dependency more.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Actively Maintained</h3><p>Kept current with the latest WordPress core releases, not abandoned after launch.</p></div>
-    </div>
-  </div>
-</section>
+  <div class="stage-wrap" id="stageWrap">
+    <div class="stage-box">
+      <div class="stage" id="stage">
+        <div class="bar">
+          <span class="wlogo" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.7 10c0-1.3.3-2.5.8-3.6l4.1 11.3A8.7 8.7 0 0 1 3.3 12Zm8.7 8.7c-.9 0-1.7-.1-2.5-.4l2.6-7.6 2.7 7.4.1.1c-.9.3-1.9.5-2.9.5Zm1.2-12.8.9-.1c.4 0 .4-.7 0-.6l-2.6.1-2.6-.1c-.4 0-.5.6 0 .6l.8.1 1.2 3.4-1.7 5.2-2.9-8.6.9-.1c.4 0 .4-.7 0-.6l-2.6.1h-.5A8.7 8.7 0 0 1 18 5.6h-.1c-1 0-1.6.8-1.6 1.7 0 .8.4 1.4.9 2.2.4.6.8 1.4.8 2.6 0 .8-.3 1.7-.7 3l-.9 3.1Zm3.2 11.6 2.6-7.6c.5-1.2.7-2.2.7-3l-.1-1a8.7 8.7 0 0 1-3.2 11.6Z"/></svg></span>
+          <button class="ib ins" type="button" aria-label="Block inserter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="ib" type="button" id="undo" aria-label="Undo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 7 4 12l5 5M4 12h11a5 5 0 0 1 0 10h-2"/></svg></button>
+          <button class="ib" type="button" id="redo" aria-label="Redo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 7 5 5-5 5M20 12H9a5 5 0 0 0 0 10h2"/></svg></button>
+          <button class="ib" type="button" aria-pressed="true" aria-label="List view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h2M4 12h2M4 18h2M9 6h11M9 12h11M9 18h11"/></svg></button>
+          <div class="doc"><span><b>Home</b><i>· Template</i></span></div>
+          <div class="dev" role="group" aria-label="Preview device">
+            <button type="button" data-d="desktop" aria-pressed="true" aria-label="Desktop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg></button>
+            <button type="button" data-d="tablet" aria-pressed="false" aria-label="Tablet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M11 18h2"/></svg></button>
+            <button type="button" data-d="mobile" aria-pressed="false" aria-label="Mobile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg></button>
+          </div>
+          <button class="save" type="button" id="saveBtn">Save</button>
+        </div>
 
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Need a WordPress plugin built?</h2>
-    <p class="reveal">Bazozo builds plugins that respect the platform.</p>
-    <a class="msite-cta-btn reveal" href="../../index.html#contact">Start a project</a>
-  </div>
-</section>
+        <aside class="lv" aria-label="List view">
+          <h3>List view</h3>
+          <p class="lv-hint">Drag the handle to reorder. Use the arrows or the eye to move or hide.</p>
+          <div class="lvl" id="lvl" role="listbox" aria-label="Template sections"></div>
+        </aside>
 
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+        <div class="canvas" id="canvas">
+          <div class="frame" id="frame">
+            <div class="site" id="site"></div>
+          </div>
+          <div class="lightbox" id="lb" hidden role="dialog" aria-label="Image preview"><div class="lp" id="lbImg"></div><div class="cap" id="lbCap"></div><button class="pv" type="button" id="lbPrev" aria-label="Previous">‹</button><button class="nx" type="button" id="lbNext" aria-label="Next">›</button><button class="cl" type="button" id="lbClose" aria-label="Close">×</button></div>
+        </div>
+
+        <aside class="styles" aria-label="Styles">
+          <div class="tabs2"><span class="on">Styles</span><span>Block</span></div>
+          <div class="grp"><h3>Typography</h3><div class="types" id="types"></div></div>
+          <div class="grp"><h3>Colour palette</h3><div class="pals" id="pals"></div><p class="palname" id="palName">—</p></div>
+          <div class="grp"><h3>Header layout</h3><div class="hdrs" id="hdrs"></div></div>
+          <div class="grp"><h3>Gallery block</h3><div class="segs" id="galSeg" role="group" aria-label="Gallery layout"><button type="button" data-g="masonry" aria-pressed="true">Masonry</button><button type="button" data-g="grid" aria-pressed="false">Grid</button></div></div>
+        </aside>
+
+        <div class="snack" id="snack" hidden role="status"><span id="snackT">—</span><button type="button" id="snackBtn">View code</button></div>
+        <div class="modal" id="modal" hidden><div class="mbox" role="dialog" aria-label="Generated theme.json and template"><h3>Saved to theme.json <button type="button" id="mClose" aria-label="Close">×</button></h3><pre id="code"></pre><div class="mf"><button type="button" id="mCopy">Copy</button><button class="p" type="button" id="mDone">Done</button></div></div></div>
       </div>
-      <a class="msite-footer-cta" href="../../index.html#contact">Start a project →</a>
-    </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-      <a href="../../index.html#work">← Back to Bazozo</a>
     </div>
   </div>
-</footer>
+  <p class="mobile-note">Best on a laptop or desktop. On a phone, scroll sideways inside the editor.</p>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  <section class="below">
+    <div>
+      <h2 class="sh">Architecture</h2>
+      <dl class="spec">
+        <div><dt>theme</dt><dd>Full-site-editing block theme; all design tokens live in theme.json, with style variations for each preset</dd></div>
+        <div><dt>blocks</dt><dd>14 custom blocks (gallery, pricing, testimonial and more) built with @wordpress/scripts and block.json</dd></div>
+        <div><dt>patterns</dt><dd>Section patterns locked where they should be, editable where clients need them</dd></div>
+        <div><dt>responsive</dt><dd>Container queries per block, so sections adapt to their slot, not just the screen</dd></div>
+        <div><dt>speed</dt><dd>Blocks load their CSS and JS only on pages that use them; no jQuery, no page builder</dd></div>
+        <div><dt>handover</dt><dd>Client video walkthrough plus locked brand fonts and colours</dd></div>
+      </dl>
+    </div>
+    <div>
+      <h2 class="sh">Numbers</h2>
+      <div class="metrics"><div class="metric"><b>14</b><span>custom blocks</span></div><div class="metric"><b>4 × 5</b><span>type × colour presets</span></div><div class="metric"><b>0</b><span>page builders</span></div></div>
+      <p class="hint">Tip: press Save to see the theme.json and block markup your choices produce.</p>
+      <a class="cta2" href="../../index.html#contact">Build a block theme like this →</a>
+    </div>
+  </section>
+</main>
 
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
 
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-demo-wrap.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-
-renderLiveDemo(projects[101]);
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="galleryloom.js" defer></script>
 </body>
 </html>

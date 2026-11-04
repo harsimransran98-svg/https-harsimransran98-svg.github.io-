@@ -3,173 +3,391 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Halcyon Health — Case Study by Bazozo</title>
-<meta name="description" content="Halcyon books appointments through a calm, deliberate motion system — nothing about the site rushes the visitor.">
+<title>Halcyon — Private skin &amp; wellness clinic · Built by Bazozo Studio</title>
+<meta name="description" content="Halcyon: a private med-spa clinic site with an interactive treatment results timeline and a multi-step consultation slot picker with a live calendar. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F9FBF9">
 <link rel="canonical" href="https://bazozo.in/work/halcyonhealth.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap">
 <link rel="preload" as="image" href="../images/halcyonhealth.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#7fc9b8; --site-hero-image:url('../images/halcyonhealth.jpg'); }</style>
+<style>
+:root{
+  --bg:#F9FBF9;
+  --bg-2:#F1F6F2;
+  --sage:#DDE8E1;
+  --sage-2:#C5D8CC;
+  --text:#11221C;
+  --muted:#56675F;
+  --faint:#94A39B;
+  --accent:#3E7B67;
+  --accent-dk:#2C5E4E;
+  --line:rgba(17,34,28,.1);
+  --serif:'Playfair Display', Georgia, serif;
+  --sans:'Manrope', system-ui, sans-serif;
+  --ease:cubic-bezier(.22,.9,.3,1);
+  --nav-h:84px;
+  --shadow:0 20px 50px -30px rgba(17,34,28,.35);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.65; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input, textarea{ font:inherit; color:inherit; }
+img{ max-width:100%; display:block; }
+.wrap{ width:100%; max-width:1240px; margin:0 auto; padding:0 clamp(18px,4vw,44px); }
+::selection{ background:var(--sage-2); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.over{ font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+.serif{ font-family:var(--serif); }
+.hero, .sec, .cta{ overflow-x:clip; }
+.blob{ position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:-1; }
+
+/* ---------- nav + pill hamburger ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); }
+.nav-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.logo{ font-family:var(--serif); font-size:28px; font-style:italic; letter-spacing:-.01em; line-height:1; }
+.logo span{ font-family:var(--sans); font-style:normal; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--muted); margin-left:8px; vertical-align:middle; }
+.nav-r{ display:flex; align-items:center; gap:12px; }
+.pill{ position:relative; z-index:2; display:inline-flex; align-items:center; gap:12px; height:48px; padding:0 18px 0 20px; border-radius:999px; border:1px solid var(--line);
+  background:rgba(255,255,255,.7); backdrop-filter:blur(12px); cursor:pointer; font-size:13px; font-weight:600; box-shadow:0 8px 24px -16px rgba(17,34,28,.4);
+  transition:transform .6s cubic-bezier(.34,1.8,.5,1), background .3s ease; }
+.pill:hover{ transform:scale(1.04); }
+.pill .bars{ position:relative; width:20px; height:12px; }
+.pill .bars i{ position:absolute; left:0; height:2px; border-radius:2px; background:var(--text); transition:transform .7s cubic-bezier(.34,1.8,.5,1), width .5s cubic-bezier(.34,1.8,.5,1), top .5s cubic-bezier(.34,1.8,.5,1); }
+.pill .bars i:nth-child(1){ top:1px; width:20px; } .pill .bars i:nth-child(2){ top:9px; width:13px; }
+.pill[aria-expanded="true"]{ background:var(--text); color:var(--bg); }
+.pill[aria-expanded="true"] .bars i{ background:var(--bg); top:5px; width:20px; }
+.pill[aria-expanded="true"] .bars i:nth-child(1){ transform:rotate(45deg); }
+.pill[aria-expanded="true"] .bars i:nth-child(2){ transform:rotate(-45deg); }
+.island{ position:fixed; z-index:79; overflow:hidden; border-radius:30px; border:1px solid rgba(255,255,255,.7);
+  background:linear-gradient(160deg, rgba(255,255,255,.78), rgba(221,232,225,.62)); backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%);
+  box-shadow:0 30px 80px -30px rgba(17,34,28,.45), inset 0 1px 0 rgba(255,255,255,.9); }
+.island-in{ padding:26px 26px 22px; width:min(560px, calc(100vw - 32px)); }
+.island nav{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.island nav a{ padding:16px 18px; border-radius:18px; background:rgba(255,255,255,.55); transition:background .3s ease, transform .4s var(--ease); }
+.island nav a:hover{ background:#fff; transform:translateY(-2px); }
+.island nav a b{ display:block; font-family:var(--serif); font-weight:500; font-size:22px; line-height:1.2; }
+.island nav a span{ font-size:12.5px; color:var(--muted); }
+.island .row{ margin-top:14px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; font-size:12.5px; color:var(--muted); }
+
+/* soft magnetic buttons */
+.mag{ position:relative; display:inline-flex; align-items:center; gap:10px; height:56px; padding:0 28px; border-radius:999px; border:none; cursor:pointer;
+  background:var(--accent); color:#fff; font-weight:600; font-size:15px; box-shadow:0 14px 30px -16px var(--accent); transition:background .3s ease, box-shadow .3s ease; will-change:transform; }
+.mag:hover{ background:var(--accent-dk); box-shadow:0 18px 36px -14px var(--accent); }
+.mag .lbl{ display:inline-flex; align-items:center; gap:10px; pointer-events:none; }
+.mag.ghost{ background:rgba(255,255,255,.7); color:var(--text); box-shadow:inset 0 0 0 1px var(--line), 0 10px 26px -18px rgba(17,34,28,.4); }
+.mag.ghost:hover{ background:#fff; }
+.mag:disabled{ opacity:.4; cursor:not-allowed; }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; min-height:100svh; padding:calc(var(--nav-h) + 30px) 0 60px; display:flex; align-items:center; isolation:isolate; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(30px,5vw,70px); align-items:center; }
+.hero h1{ font-family:var(--serif); font-weight:400; font-size:clamp(42px,5.3vw,78px); line-height:1.02; letter-spacing:-.02em; margin-top:18px; }
+.hero h1 em{ color:var(--accent); }
+.hero h1 .ln{ display:block; overflow:hidden; padding-bottom:.04em; }
+.hero h1 .ln > span{ display:block; }
+.hero .lede{ margin-top:22px; max-width:440px; color:var(--muted); font-size:17px; }
+.hero-ctas{ margin-top:32px; display:flex; gap:12px; flex-wrap:wrap; }
+.trust{ margin-top:34px; display:flex; gap:26px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+.trust b{ display:block; font-family:var(--serif); font-size:26px; font-weight:500; color:var(--text); }
+.hero-media{ position:relative; }
+.hero-img{ border-radius:240px 240px 30px 30px; overflow:hidden; aspect-ratio:4/5; box-shadow:var(--shadow); }
+.hero-img img{ width:100%; height:100%; object-fit:cover; object-position:62% 50%; }
+.glass-card{ position:absolute; left:-30px; bottom:40px; padding:16px 18px; border-radius:20px; background:rgba(255,255,255,.72); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.8); box-shadow:var(--shadow); display:flex; gap:12px; align-items:center; }
+.glass-card .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 6px rgba(62,123,103,.18); animation:pulse 2.4s ease-in-out infinite; }
+@keyframes pulse{ 50%{ box-shadow:0 0 0 10px rgba(62,123,103,.05); } }
+.glass-card small{ display:block; font-size:11.5px; color:var(--muted); }
+.glass-card b{ font-weight:700; font-size:14.5px; }
+
+/* ---------- sections ---------- */
+.sec{ position:relative; padding:clamp(100px,12vw,150px) 0; isolation:isolate; }
+.sec-h{ max-width:640px; margin-bottom:50px; }
+.sec-h.center{ text-align:center; margin-left:auto; margin-right:auto; }
+.sec-h h2{ font-family:var(--serif); font-weight:400; font-size:clamp(36px,4.6vw,60px); line-height:1.08; letter-spacing:-.015em; margin-top:12px; }
+.sec-h h2 em{ color:var(--accent); }
+.sec-h p{ margin-top:14px; color:var(--muted); }
+
+/* treatments */
+.treat{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.tcard{ padding:26px; border-radius:26px; background:#fff; box-shadow:0 1px 0 var(--line), var(--shadow); display:flex; flex-direction:column; gap:10px; transition:transform .5s var(--ease); }
+.tcard:hover{ transform:translateY(-6px); }
+.tcard .ic{ width:46px; height:46px; border-radius:16px; background:var(--sage); display:grid; place-items:center; color:var(--accent); }
+.tcard .ic svg{ width:22px; height:22px; }
+.tcard h3{ font-family:var(--serif); font-weight:500; font-size:22px; line-height:1.2; }
+.tcard p{ font-size:14px; color:var(--muted); }
+.tcard .meta{ margin-top:auto; display:flex; justify-content:space-between; font-size:13px; font-weight:600; padding-top:12px; border-top:1px solid var(--line); }
+
+/* results timeline */
+.results{ background:var(--bg-2); border-radius:40px; padding:clamp(28px,4vw,54px); display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:clamp(24px,4vw,56px); align-items:center; }
+.tabs{ display:inline-flex; padding:5px; border-radius:999px; background:#fff; box-shadow:inset 0 0 0 1px var(--line); flex-wrap:wrap; gap:2px; }
+.tabs button{ border:none; background:none; padding:10px 18px; border-radius:999px; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; transition:background .35s var(--ease), color .3s ease; }
+.tabs button[aria-selected="true"]{ background:var(--accent); color:#fff; }
+.skin-wrap{ position:relative; aspect-ratio:1; max-width:440px; margin:0 auto; width:100%; }
+.skin-wrap svg{ width:100%; height:100%; }
+.week-badge{ position:absolute; right:4%; top:6%; padding:12px 16px; border-radius:18px; background:rgba(255,255,255,.85); backdrop-filter:blur(10px); box-shadow:var(--shadow); text-align:center; }
+.week-badge b{ display:block; font-family:var(--serif); font-size:34px; line-height:1; font-weight:500; }
+.week-badge small{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.tl-slider{ margin-top:26px; }
+.tl-slider input{ -webkit-appearance:none; appearance:none; width:100%; height:32px; background:transparent; cursor:pointer; }
+.tl-slider input::-webkit-slider-runnable-track{ height:6px; border-radius:6px; background:linear-gradient(90deg, var(--accent) var(--p,0%), var(--sage-2) var(--p,0%)); }
+.tl-slider input::-moz-range-track{ height:6px; border-radius:6px; background:var(--sage-2); }
+.tl-slider input::-moz-range-progress{ height:6px; border-radius:6px; background:var(--accent); }
+.tl-slider input::-webkit-slider-thumb{ -webkit-appearance:none; width:28px; height:28px; margin-top:-11px; border-radius:50%; background:#fff; border:6px solid var(--accent); box-shadow:0 6px 16px -6px rgba(17,34,28,.5); }
+.tl-slider input::-moz-range-thumb{ width:18px; height:18px; border-radius:50%; background:#fff; border:6px solid var(--accent); }
+.ticks{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--faint); margin-top:2px; }
+.milestone{ margin-top:22px; padding:20px 22px; border-radius:22px; background:#fff; box-shadow:0 1px 0 var(--line); }
+.milestone h4{ font-family:var(--serif); font-weight:500; font-size:22px; }
+.milestone p{ margin-top:4px; color:var(--muted); font-size:14.5px; }
+.metrics{ margin-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; }
+.metric .ml{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--muted); font-weight:600; }
+.metric .ml b{ color:var(--text); }
+.metric .mt{ margin-top:6px; height:6px; border-radius:6px; background:var(--sage); overflow:hidden; }
+.metric .mt i{ display:block; height:100%; border-radius:inherit; background:var(--accent); transition:width .5s var(--ease); }
+.metric.neg .mt i{ background:#C98B7A; }
+.disclaimer{ margin-top:12px; font-size:12px; color:var(--faint); }
+
+/* booking */
+.booking{ border-radius:40px; background:#fff; box-shadow:0 1px 0 var(--line), 0 40px 90px -50px rgba(17,34,28,.4); overflow:hidden; display:grid; grid-template-columns:300px 1fr; }
+.b-side{ background:var(--text); color:var(--bg); padding:34px 30px; display:flex; flex-direction:column; gap:22px; }
+.b-side h3{ font-family:var(--serif); font-weight:400; font-size:30px; line-height:1.15; }
+.steps{ list-style:none; display:grid; gap:4px; counter-reset:s; }
+.steps li{ display:flex; align-items:center; gap:12px; padding:10px 0; font-size:14px; color:rgba(249,251,249,.5); transition:color .3s ease; }
+.steps li::before{ counter-increment:s; content:counter(s); width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:700; border:1px solid rgba(249,251,249,.25); transition:background .3s ease, border-color .3s ease, color .3s ease; }
+.steps li.on{ color:var(--bg); }
+.steps li.on::before{ background:var(--bg); color:var(--text); border-color:var(--bg); }
+.steps li.done{ color:rgba(249,251,249,.85); }
+.steps li.done::before{ content:'✓'; background:var(--accent); border-color:var(--accent); color:#fff; }
+.summary{ margin-top:auto; font-size:13px; color:rgba(249,251,249,.7); display:grid; gap:6px; }
+.summary b{ color:var(--bg); font-weight:600; }
+.b-main{ padding:clamp(24px,3.5vw,44px); min-height:520px; display:flex; flex-direction:column; }
+.b-main h4{ font-family:var(--serif); font-weight:400; font-size:28px; }
+.b-main .sub{ color:var(--muted); font-size:14px; margin-top:4px; }
+.pane{ margin-top:22px; flex:1; }
+.choices{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:10px; }
+.choice{ text-align:left; padding:16px 18px; border-radius:20px; border:1px solid var(--line); background:var(--bg); cursor:pointer; transition:border-color .25s ease, background .25s ease, transform .4s var(--ease); }
+.choice:hover{ transform:translateY(-2px); border-color:var(--sage-2); }
+.choice[aria-pressed="true"]{ border-color:var(--accent); background:var(--sage); }
+.choice b{ display:block; font-size:15px; }
+.choice span{ font-size:13px; color:var(--muted); }
+.choice .av{ width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font-family:var(--serif); font-size:16px; color:#fff; background:var(--accent); margin-bottom:10px; }
+.cal-h{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.cal-h b{ font-family:var(--serif); font-weight:500; font-size:22px; }
+.cal-nav{ display:flex; gap:6px; }
+.cal-nav button{ width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--bg); cursor:pointer; }
+.cal-nav button:disabled{ opacity:.35; cursor:not-allowed; }
+.cal{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.cal .dow{ font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); text-align:center; padding-bottom:4px; }
+.day{ position:relative; aspect-ratio:1; border-radius:14px; border:1px solid transparent; background:var(--bg); cursor:pointer; font-weight:600; font-size:14px; transition:background .2s ease, border-color .2s ease, transform .3s var(--ease); }
+.day:hover:not(:disabled){ border-color:var(--accent); transform:scale(1.05); }
+.day:disabled{ background:none; color:var(--faint); cursor:not-allowed; font-weight:400; }
+.day .av-dot{ position:absolute; left:50%; bottom:16%; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:var(--accent); }
+.day.few .av-dot{ background:#D19A5A; }
+.day[aria-pressed="true"]{ background:var(--accent); color:#fff; }
+.day[aria-pressed="true"] .av-dot{ background:#fff; }
+.day.today{ border-color:var(--sage-2); }
+.legend{ margin-top:12px; display:flex; gap:18px; font-size:12px; color:var(--muted); }
+.legend i{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent); margin-right:6px; vertical-align:middle; }
+.legend i.f{ background:#D19A5A; }
+.slots{ display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:8px; }
+.slot{ height:46px; border-radius:14px; border:1px solid var(--line); background:var(--bg); cursor:pointer; font-weight:600; font-size:14px; transition:background .2s ease, border-color .2s ease; }
+.slot:hover:not(:disabled){ border-color:var(--accent); }
+.slot:disabled{ text-decoration:line-through; color:var(--faint); cursor:not-allowed; background:none; }
+.slot[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.fields{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.field{ display:grid; gap:6px; }
+.field.full{ grid-column:1 / -1; }
+.field label{ font-size:12.5px; font-weight:600; color:var(--muted); }
+.field input, .field textarea{ height:50px; padding:0 16px; border-radius:16px; border:1px solid var(--line); background:var(--bg); font-size:15px; transition:border-color .2s ease, box-shadow .2s ease; }
+.field textarea{ height:96px; padding:12px 16px; resize:vertical; }
+.field input:focus, .field textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 4px rgba(62,123,103,.15); }
+.field input[aria-invalid="true"]{ border-color:#B4523F; }
+.field small{ color:#A3442F; font-size:12px; min-height:0; }
+.b-foot{ margin-top:26px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.done-card{ text-align:center; display:grid; justify-items:center; gap:12px; padding:20px 0; }
+.done-card .tick{ width:76px; height:76px; border-radius:50%; background:var(--sage); color:var(--accent); display:grid; place-items:center; }
+.done-card h4{ font-size:32px; }
+.done-card p{ color:var(--muted); max-width:420px; }
+.done-card .ref{ font-weight:700; letter-spacing:.1em; }
+
+/* cta + footer */
+.cta{ text-align:center; padding:clamp(110px,14vw,170px) 0; position:relative; isolation:isolate; }
+.cta h2{ font-family:var(--serif); font-weight:400; font-size:clamp(46px,7vw,100px); line-height:1.02; letter-spacing:-.02em; }
+.cta h2 em{ color:var(--accent); }
+.cta p{ margin:20px auto 32px; max-width:420px; color:var(--muted); }
+.foot{ border-top:1px solid var(--line); padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px)); font-size:13px; color:var(--muted); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a:hover{ color:var(--accent); }
+
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:1000px){
+  .hero-grid, .results{ grid-template-columns:1fr; }
+  .treat{ grid-template-columns:1fr 1fr; }
+  .booking{ grid-template-columns:1fr; }
+  .b-side{ padding:24px; }
+  .steps{ grid-template-columns:repeat(5,auto); justify-content:start; gap:4px 14px; }
+  .steps li{ font-size:0; gap:0; }
+  .summary{ display:none; }
+  .glass-card{ left:12px; }
+  .hero-media{ max-width:460px; }
+}
+@media(max-width:560px){
+  .treat, .fields, .metrics{ grid-template-columns:1fr; }
+  .island nav{ grid-template-columns:1fr; }
+  .logo span{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+</style>
 </head>
 <body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">Halcyon<span>Clinic</span></a>
+    <div class="nav-r">
+      <a class="mag ghost" href="#book" style="height:48px;padding:0 20px;font-size:14px"><span class="lbl">Book</span></a>
+      <button class="pill" id="pill" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="island"><span class="bars" aria-hidden="true"><i></i><i></i></span><span id="pillLbl">Menu</span></button>
+    </div>
   </div>
 </header>
-
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
+<div class="island" id="island" hidden>
+  <div class="island-in">
+    <nav aria-label="Main">
+      <a href="#treatments"><b>Treatments</b><span>Facials, renewal, laser</span></a>
+      <a href="#results"><b>Results</b><span>Week-by-week timeline</span></a>
+      <a href="#book"><b>Book</b><span>Live consultation slots</span></a>
+      <a href="../index.html#work"><b>Bazozo</b><span>← Back to the studio</span></a>
+    </nav>
+    <div class="row"><span>12 Linden Row · Mon–Sat, 9–18</span><span id="islandNext"></span></div>
+  </div>
 </div>
 
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Wellness Clinic</div>
-    <h1><span class="word"><span class="word-inner">Care,</span></span> <span class="word"><span class="word-inner">paced</span></span> <span class="word"><span class="word-inner">deliberately</span></span></h1>
-    <p>Halcyon books appointments through a calm, deliberate motion system — nothing about the site rushes the visitor.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Halcyon Health is a small wellness clinic focused on longer, unhurried appointments. The booking site mirrors that pace: slow transitions, generous whitespace, no urgency banners.</p>
-      <p>Every practitioner's page includes their actual approach and typical session length, so patients know what to expect before booking.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Calm Motion System</h3><p>Every transition on the site is intentionally slow — the opposite of a typical booking funnel.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Practitioner Profiles</h3><p>Real bios, approach, and session length for every practitioner on staff.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Same-Week Booking</h3><p>Live calendar availability, typically within the same week.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Book an appointment</h2>
-    <p class="reveal">Most first appointments are available within the week.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Check availability</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
+<main id="top">
+  <section class="hero">
+    <span class="blob" style="width:520px;height:520px;right:-120px;top:-60px;background:#DDE8E1"></span>
+    <span class="blob" style="width:380px;height:380px;left:-140px;bottom:-60px;background:#EAF1EC"></span>
+    <div class="wrap hero-grid">
       <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+        <span class="over rv-h">Private skin &amp; wellness clinic</span>
+        <h1><span class="ln"><span>Unhurried care,</span></span><span class="ln"><span><em>visible</em> results.</span></span></h1>
+        <p class="lede rv-h">Every first appointment is 60 minutes with a doctor, not a sales consultant. We plan treatments around your skin's healing time, not a promotion calendar.</p>
+        <div class="hero-ctas rv-h">
+          <a class="mag" href="#book"><span class="lbl">Book a consultation <span aria-hidden="true">→</span></span></a>
+          <a class="mag ghost" href="#results"><span class="lbl">See the timeline</span></a>
+        </div>
+        <div class="trust rv-h"><div><b>60 min</b>first consults</div><div><b>4.9</b>from 1,200 reviews</div><div><b>GMC</b>registered doctors</div></div>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
+      <div class="hero-media rv-h">
+        <div class="hero-img" id="heroImg"><img src="../images/halcyonhealth.jpg" alt="A practitioner giving a calm shoulder treatment in a softly lit treatment room" width="1920" height="1267"></div>
+        <div class="glass-card"><span class="dot" aria-hidden="true"></span><div><small>Next available</small><b id="nextSlot">—</b></div></div>
+      </div>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <section class="sec" id="treatments">
+    <div class="wrap">
+      <div class="sec-h"><span class="over rv">Treatments</span><h2 class="rv">Four treatments, done <em>properly.</em></h2><p class="rv">We'd rather do a few things very well. Every course starts with a consultation.</p></div>
+      <div class="treat">
+        <article class="tcard rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c3 4 6 6.5 6 10a6 6 0 0 1-12 0c0-3.5 3-6 6-10Z"/></svg></span><h3>Hydra renewal</h3><p>Deep cleanse, exfoliation and hydration infusion. No downtime.</p><div class="meta"><span>45 min</span><span>from £140</span></div></article>
+        <article class="tcard rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20 20 4M8 20l12-12M4 16 16 4"/></svg></span><h3>Collagen induction</h3><p>Controlled micro-needling that rebuilds texture over 6–12 weeks.</p><div class="meta"><span>60 min</span><span>from £260</span></div></article>
+        <article class="tcard rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span><h3>Pigment correction</h3><p>Low-energy laser for sun spots and uneven tone, in a short series.</p><div class="meta"><span>40 min</span><span>from £220</span></div></article>
+        <article class="tcard rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 21c0-6 3-9 7-9s7 3 7 9M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg></span><h3>Doctor consultation</h3><p>A full skin assessment and a written plan you can take anywhere.</p><div class="meta"><span>60 min</span><span>£95</span></div></article>
+      </div>
     </div>
+  </section>
+
+  <section class="sec" id="results" style="padding-top:0">
+    <div class="wrap">
+      <div class="results">
+        <div>
+          <span class="over rv">Results timeline</span>
+          <h2 class="serif rv" style="font-weight:400;font-size:clamp(34px,4vw,52px);line-height:1.1;margin-top:12px">What to expect, <em style="color:var(--accent)">week by week.</em></h2>
+          <div class="tabs rv" role="tablist" aria-label="Treatment" style="margin-top:22px" id="tlTabs"></div>
+          <div class="tl-slider rv">
+            <input type="range" id="week" min="0" max="12" value="0" step="1" aria-label="Weeks since first treatment">
+            <div class="ticks"><span>Day 0</span><span>Wk 3</span><span>Wk 6</span><span>Wk 9</span><span>Wk 12</span></div>
+          </div>
+          <div class="milestone rv" aria-live="polite"><h4 id="msTitle">—</h4><p id="msText"></p>
+            <div class="metrics" id="metrics"></div>
+          </div>
+          <p class="disclaimer">Illustrative timeline based on a typical course. Individual results vary and are discussed at consultation.</p>
+        </div>
+        <div class="skin-wrap rv">
+          <svg id="skin" viewBox="0 0 400 400" role="img" aria-label="Illustration of skin texture changing over the treatment course">
+            <defs>
+              <radialGradient id="skinBase" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#F2D9C8"/><stop offset=".7" stop-color="#E2BBA2"/><stop offset="1" stop-color="#C99A80"/></radialGradient>
+              <radialGradient id="glow" cx=".35" cy=".3" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="red" cx=".5" cy=".5" r=".55"><stop offset="0" stop-color="#E06C5A" stop-opacity=".55"/><stop offset="1" stop-color="#E06C5A" stop-opacity="0"/></radialGradient>
+              <clipPath id="skinClip"><circle cx="200" cy="200" r="170"/></clipPath>
+            </defs>
+            <circle cx="200" cy="200" r="186" fill="none" stroke="#C5D8CC" stroke-width="1.5" stroke-dasharray="3 7"/>
+            <g clip-path="url(#skinClip)">
+              <rect width="400" height="400" fill="url(#skinBase)"/>
+              <g id="pores"></g>
+              <g id="lines" fill="none" stroke="#9E6F57" stroke-linecap="round"></g>
+              <g id="spots"></g>
+              <rect id="redness" width="400" height="400" fill="url(#red)" opacity="0"/>
+              <ellipse id="sheen" cx="150" cy="130" rx="150" ry="110" fill="url(#glow)" opacity=".1"/>
+            </g>
+          </svg>
+          <div class="week-badge"><b id="weekNum">0</b><small>weeks</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="book" style="padding-top:0">
+    <span class="blob" style="width:460px;height:460px;left:50%;top:10%;background:#E5EEE8"></span>
+    <div class="wrap">
+      <div class="sec-h center"><span class="over rv">Book</span><h2 class="rv">Pick a time that <em>suits you.</em></h2><p class="rv">Live availability for the next two months. Nothing is charged until after your consultation.</p></div>
+      <div class="booking rv">
+        <aside class="b-side">
+          <h3>Your consultation</h3>
+          <ol class="steps" id="steps"><li>Treatment</li><li>Practitioner</li><li>Date</li><li>Time</li><li>Details</li></ol>
+          <div class="summary" id="summary"></div>
+        </aside>
+        <div class="b-main">
+          <h4 id="bTitle">Choose a treatment</h4>
+          <p class="sub" id="bSub">You can change this at your consultation.</p>
+          <div class="pane" id="pane" aria-live="polite"></div>
+          <div class="b-foot" id="bFoot">
+            <button class="mag ghost" id="backBtn" type="button"><span class="lbl">← Back</span></button>
+            <button class="mag" id="nextBtn" type="button" disabled><span class="lbl">Continue <span aria-hidden="true">→</span></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <span class="blob" style="width:600px;height:400px;left:50%;top:20%;transform:translateX(-50%);background:#DDE8E1"></span>
+    <div class="wrap">
+      <span class="over rv">Same-week appointments</span>
+      <h2 class="rv" style="margin-top:14px">Take your <em>time.</em><br>We do.</h2>
+      <p class="rv">Most first consultations are available within the week.</p>
+      <a class="mag rv" href="#book"><span class="lbl">Book a consultation <span aria-hidden="true">→</span></span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="halcyonhealth.js" defer></script>
 </body>
 </html>

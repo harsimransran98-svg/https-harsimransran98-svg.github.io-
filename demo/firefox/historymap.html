@@ -3,125 +3,233 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HistoryMap — Case Study by Bazozo</title>
-<meta name="description" content="Visualizes browsing history as a connected timeline.">
+<title>HistoryMap — visual browsing timeline · Firefox add-on by Bazozo Studio</title>
+<meta name="description" content="HistoryMap: HistoryMap turns your browsing history into a living map. Every page is a node, every link you followed is a branch, and the whole session plays back over time. Try the live add-on simulator. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0B1020">
 <link rel="canonical" href="https://bazozo.in/demo/firefox/historymap.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Albert+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#0B1020;
+  --text:#E4E9F7;
+  --accent:#5B8CFF;
+  --accent-2:#FFC857;
+  --panel:#121A30;
+  --line:rgba(255,255,255,.1);
+  --dim:color-mix(in srgb, var(--text) 64%, transparent);
+  --menu-bg:#050505;
+  --menu-text:#E4E9F7;
+  --display:'Big Shoulders Display', Georgia, serif;
+  --dw:800;
+  --body:'Albert Sans', system-ui, sans-serif;
+  --mono:'ui-monospace', ui-monospace, monospace;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input, select, textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+.mono{ font-family:var(--mono); }
+.prog{ position:fixed; z-index:70; top:0; left:0; right:0; height:3px; background:var(--accent); transform:scaleX(0); transform-origin:0 50%; }
+.nav{ position:fixed; z-index:65; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:16px clamp(18px,4vw,48px); transition:background .4s ease, box-shadow .4s ease; }
+.nav.scrolled{ background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:var(--dw); font-size:20px; }
+.logo i{ width:30px; height:30px; border-radius:9px; background:var(--accent); display:grid; place-items:center; font-style:normal; font-family:var(--body); font-weight:800; font-size:14px; color:var(--bg); }
+.nav .sp{ flex:1; }
+.nav .back{ font-size:13px; font-weight:600; opacity:.75; transition:opacity .2s ease; } .nav .back:hover{ opacity:1; }
+.burger{ position:relative; z-index:80; width:48px; height:48px; border-radius:14px; background:var(--accent); display:grid; place-items:center; box-shadow:0 10px 26px -12px var(--accent); transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-radius .4s ease; }
+.burger:hover{ transform:scale(1.08) rotate(45deg); }
+.burger[aria-expanded="true"]{ border-radius:50%; }
+.burger span{ position:absolute; left:14px; right:14px; height:2px; border-radius:2px; background:var(--bg); transition:transform .6s cubic-bezier(.68,-.6,.32,1.6), opacity .3s ease, right .4s ease; }
+.burger:hover span{ transform:rotate(-45deg); }
+.burger span:nth-child(1){ transform:translateY(-6px); } .burger span:nth-child(3){ transform:translateY(6px); right:22px; }
+.burger:hover span:nth-child(1){ transform:translateY(-6px) rotate(-45deg); } .burger:hover span:nth-child(3){ transform:translateY(6px) rotate(-45deg); right:14px; }
+.burger[aria-expanded="true"] span:nth-child(1){ transform:rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2){ opacity:0; transform:translateX(12px); }
+.burger[aria-expanded="true"] span:nth-child(3){ transform:rotate(-45deg); right:14px; }
+.menu{ position:fixed; z-index:60; inset:0; background:var(--menu-bg); color:var(--menu-text); display:flex; flex-direction:column; justify-content:center; padding:90px clamp(24px,6vw,80px) 40px; }
+.menu nav{ position:relative; display:flex; flex-direction:column; gap:4px; }
+.menu nav a{ font-family:var(--display); font-weight:var(--dw); font-size:clamp(36px,6.5vw,72px); line-height:1.1; display:flex; align-items:baseline; gap:18px; transition:color .3s ease, transform .4s cubic-bezier(.34,1.56,.64,1); }
+.menu nav a small{ font-family:var(--mono); font-size:13px; opacity:.5; }
+.menu nav a:hover{ color:var(--accent); transform:translateX(14px); }
+.menu .mnote{ position:relative; margin-top:36px; font-size:14px; opacity:.6; max-width:420px; }
+.menu{ clip-path:circle(0% at calc(100% - 44px) 40px); }
+.btn{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; border-radius:12px; font-weight:600; font-size:15px; background:var(--accent); color:#0B0B0B; }
+.btn.ghost{ background:transparent; color:var(--text); box-shadow:inset 0 0 0 1.5px var(--line); }
+.btn{ transition:transform .25s ease-out, box-shadow .3s ease; will-change:transform; } .btn:hover{ box-shadow:0 18px 40px -16px var(--accent), 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent); }
+.hero{ position:relative; padding:150px 0 90px; overflow:hidden; }
+.orb{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.55; pointer-events:none; }
+.orb.o1{ width:520px; height:520px; right:-120px; top:-80px; background:var(--accent); opacity:0.28; }
+.orb.o2{ width:380px; height:380px; left:-140px; bottom:-120px; background:var(--accent-2); opacity:0.2; }
+.hero .wrap{ position:relative; }
+.kick{ display:inline-flex; align-items:center; gap:10px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); font-size:12.5px; font-weight:600; }
+.kick i{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+.hero h1{ margin-top:22px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(44px,7.4vw,104px); line-height:.98; letter-spacing:-.025em; max-width:14ch; }
+.hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; }
+.hero h1 .w > span{ display:inline-block; }
+.hero .lead{ margin-top:22px; max-width:600px; font-size:18.5px; color:var(--dim); }
+.acts{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+.stats{ display:flex; flex-wrap:wrap; gap:36px; margin-top:48px; padding-top:28px; border-top:1px solid var(--line); }
+.stats b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:30px; color:var(--accent); }
+.stats span{ font-size:13px; color:var(--dim); }
+section.s{ padding:clamp(70px,10vw,130px) 0; }
+.lbl{ display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.lbl::before{ content:''; width:22px; height:1.5px; background:currentColor; }
+.sh{ margin-top:12px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(32px,4.6vw,58px); line-height:1.04; letter-spacing:-.015em; }
+.demo-h{ display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:end; margin-bottom:30px; }
+.demo-h p{ color:var(--dim); font-size:17px; }
+/* the Firefox window */
+.cx{ --cx-bg:#1C1B22; --cx-bar:#2B2A33; --cx-tab:#42414D; --cx-omni:#1C1B22; --cx-ink:#FBFBFE; --fx-blue:#00DDFF;
+  position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:0 50px 100px -50px rgba(0,0,0,.6); background:var(--cx-bg); color:var(--cx-ink); font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; }
+.cx-tabs{ display:flex; align-items:center; gap:4px; height:44px; padding:0 6px 0 8px; }
+.fx-view{ flex:none; width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.85; }
+.fx-view svg{ width:16px; height:16px; }
+.cx-tab{ position:relative; display:flex; align-items:center; gap:8px; width:230px; height:36px; padding:0 10px; border-radius:4px; font-size:12px; opacity:.85; transition:background .2s ease; }
+.cx-tab:hover{ background:rgba(251,251,254,.08); }
+.cx-tab.on{ background:var(--cx-tab); opacity:1; box-shadow:0 0 4px rgba(0,0,0,.5); }
+.cx-tab span{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cx-tab b{ font-weight:400; opacity:.6; }
+.cx-tab .fav{ width:14px; height:14px; border-radius:4px; background:var(--accent); flex:none; } .cx-tab .fav.f2{ background:conic-gradient(from 200deg, #FF9500, #FF2E63, #9059FF, #FF9500); border-radius:50%; }
+.cx-plus{ flex:none; width:28px; height:28px; display:grid; place-items:center; border-radius:4px; font-size:18px; opacity:.75; }
+.fx-list{ flex:none; margin-left:auto; width:28px; height:28px; display:grid; place-items:center; opacity:.7; font-size:13px; }
+.fx-win{ flex:none; display:flex; gap:2px; margin-left:4px; } .fx-win i{ width:30px; height:28px; display:grid; place-items:center; font-style:normal; font-size:12px; opacity:.7; }
+.cx-bar{ display:flex; align-items:center; gap:4px; height:42px; padding:0 8px; background:var(--cx-bar); border-bottom:1px solid #0C0C0D; }
+.cx-nb{ width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.8; font-size:15px; }
+.cx-omni{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; height:32px; margin:0 4px; padding:0 10px; border-radius:4px; background:var(--cx-omni); font-size:13.5px; box-shadow:inset 0 0 0 1px rgba(255,255,255,.05); }
+.fx-shield{ flex:none; color:#BFBFC9; } .cx-omni .fx-lock{ flex:none; opacity:.75; }
+.cx-omni #cxUrl{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cx-star{ opacity:.6; }
+.cx-puz, .fx-dl, .fx-menu{ width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.75; }
+.fx-menu{ font-size:17px; }
+.cx-ext{ position:relative; width:32px; height:32px; border-radius:4px; display:grid; place-items:center; transition:background .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.cx-ext i{ width:20px; height:20px; border-radius:6px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:12px; color:#fff; background:var(--accent); box-shadow:0 0 0 0 var(--accent); animation:cxGlow 2.4s ease-in-out infinite; }
+.cx-ext:hover{ background:rgba(251,251,254,.12); transform:scale(1.08); }
+.cx-ext[aria-expanded="true"]{ background:rgba(251,251,254,.16); } .cx-ext[aria-expanded="true"] i{ animation:none; box-shadow:0 0 14px var(--accent); }
+@keyframes cxGlow{ 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent), 0 0 10px var(--accent); } 50%{ box-shadow:0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent), 0 0 18px var(--accent); } }
+.cx-badge{ position:absolute; right:-3px; bottom:-1px; min-width:16px; height:15px; padding:0 4px; border-radius:8px; background:var(--accent-2); color:#111; font-size:9.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--cx-bar); }
+.cx-av{ display:none; }
+.cx-view{ position:relative; height:600px; background:#fff; }
+.cx-page{ position:absolute; inset:0; overflow-y:auto; overflow-x:hidden; color:#1F2328; font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; scrollbar-width:thin; }
+.cx-pop{ position:absolute; z-index:20; top:8px; right:44px; width:min(var(--pw), calc(100% - 24px)); max-height:calc(100% - 20px); display:flex; flex-direction:column; border-radius:8px; overflow:hidden; background:var(--panel); color:var(--text); font-family:var(--body); box-shadow:0 12px 36px rgba(0,0,0,.35), 0 0 0 1px var(--line); transform-origin:calc(100% - 22px) 0; }
+.cx-pop::before{ content:''; position:absolute; top:-6px; right:20px; width:12px; height:12px; background:var(--panel); transform:rotate(45deg); }
+.cx-pop-h{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line); }
+.cx-pop-h i{ width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:13px; color:#fff; background:var(--accent); }
+.cx-pop-h b{ font-family:var(--display); font-weight:var(--dw); font-size:16px; }
+.cx-pop-s{ font-size:11.5px; color:var(--dim); }
+.cx-px{ margin-left:auto; width:28px; height:28px; border-radius:4px; font-size:18px; color:var(--dim); } .cx-px:hover{ background:var(--line); color:var(--text); }
+.cx-pop-b{ padding:14px; overflow-y:auto; scrollbar-width:thin; }
+@media(max-width:900px){ .cx-tab:not(.on), .fx-view, .cx-nb:nth-child(2), .cx-star, .cx-puz, .fx-dl, .fx-list, .fx-win{ display:none; } .cx-tab{ width:auto; flex:1; min-width:0; } .cx-view{ height:560px; } .cx-pop{ right:12px; } }
+#demo{ position:relative; }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+.feat{ position:relative; padding:28px; border-radius:20px; background:var(--panel); border:1px solid var(--line); overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-color .3s ease; }
+.feat:hover{ transform:translateY(-6px) rotate(-.5deg); border-color:var(--accent); }
+.feat .n{ font-family:var(--mono); font-size:13px; color:var(--accent); }
+.feat h3{ margin-top:14px; font-family:var(--display); font-weight:var(--dw); font-size:24px; line-height:1.15; }
+.feat p{ margin-top:8px; color:var(--dim); }
+.cta{ text-align:center; }
+.cta .sh{ max-width:16ch; margin:12px auto 0; }
+.cta p{ margin:14px auto 30px; color:var(--dim); }
+.foot{ padding:30px 0 calc(34px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); font-size:13px; color:var(--dim); }
+.foot .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+.toast{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--bg); font-size:14px; font-weight:600; box-shadow:0 20px 40px rgba(0,0,0,.3); max-width:calc(100% - 32px); }
+@media(max-width:900px){ .demo-h, .feats{ grid-template-columns:1fr; } .wpa-body{ grid-template-columns:1fr; } .wpa-menu{ display:none; } .nav .back{ display:none; } .wpa-main{ padding:16px 14px 20px; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } .rv{ opacity:1; transform:none; } }
+/* ---------- add-on simulator ---------- */
+.hm-app{ position:relative; min-height:100%; padding:20px 22px 40px; background:radial-gradient(120% 80% at 80% 0%, #17224A 0%, #0B1020 60%); color:#E4E9F7; font-family:'Albert Sans', sans-serif; }
+.hm-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; } .hm-head h1{ font:800 34px 'Big Shoulders Display', sans-serif; letter-spacing:.01em; } .hm-head span{ font-size:13px; color:#8D98BC; }
+.hm-chips{ display:flex; flex-wrap:wrap; gap:6px; margin:12px 0; }
+.hm-chip{ display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; border-radius:14px; border:1px solid rgba(255,255,255,.12); color:#E4E9F7; font:600 12px 'Albert Sans', sans-serif; transition:opacity .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.hm-chip i{ width:9px; height:9px; border-radius:50%; background:var(--k); } .hm-chip[aria-pressed="false"]{ opacity:.4; } .hm-chip:hover{ transform:translateY(-2px); }
+.hm-ctrl{ display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+.hm-play{ flex:none; height:34px; padding:0 14px; border-radius:17px; background:#5B8CFF; color:#0B1020; font:800 12.5px 'Albert Sans', sans-serif; transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; } .hm-play:hover{ transform:translateY(-2px); box-shadow:0 0 20px -4px #5B8CFF; }
+.hm-ctrl input{ flex:1; min-width:0; accent-color:#FFC857; } .hm-tl{ flex:none; font:600 12px ui-monospace, Consolas, monospace; color:#FFC857; }
+.hm-wrap{ overflow-x:auto; scrollbar-width:thin; }
+.hm-svg{ display:block; font-family:'Albert Sans', sans-serif; }
+.hm-axis line{ stroke:rgba(255,255,255,.06); stroke-dasharray:3 5; } .hm-axis text{ fill:#6F7BA3; font-size:10px; }
+.hm-link{ fill:none; stroke-width:2; opacity:.75; transition:opacity .3s ease; } .hm-link.dim{ opacity:.12; } .hm-link.hot{ stroke-width:3.5; opacity:1; filter:drop-shadow(0 0 4px currentColor); }
+.hm-node{ cursor:pointer; transition:opacity .3s ease; outline:none; } .hm-node.dim{ opacity:.18; }
+.hm-node .halo{ opacity:0; transition:opacity .25s ease; } .hm-node:hover .halo, .hm-node:focus-visible .halo, .hm-node.sel .halo{ opacity:.28; }
+.hm-node text{ fill:#C9D2EE; font-size:11.5px; paint-order:stroke; stroke:#0B1020; stroke-width:3px; } .hm-node.sel text{ fill:#fff; font-weight:700; }
+.hm-card{ position:absolute; right:18px; bottom:18px; z-index:5; width:min(340px, calc(100% - 36px)); padding:16px; border-radius:16px; background:rgba(18,26,48,.94); border:1px solid color-mix(in srgb, var(--k) 50%, transparent); box-shadow:0 20px 50px -20px rgba(0,0,0,.7), 0 0 30px -14px var(--k); backdrop-filter:blur(8px); }
+.hm-card[hidden]{ display:none; }
+.hm-card > small{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--k); } .hm-card > b{ display:block; margin:4px 24px 10px 0; font:800 22px/1.1 'Big Shoulders Display', sans-serif; }
+.hm-x{ position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:50%; color:#8D98BC; font-size:16px; } .hm-x:hover{ background:rgba(255,255,255,.08); color:#fff; }
+.hm-cg{ display:grid; grid-template-columns:1fr 1fr; gap:6px; } .hm-cg div{ padding:7px 9px; border-radius:9px; background:rgba(255,255,255,.04); } .hm-cg span{ display:block; font-size:10.5px; color:#8D98BC; } .hm-cg em{ font-style:normal; font-size:12.5px; font-weight:600; }
+.hm-tlh{ display:block; margin-top:10px; font-size:11px; font-weight:700; color:#8D98BC; text-transform:uppercase; letter-spacing:.06em; }
+.hm-trail{ margin:6px 0 0 18px; font-size:12px; color:#C9D2EE; max-height:110px; overflow:auto; } .hm-trail li{ padding:2px 0; } .hm-trail li:last-child{ color:var(--k); font-weight:700; }
+.hm-row{ display:flex; gap:6px; margin-top:12px; } .hm-row .btn{ flex:1; height:36px; font-size:12.5px; } .hm-sb{ flex:1; height:36px; border-radius:18px; border:1px solid rgba(255,255,255,.15); color:#E4E9F7; font:600 12px 'Albert Sans', sans-serif; }
+.hm-l{ margin:4px 0 8px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); } .hm-l:not(:first-child){ margin-top:14px; }
+.hm-sess{ display:flex; flex-direction:column; gap:6px; }
+.hm-s{ display:flex; flex-direction:column; align-items:flex-start; padding:10px 12px; border-radius:10px; border:1px solid var(--line); color:var(--text); text-align:left; transition:border-color .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.hm-s:hover{ transform:translateX(3px); } .hm-s.on{ border-color:var(--accent); background:rgba(91,140,255,.1); } .hm-s b{ font:800 17px 'Big Shoulders Display', sans-serif; } .hm-s small{ font-size:11.5px; color:var(--dim); }
+.hm-stats{ display:grid; grid-template-columns:1fr 1fr; gap:6px; } .hm-stats div{ padding:9px; border-radius:10px; background:rgba(255,255,255,.04); } .hm-stats b{ display:block; font:800 22px 'Big Shoulders Display', sans-serif; color:var(--accent-2); } .hm-stats span{ font-size:11px; color:var(--dim); }
+.hm-rp{ width:100%; height:40px; margin-top:12px; font-size:13px; }
+@media(max-width:900px){ .hm-app{ padding:16px 14px 30px; } .hm-head h1{ font-size:28px; } }
+
+</style>
 </head>
-<body data-theme="1">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
+<body>
+<div class="prog" id="prog"></div>
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><i>H</i>HistoryMap</a><span class="sp"></span>
+  <a class="back" href="../../index.html#work">← Bazozo</a>
+  <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 </header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>Firefox Add-ons</div>
-    <h1 class="device-title">HistoryMap</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Built to disappear into your browser</p>
-    <div class="device-frame-wrap browser" id="deviceFrameWrap">
-      <div id="demoBody"></div>
+<div class="menu" id="menu" data-variant="1" hidden>
+  <nav aria-label="Site"><a href="#demo-sec"><small>01</small>Try the plugin</a><a href="#features"><small>02</small>Features</a><a href="#cta"><small>03</small>Pricing</a><a href="../../index.html#contact"><small>04</small>Hire Bazozo</a><a href="../../index.html#work"><small>05</small>All work</a></nav>
+  <p class="mnote">Firefox add-on · visual browsing timeline</p>
+</div>
+<main id="top">
+  <section class="hero"><span class="orb o1"></span><span class="orb o2"></span>
+    <div class="wrap">
+      <span class="kick"><i></i>Firefox add-on · visual browsing timeline</span>
+      <h1 id="h1"><span class="w"><span>See</span></span> <span class="w"><span>how</span></span> <span class="w"><span>your</span></span> <span class="w"><span>research</span></span> <span class="w"><span>grew.</span></span></h1>
+      <p class="lead">HistoryMap turns your browsing history into a living map. Every page is a node, every link you followed is a branch, and the whole session plays back over time.</p>
+      <div class="acts"><a class="btn pri" href="#demo-sec">Try the add-on ↓</a><a class="btn ghost" href="#cta">Add to Firefox</a></div>
+      <div class="stats"><div><b>Graph</b><span>pages and branches</span></div><div><b>Replay</b><span>your session over time</span></div><div><b>Trails</b><span>copy how you got there</span></div></div>
     </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>HistoryMap is a lightweight firefox add-ons that does exactly what it says: visualizes browsing history as a connected timeline. No bloated settings screen, no background trackers, no upsell halfway through onboarding.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>One-Click Install</h4><p>No account, no setup wizard — it just works the moment you add it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Runs Entirely Offline</h4><p>No data ever leaves your browser unless you explicitly export it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Tiny Footprint</h4><p>Built to add negligible memory or CPU overhead, even with dozens of tabs open.</p></div>
+  </section>
+  <section class="s" id="demo-sec" style="padding-top:20px"><div class="wrap">
+    <div class="demo-h"><div class="rv"><span class="lbl">Live in Firefox</span><h2 class="sh">Replay a research session</h2></div><p class="rv">Press play to watch the session branch out. Click any node for its details and trail, filter by site, or switch to another session from the toolbar.</p></div>
+    <div class="cx" id="cx" role="region" aria-label="HistoryMap browser simulator">
+      <div class="cx-tabs"><span class="fx-view" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M1.5 6h13"/></svg></span><div class="cx-tab on"><i class="fav"></i><span>HistoryMap · Octopus sleep</span><b aria-hidden="true">×</b></div><div class="cx-tab"><i class="fav f2"></i><span>New Tab</span></div><span class="cx-plus" aria-hidden="true">+</span><span class="fx-list" aria-hidden="true">⌄</span><span class="fx-win" aria-hidden="true"><i>–</i><i>▢</i><i>✕</i></span></div>
+      <div class="cx-bar"><span class="cx-nb" aria-hidden="true">←</span><span class="cx-nb" aria-hidden="true">→</span><span class="cx-nb" aria-hidden="true">↻</span>
+        <div class="cx-omni"><svg class="fx-shield" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 1.5 2.5 3.5v4c0 3.2 2.3 5.9 5.5 7 3.2-1.1 5.5-3.8 5.5-7v-4Z"/></svg><svg class="fx-lock" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span id="cxUrl">moz-extension://historymap/session/octopus-sleep</span><span class="cx-star" aria-hidden="true">☆</span></div>
+        <span class="fx-dl" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8m-3.5-3.5L8 10l3.5-3.5M2.5 13.5h11"/></svg></span>
+        <span class="cx-puz" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 3a2 2 0 0 1 4 0v2h4a1 1 0 0 1 1 1v4h-2a2 2 0 0 0 0 4h2v4a1 1 0 0 1-1 1h-4v-2a2 2 0 0 0-4 0v2H6a1 1 0 0 1-1-1v-4h2a2 2 0 0 0 0-4H5V6a1 1 0 0 1 1-1h4Z"/></svg></span>
+        <button class="cx-ext" type="button" id="cxExt" aria-expanded="false" aria-controls="cxPop" aria-label="Open HistoryMap"><i>H</i><b class="cx-badge" id="cxBadge" hidden></b></button><span class="fx-menu" aria-hidden="true">≡</span><span class="cx-av" aria-hidden="true"></span></div>
+      <div class="cx-view"><div class="cx-page" id="cxPage" data-lenis-prevent></div>
+        <div class="cx-pop" id="cxPop" role="dialog" aria-label="HistoryMap" hidden style="--pw:340px"><div class="cx-pop-h"><i>H</i><b>HistoryMap</b><span class="cx-pop-s">sessions</span><button class="cx-px" type="button" id="cxPopX" aria-label="Close popup">×</button></div><div class="cx-pop-b" id="cxPopBody"></div></div>
       </div>
     </div>
-  </div>
-</section>
-
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects[73]);
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-firefox');
-</script>
+  </div></section>
+  <section class="s" id="features" style="padding-top:0"><div class="wrap">
+    <span class="lbl rv">Why it works</span><h2 class="sh rv">Built for the browser you already use</h2>
+    <div class="feats"><article class="feat rv"><span class="n">01</span><h3>History as a map</h3><p>Pages are nodes and the links you followed are branches, laid out over time.</p></article><article class="feat rv"><span class="n">02</span><h3>Watch it unfold</h3><p>Replay any session and see exactly when each rabbit hole began.</p></article><article class="feat rv"><span class="n">03</span><h3>Trails you can share</h3><p>Copy the path from your first search to any page as a tidy list.</p></article></div>
+  </div></section>
+  <section class="s cta" id="cta"><div class="wrap">
+    <span class="lbl rv">HistoryMap</span><h2 class="sh rv">Find your way back</h2><p class="rv">Free. History never leaves your device.</p>
+    <a class="btn pri rv" href="../../index.html#contact">Add to Firefox →</a>
+  </div></section>
+</main>
+<footer class="foot"><div class="wrap"><span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span><a href="../../index.html#work">← Back to Bazozo</a></div></footer>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="historymap.js" defer></script>
 </body>
 </html>

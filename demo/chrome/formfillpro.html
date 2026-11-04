@@ -3,125 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFill Pro — Case Study by Bazozo</title>
-<meta name="description" content="Fills repetitive forms instantly from saved templates.">
+<title>FormFill Pro — QA test-data autofill · Chrome extension by Bazozo Studio</title>
+<meta name="description" content="FormFill Pro: FormFill Pro fills any form with realistic test profiles and sandbox card numbers, so QA can test the happy path and the edge cases fast. Try the live extension simulator. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0B1220">
 <link rel="canonical" href="https://bazozo.in/demo/chrome/formfillpro.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&family=Red+Hat+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0B1220;
+  --text:#E2E8F0;
+  --accent:#F59E0B;
+  --accent-2:#22C55E;
+  --panel:#111A2E;
+  --line:rgba(255,255,255,.1);
+  --dim:color-mix(in srgb, var(--text) 64%, transparent);
+  --menu-bg:#050505;
+  --menu-text:#E2E8F0;
+  --display:'Red Hat Display', Georgia, serif;
+  --dw:800;
+  --body:'Red Hat Display', system-ui, sans-serif;
+  --mono:'Red Hat Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input, select, textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+.mono{ font-family:var(--mono); }
+.prog{ position:fixed; z-index:70; top:0; left:0; right:0; height:3px; background:var(--accent); transform:scaleX(0); transform-origin:0 50%; }
+.nav{ position:fixed; z-index:65; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:16px clamp(18px,4vw,48px); transition:background .4s ease, box-shadow .4s ease; }
+.nav.scrolled{ background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:var(--dw); font-size:20px; }
+.logo i{ width:30px; height:30px; border-radius:9px; background:var(--accent); display:grid; place-items:center; font-style:normal; font-family:var(--body); font-weight:800; font-size:14px; color:var(--bg); }
+.nav .sp{ flex:1; }
+.nav .back{ font-size:13px; font-weight:600; opacity:.75; transition:opacity .2s ease; } .nav .back:hover{ opacity:1; }
+.burger{ position:relative; z-index:80; width:48px; height:48px; border-radius:14px; background:var(--accent); display:grid; place-items:center; box-shadow:0 10px 26px -12px var(--accent); transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-radius .4s ease; }
+.burger:hover{ transform:scale(1.08) rotate(45deg); }
+.burger[aria-expanded="true"]{ border-radius:50%; }
+.burger span{ position:absolute; left:14px; right:14px; height:2px; border-radius:2px; background:var(--bg); transition:transform .6s cubic-bezier(.68,-.6,.32,1.6), opacity .3s ease, right .4s ease; }
+.burger:hover span{ transform:rotate(-45deg); }
+.burger span:nth-child(1){ transform:translateY(-6px); } .burger span:nth-child(3){ transform:translateY(6px); right:22px; }
+.burger:hover span:nth-child(1){ transform:translateY(-6px) rotate(-45deg); } .burger:hover span:nth-child(3){ transform:translateY(6px) rotate(-45deg); right:14px; }
+.burger[aria-expanded="true"] span:nth-child(1){ transform:rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2){ opacity:0; transform:translateX(12px); }
+.burger[aria-expanded="true"] span:nth-child(3){ transform:rotate(-45deg); right:14px; }
+.menu{ position:fixed; z-index:60; inset:0; background:var(--menu-bg); color:var(--menu-text); display:flex; flex-direction:column; justify-content:center; padding:90px clamp(24px,6vw,80px) 40px; }
+.menu nav{ position:relative; display:flex; flex-direction:column; gap:4px; }
+.menu nav a{ font-family:var(--display); font-weight:var(--dw); font-size:clamp(36px,6.5vw,72px); line-height:1.1; display:flex; align-items:baseline; gap:18px; transition:color .3s ease, transform .4s cubic-bezier(.34,1.56,.64,1); }
+.menu nav a small{ font-family:var(--mono); font-size:13px; opacity:.5; }
+.menu nav a:hover{ color:var(--accent); transform:translateX(14px); }
+.menu .mnote{ position:relative; margin-top:36px; font-size:14px; opacity:.6; max-width:420px; }
+.menu{ left:auto; width:min(440px,100%); box-shadow:-30px 0 80px rgba(0,0,0,.35); } .menu-back{ position:fixed; inset:0; z-index:59; background:rgba(0,0,0,.4); backdrop-filter:blur(4px); }
+.btn{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; border-radius:12px; font-weight:600; font-size:15px; background:var(--accent); color:#0B0B0B; }
+.btn.ghost{ background:transparent; color:var(--text); box-shadow:inset 0 0 0 1.5px var(--line); }
+.btn{ position:relative; } .btn::before, .btn::after{ content:''; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; border:2px solid transparent; } .btn::before{ border-top-color:var(--accent-2); border-right-color:var(--accent-2); transform:scale(0); transform-origin:0 0; transition:transform .45s ease; } .btn::after{ border-bottom-color:var(--accent-2); border-left-color:var(--accent-2); transform:scale(0); transform-origin:100% 100%; transition:transform .45s ease .15s; } .btn:hover::before, .btn:hover::after{ transform:scale(1); } .btn:hover{ background:transparent !important; color:var(--text) !important; box-shadow:inset 0 0 30px -10px var(--accent); }
+.hero{ position:relative; padding:150px 0 90px; overflow:hidden; }
+.orb{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.55; pointer-events:none; }
+.orb.o1{ width:520px; height:520px; right:-120px; top:-80px; background:var(--accent); opacity:0.28; }
+.orb.o2{ width:380px; height:380px; left:-140px; bottom:-120px; background:var(--accent-2); opacity:0.2; }
+.hero .wrap{ position:relative; }
+.kick{ display:inline-flex; align-items:center; gap:10px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); font-size:12.5px; font-weight:600; }
+.kick i{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+.hero h1{ margin-top:22px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(44px,7.4vw,104px); line-height:.98; letter-spacing:-.025em; max-width:14ch; }
+.hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; }
+.hero h1 .w > span{ display:inline-block; }
+.hero .lead{ margin-top:22px; max-width:600px; font-size:18.5px; color:var(--dim); }
+.acts{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+.stats{ display:flex; flex-wrap:wrap; gap:36px; margin-top:48px; padding-top:28px; border-top:1px solid var(--line); }
+.stats b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:30px; color:var(--accent); }
+.stats span{ font-size:13px; color:var(--dim); }
+section.s{ padding:clamp(70px,10vw,130px) 0; }
+.lbl{ display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.lbl::before{ content:''; width:22px; height:1.5px; background:currentColor; }
+.sh{ margin-top:12px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(32px,4.6vw,58px); line-height:1.04; letter-spacing:-.015em; }
+.demo-h{ display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:end; margin-bottom:30px; }
+.demo-h p{ color:var(--dim); font-size:17px; }
+/* the Chrome window */
+.cx{ --cx-bg:#202124; --cx-bar:#35363A; --cx-omni:#202124; --cx-ink:#E8EAED;
+  position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 50px 100px -50px rgba(0,0,0,.6); background:var(--cx-bg); color:var(--cx-ink); font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; }
+.cx-tabs{ display:flex; align-items:flex-end; gap:2px; height:42px; padding:0 10px; }
+.cx-dots{ display:flex; gap:7px; align-self:center; margin-right:12px; } .cx-dots i{ width:11px; height:11px; border-radius:50%; background:#FF5F57; } .cx-dots i:nth-child(2){ background:#FEBC2E; } .cx-dots i:nth-child(3){ background:#28C840; }
+.cx-tab{ display:flex; align-items:center; gap:8px; width:220px; height:34px; padding:0 12px; border-radius:10px 10px 0 0; font-size:12.5px; opacity:.75; }
+.cx-tab.on{ background:var(--cx-bar); opacity:1; }
+.cx-tab span{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cx-tab b{ font-weight:400; opacity:.6; }
+.cx-tab .fav{ width:14px; height:14px; border-radius:4px; background:var(--accent); flex:none; } .cx-tab .fav.f2{ background:#9AA0A6; border-radius:50%; }
+.cx-plus{ align-self:center; margin-left:6px; font-size:18px; opacity:.7; }
+.cx-bar{ display:flex; align-items:center; gap:6px; height:44px; padding:0 10px; background:var(--cx-bar); border-bottom:1px solid #3C3C3C; }
+.cx-nb{ width:30px; height:30px; display:grid; place-items:center; border-radius:50%; opacity:.7; font-size:15px; }
+.cx-omni{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; height:32px; padding:0 14px; border-radius:16px; background:var(--cx-omni); font-size:13.5px; }
+.cx-omni #cxUrl{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cx-star{ opacity:.6; }
+.cx-puz{ width:30px; height:30px; display:grid; place-items:center; opacity:.65; }
+.cx-ext{ position:relative; width:32px; height:32px; border-radius:50%; display:grid; place-items:center; transition:background .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.cx-ext i{ width:20px; height:20px; border-radius:6px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:12px; color:#fff; background:var(--accent); box-shadow:0 0 0 0 var(--accent); animation:cxGlow 2.4s ease-in-out infinite; }
+.cx-ext:hover{ background:rgba(127,127,127,.18); transform:scale(1.1); }
+.cx-ext[aria-expanded="true"]{ background:rgba(127,127,127,.22); } .cx-ext[aria-expanded="true"] i{ animation:none; box-shadow:0 0 14px var(--accent); }
+@keyframes cxGlow{ 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent), 0 0 10px var(--accent); } 50%{ box-shadow:0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent), 0 0 18px var(--accent); } }
+.cx-badge{ position:absolute; right:-3px; bottom:-1px; min-width:16px; height:15px; padding:0 4px; border-radius:8px; background:var(--accent-2); color:#111; font-size:9.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--cx-bar); }
+.cx-av{ width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#F59E0B,#DB2777); margin-left:4px; }
+.cx-view{ position:relative; height:600px; background:#fff; }
+.cx-page{ position:absolute; inset:0; overflow-y:auto; overflow-x:hidden; color:#1F2328; font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; scrollbar-width:thin; }
+.cx-pop{ position:absolute; z-index:20; top:6px; right:12px; width:min(var(--pw), calc(100% - 24px)); max-height:calc(100% - 20px); display:flex; flex-direction:column; border-radius:12px; overflow:hidden; background:var(--panel); color:var(--text); font-family:var(--body); box-shadow:0 18px 50px rgba(0,0,0,.35), 0 0 0 1px var(--line); transform-origin:calc(100% - 40px) 0; }
+.cx-pop::before{ content:''; position:absolute; top:-6px; right:46px; width:12px; height:12px; background:var(--panel); transform:rotate(45deg); }
+.cx-pop-h{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line); }
+.cx-pop-h i{ width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:13px; color:#fff; background:var(--accent); }
+.cx-pop-h b{ font-family:var(--display); font-weight:var(--dw); font-size:15px; }
+.cx-pop-s{ font-size:11.5px; color:var(--dim); }
+.cx-px{ margin-left:auto; width:28px; height:28px; border-radius:50%; font-size:18px; color:var(--dim); } .cx-px:hover{ background:var(--line); color:var(--text); }
+.cx-pop-b{ padding:14px; overflow-y:auto; scrollbar-width:thin; }
+@media(max-width:900px){ .cx-tab:not(.on), .cx-nb:nth-child(2), .cx-star, .cx-puz{ display:none; } .cx-view{ height:560px; } }
+#demo{ position:relative; }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+.feat{ position:relative; padding:28px; border-radius:20px; background:var(--panel); border:1px solid var(--line); overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-color .3s ease; }
+.feat:hover{ transform:translateY(-6px) rotate(-.5deg); border-color:var(--accent); }
+.feat .n{ font-family:var(--mono); font-size:13px; color:var(--accent); }
+.feat h3{ margin-top:14px; font-family:var(--display); font-weight:var(--dw); font-size:24px; line-height:1.15; }
+.feat p{ margin-top:8px; color:var(--dim); }
+.cta{ text-align:center; }
+.cta .sh{ max-width:16ch; margin:12px auto 0; }
+.cta p{ margin:14px auto 30px; color:var(--dim); }
+.foot{ padding:30px 0 calc(34px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); font-size:13px; color:var(--dim); }
+.foot .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+.toast{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--bg); font-size:14px; font-weight:600; box-shadow:0 20px 40px rgba(0,0,0,.3); max-width:calc(100% - 32px); }
+@media(max-width:900px){ .demo-h, .feats{ grid-template-columns:1fr; } .wpa-body{ grid-template-columns:1fr; } .wpa-menu{ display:none; } .nav .back{ display:none; } .wpa-main{ padding:16px 14px 20px; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } .rv{ opacity:1; transform:none; } }
+/* ---------- extension simulator ---------- */
+.fp-site{ min-height:100%; background:#F8FAFC; color:#0F172A; }
+.fp-top{ display:flex; align-items:center; gap:12px; height:50px; padding:0 22px; background:#fff; border-bottom:1px solid #E2E8F0; } .fp-top b{ letter-spacing:.2em; font-size:14px; } .fp-stg{ font:700 10.5px/1 var(--mono); padding:4px 7px; border-radius:4px; background:#FEF3C7; color:#92400E; }
+.fp-grid{ display:grid; grid-template-columns:1fr 220px; gap:18px; padding:20px 22px 40px; }
+.fp-form{ display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; padding:20px; border-radius:14px; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.06); align-content:start; }
+.fp-form h2{ grid-column:1 / -1; font-size:22px; }
+.fp-f label{ display:block; font-size:12px; font-weight:600; color:#475569; margin-bottom:4px; }
+.fp-f input, .fp-f select{ width:100%; height:40px; padding:0 10px; border-radius:8px; border:1.5px solid #CBD5E1; background:#fff; font:14px var(--body); color:#0F172A; transition:border-color .2s ease, box-shadow .2s ease; }
+.fp-f input.typing, .fp-f select.typing{ border-color:#F59E0B; box-shadow:0 0 0 3px rgba(245,158,11,.25); }
+.fp-f.bad input, .fp-f.bad select{ border-color:#EF4444; } .fp-f.good input, .fp-f.good select{ border-color:#22C55E; }
+.fp-e{ display:block; min-height:14px; font-size:11px; color:#EF4444; }
+.fp-name, .fp-email, .fp-addr, .fp-card, .fp-terms, .fp-place, .fp-ok{ grid-column:1 / -1; }
+.fp-terms{ font-size:13px; display:flex; gap:8px; align-items:center; } .fp-terms input{ width:16px; height:16px; accent-color:#0F172A; }
+.fp-place{ height:46px; border-radius:10px; background:#0F172A; color:#fff; font-weight:700; transition:transform .25s cubic-bezier(.34,1.56,.64,1); } .fp-place:hover{ transform:translateY(-2px); }
+.fp-sum{ padding:16px; border-radius:14px; background:#fff; height:max-content; font-size:13.5px; display:flex; flex-direction:column; gap:6px; } .fp-sum strong{ margin-top:6px; padding-top:8px; border-top:1px solid #E2E8F0; }
+.fp-ok{ padding:28px; text-align:center; } .fp-ok b{ display:block; font-size:22px; color:#16A34A; } .fp-ok p{ color:#64748B; font-family:var(--mono); font-size:12.5px; }
+.fp-l{ font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin:4px 0 6px; } .fp-l ~ .fp-l{ margin-top:14px; }
+.fp-seg{ display:flex; gap:4px; } .fp-seg button{ flex:1; height:32px; border-radius:8px; border:1px solid var(--line); font-size:12px; font-weight:700; } .fp-seg button[aria-pressed="true"]{ background:var(--accent); color:#0B1220; border-color:var(--accent); }
+.fp-prev{ margin:10px 0; padding:10px; border-radius:10px; background:#0B1220; font-size:12px; display:grid; gap:4px; } .fp-prev div{ display:grid; grid-template-columns:44px 1fr; gap:6px; } .fp-prev span{ color:var(--dim); } .fp-prev code{ font-family:var(--mono); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#FCD34D; }
+.fp-fill{ width:100%; height:44px; justify-content:center; } .fp-fill:disabled{ opacity:.6; }
+.fp-clr{ display:block; margin:8px auto 0; font-size:12px; color:var(--dim); text-decoration:underline; }
+.fp-status{ display:flex; flex-wrap:wrap; gap:4px; } .fp-status span{ font:11px var(--mono); padding:2px 6px; border-radius:4px; } .fp-status .ok{ background:rgba(34,197,94,.15); color:#86EFAC; } .fp-status .no{ background:rgba(255,255,255,.05); color:var(--dim); }
+@media(max-width:900px){ .fp-grid{ grid-template-columns:1fr; } .fp-sum{ display:none; } }
+
+</style>
 </head>
-<body data-theme="5">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
+<body>
+<div class="prog" id="prog"></div>
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><i>F</i>FormFill Pro</a><span class="sp"></span>
+  <a class="back" href="../../index.html#work">← Bazozo</a>
+  <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 </header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>Chrome Extensions</div>
-    <h1 class="device-title">FormFill Pro</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Small tool, big difference</p>
-    <div class="device-frame-wrap browser" id="deviceFrameWrap">
-      <div id="demoBody"></div>
+<div class="menu" id="menu" data-variant="2" hidden>
+  <nav aria-label="Site"><a href="#demo-sec"><small>01</small>Try the plugin</a><a href="#features"><small>02</small>Features</a><a href="#cta"><small>03</small>Pricing</a><a href="../../index.html#contact"><small>04</small>Hire Bazozo</a><a href="../../index.html#work"><small>05</small>All work</a></nav>
+  <p class="mnote">Chrome extension · QA test-data autofill</p>
+</div>
+<main id="top">
+  <section class="hero"><span class="orb o1"></span><span class="orb o2"></span>
+    <div class="wrap">
+      <span class="kick"><i></i>Chrome extension · QA test-data autofill</span>
+      <h1 id="h1"><span class="w"><span>Test</span></span> <span class="w"><span>checkout</span></span> <span class="w"><span>in</span></span> <span class="w"><span>two</span></span> <span class="w"><span>seconds,</span></span> <span class="w"><span>not</span></span> <span class="w"><span>two</span></span> <span class="w"><span>minutes.</span></span></h1>
+      <p class="lead">FormFill Pro fills any form with realistic test profiles and sandbox card numbers, so QA can test the happy path and the edge cases fast.</p>
+      <div class="acts"><a class="btn pri" href="#demo-sec">Try the extension ↓</a><a class="btn ghost" href="#cta">Add to Chrome</a></div>
+      <div class="stats"><div><b>1 click</b><span>full checkout</span></div><div><b>Sandbox</b><span>card numbers only</span></div><div><b>Edge cases</b><span>unicode, long names</span></div></div>
     </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>FormFill Pro is a lightweight chrome extensions that does exactly what it says: fills repetitive forms instantly from saved templates. No bloated settings screen, no background trackers, no upsell halfway through onboarding.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>One-Click Install</h4><p>No account, no setup wizard — it just works the moment you add it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Runs Entirely Offline</h4><p>No data ever leaves your browser unless you explicitly export it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Tiny Footprint</h4><p>Built to add negligible memory or CPU overhead, even with dozens of tabs open.</p></div>
+  </section>
+  <section class="s" id="demo-sec" style="padding-top:20px"><div class="wrap">
+    <div class="demo-h"><div class="rv"><span class="lbl">Live in Chrome</span><h2 class="sh">Fill a checkout</h2></div><p class="rv">Open FormFill Pro, pick a profile and press Fill. Then place the order to run the page’s own validation.</p></div>
+    <div class="cx" id="cx" role="region" aria-label="FormFill Pro browser simulator">
+      <div class="cx-tabs"><span class="cx-dots" aria-hidden="true"><i></i><i></i><i></i></span><div class="cx-tab on"><i class="fav"></i><span>Checkout · Northwind</span><b aria-hidden="true">×</b></div><div class="cx-tab"><i class="fav f2"></i><span>New Tab</span></div><span class="cx-plus" aria-hidden="true">+</span></div>
+      <div class="cx-bar"><span class="cx-nb" aria-hidden="true">←</span><span class="cx-nb" aria-hidden="true">→</span><span class="cx-nb" aria-hidden="true">↻</span>
+        <div class="cx-omni"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span id="cxUrl">staging.northwind.store/checkout</span><span class="cx-star" aria-hidden="true">☆</span></div>
+        <span class="cx-puz" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 3a2 2 0 0 1 4 0v2h4a1 1 0 0 1 1 1v4h-2a2 2 0 0 0 0 4h2v4a1 1 0 0 1-1 1h-4v-2a2 2 0 0 0-4 0v2H6a1 1 0 0 1-1-1v-4h2a2 2 0 0 0 0-4H5V6a1 1 0 0 1 1-1h4Z"/></svg></span>
+        <button class="cx-ext" type="button" id="cxExt" aria-expanded="false" aria-controls="cxPop" aria-label="Open FormFill Pro"><i>F</i><b class="cx-badge" id="cxBadge" hidden></b></button><span class="cx-av" aria-hidden="true"></span></div>
+      <div class="cx-view"><div class="cx-page" id="cxPage" data-lenis-prevent></div>
+        <div class="cx-pop" id="cxPop" role="dialog" aria-label="FormFill Pro" hidden style="--pw:340px"><div class="cx-pop-h"><i>F</i><b>FormFill Pro</b><span class="cx-pop-s">staging only</span><button class="cx-px" type="button" id="cxPopX" aria-label="Close popup">×</button></div><div class="cx-pop-b" id="cxPopBody"></div></div>
       </div>
     </div>
-  </div>
-</section>
-
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects[61]);
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-chrome');
-</script>
+  </div></section>
+  <section class="s" id="features" style="padding-top:0"><div class="wrap">
+    <span class="lbl rv">Why it works</span><h2 class="sh rv">Built for the browser you already use</h2>
+    <div class="feats"><article class="feat rv"><span class="n">01</span><h3>Realistic profiles</h3><p>Names, addresses and phones that look real but belong to no one.</p></article><article class="feat rv"><span class="n">02</span><h3>Sandbox cards</h3><p>Only documented test numbers, with the right expiry and CVC rules.</p></article><article class="feat rv"><span class="n">03</span><h3>Edge-case mode</h3><p>Long names, accents and right-to-left text to break fragile forms.</p></article></div>
+  </div></section>
+  <section class="s cta" id="cta"><div class="wrap">
+    <span class="lbl rv">FormFill Pro</span><h2 class="sh rv">Ship forms that hold up</h2><p class="rv">Free for individuals; team profiles on Pro.</p>
+    <a class="btn pri rv" href="../../index.html#contact">Add to Chrome →</a>
+  </div></section>
+</main>
+<footer class="foot"><div class="wrap"><span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span><a href="../../index.html#work">← Back to Bazozo</a></div></footer>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="formfillpro.js" defer></script>
 </body>
 </html>

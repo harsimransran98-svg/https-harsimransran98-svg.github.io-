@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afterglow — Colour Grade &amp; Edit Suite · Built by Bazozo Studio</title>
+<meta name="description" content="Afterglow: an interactive colour-grading suite with a RAW LOG vs graded wipe, four live LUTs, animated RGB parade and histogram scopes, and a multi-track timeline. Concept build by Bazozo Studio.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#070709">
+<link rel="canonical" href="https://bazozo.in/work/afterglow.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#070709;
+  --panel:#0E0E12;
+  --panel-2:#15151B;
+  --edge:#23232C;
+  --text:#EDEDEF;
+  --dim:#8A8A96;
+  --faint:#55555F;
+  --accent:#FF5500;
+  --accent-2:#FF8A4C;
+  --led-g:#33FF88;
+  --led-r:#FF3344;
+  --display:'Bebas Neue', 'Impact', sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:64px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--mono); font-size:14px; line-height:1.55; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+canvas{ display:block; }
+.wrap{ width:100%; max-width:1440px; margin:0 auto; padding:0 clamp(12px,2.4vw,32px); }
+::selection{ background:var(--accent); color:#000; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.lbl{ font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+
+/* ---------- top bar ---------- */
+.top{ position:sticky; top:0; z-index:60; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); background:rgba(7,7,9,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--edge); }
+.top .wrap{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.brand{ display:flex; align-items:baseline; gap:12px; }
+.brand b{ font-family:var(--display); font-weight:400; font-size:30px; letter-spacing:.04em; line-height:1; }
+.brand b span{ color:var(--accent); }
+.brand small{ font-size:10.5px; letter-spacing:.18em; color:var(--dim); text-transform:uppercase; }
+.top-r{ display:flex; align-items:center; gap:10px; }
+.rec{ display:none; align-items:center; gap:8px; font-size:11px; letter-spacing:.14em; color:var(--dim); }
+.rec i{ width:8px; height:8px; border-radius:50%; background:var(--led-r); box-shadow:0 0 8px var(--led-r); animation:blink 1s steps(2) infinite; }
+@keyframes blink{ 50%{ opacity:.25; } }
+@media(min-width:760px){ .rec{ display:flex; } }
+
+/* clapperboard menu toggle */
+.clap{ position:relative; width:52px; height:44px; border:none; background:none; cursor:pointer; }
+.clap .stick, .clap .slate{ position:absolute; left:6px; right:6px; border-radius:2px; }
+.clap .slate{ bottom:6px; height:18px; background:#1D1D24; border:1.5px solid var(--text); }
+.clap .slate::after{ content:''; position:absolute; left:4px; right:4px; top:5px; height:1.5px; background:var(--dim); box-shadow:0 5px 0 var(--dim); }
+.clap .stick{ top:9px; height:10px; transform-origin:2px 100%; transform:rotate(-22deg); transition:transform .35s cubic-bezier(.6,-0.4,.3,1.6);
+  background:repeating-linear-gradient(-45deg, var(--text) 0 6px, #111 6px 12px); border:1.5px solid var(--text); }
+.clap:hover .stick{ transform:rotate(-30deg); }
+.clap[aria-expanded="true"] .stick{ transform:rotate(0deg); background:repeating-linear-gradient(-45deg, var(--accent) 0 6px, #111 6px 12px); border-color:var(--accent); }
+.clap[aria-expanded="true"] .slate{ border-color:var(--accent); }
+.menu{ position:fixed; z-index:58; top:var(--nav-h); right:clamp(12px,2.4vw,32px); width:min(340px, calc(100vw - 24px)); background:var(--panel); border:1px solid var(--edge); border-top:2px solid var(--accent); padding:10px; box-shadow:0 30px 60px -20px #000; }
+.menu a{ display:flex; justify-content:space-between; align-items:center; padding:12px 12px; font-family:var(--display); font-size:26px; letter-spacing:.04em; border-bottom:1px solid var(--edge); }
+.menu a:last-child{ border-bottom:none; }
+.menu a small{ font-family:var(--mono); font-size:10.5px; color:var(--faint); letter-spacing:.1em; }
+.menu a:hover{ color:var(--accent); }
+
+/* broadcast deck buttons with LEDs */
+.deck{ position:relative; display:inline-flex; align-items:center; gap:10px; height:44px; padding:0 16px 0 14px; cursor:pointer; border-radius:5px;
+  border:1px solid #2C2C36; border-bottom-width:3px; background:linear-gradient(180deg, #23232B, #17171D); color:var(--text);
+  font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 6px 14px -8px #000; transition:transform .08s ease, border-bottom-width .08s ease, background .2s ease; }
+.deck:hover{ background:linear-gradient(180deg, #2A2A33, #1B1B22); }
+.deck:active{ transform:translateY(2px); border-bottom-width:1px; }
+.deck .led{ width:8px; height:8px; border-radius:50%; background:#3A3A44; box-shadow:inset 0 1px 1px rgba(0,0,0,.6); transition:background .2s ease, box-shadow .2s ease; flex:none; }
+.deck[aria-pressed="true"] .led, .deck.live .led{ background:var(--led-g); box-shadow:0 0 8px var(--led-g), 0 0 2px var(--led-g); }
+.deck.hot .led{ background:var(--accent); box-shadow:0 0 10px var(--accent); }
+.deck.hot{ border-color:#5A2A12; }
+.deck[aria-pressed="true"]{ border-color:#2F6B47; background:linear-gradient(180deg, #1E2A23, #151C18); }
+
+/* ---------- hero ---------- */
+.hero{ padding:28px 0 18px; display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; }
+.hero h1{ font-family:var(--display); font-weight:400; font-size:clamp(64px,11vw,168px); line-height:.82; letter-spacing:.01em; }
+.hero h1 span{ color:var(--accent); }
+.hero p{ max-width:420px; color:var(--dim); margin-top:10px; }
+.hero-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+.meta-row{ display:flex; gap:22px; flex-wrap:wrap; margin-top:14px; font-size:11px; color:var(--faint); letter-spacing:.08em; text-transform:uppercase; }
+.meta-row b{ color:var(--text); font-weight:500; }
+
+/* ---------- suite ---------- */
+.suite{ display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:10px; }
+.pane{ background:var(--panel); border:1px solid var(--edge); border-radius:6px; }
+.pane-h{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--edge); font-size:11px; color:var(--dim); letter-spacing:.08em; }
+.pane-h b{ color:var(--text); font-weight:500; }
+.viewer-wrap{ padding:10px; }
+.viewer{ position:relative; aspect-ratio:2.35/1; background:#000; overflow:hidden; border-radius:2px; cursor:ew-resize; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
+.viewer canvas{ width:100%; height:100%; }
+.grain{ position:absolute; inset:0; pointer-events:none; opacity:.09; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain .6s steps(4) infinite; }
+@keyframes grain{ 0%{ background-position:0 0; } 25%{ background-position:-40px 20px; } 50%{ background-position:30px -30px; } 75%{ background-position:-20px -40px; } }
+.wipe{ position:absolute; top:0; bottom:0; width:2px; margin-left:-1px; background:#fff; box-shadow:0 0 12px rgba(0,0,0,.6); pointer-events:none; }
+.wipe::after{ content:''; position:absolute; top:50%; left:50%; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; background:rgba(7,7,9,.75); border:2px solid #fff;
+  background-image:linear-gradient(90deg, transparent 44%, #fff 44% 48%, transparent 48% 52%, #fff 52% 56%, transparent 56%); }
+.tag{ position:absolute; top:10px; padding:3px 8px; font-size:10.5px; letter-spacing:.14em; background:rgba(7,7,9,.75); border:1px solid rgba(255,255,255,.2); pointer-events:none; }
+.tag.l{ left:10px; } .tag.r{ right:10px; color:var(--accent); border-color:rgba(255,85,0,.5); }
+.safe{ position:absolute; inset:6% 4%; border:1px dashed rgba(255,255,255,.14); pointer-events:none; }
+.hud{ position:absolute; left:10px; bottom:8px; right:10px; display:flex; justify-content:space-between; font-size:11px; letter-spacing:.08em; color:rgba(237,237,239,.85); pointer-events:none; text-shadow:0 1px 2px #000; }
+.transport{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:0 10px 10px; }
+.tc{ font-size:20px; font-weight:600; letter-spacing:.06em; color:var(--accent); min-width:150px; font-variant-numeric:tabular-nums; }
+.side{ display:flex; flex-direction:column; gap:10px; }
+.luts{ display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:10px; }
+.lut{ position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:6px; padding:8px; border-radius:5px; cursor:pointer; text-align:left;
+  border:1px solid #2C2C36; border-bottom-width:3px; background:linear-gradient(180deg, #1F1F27, #15151B); transition:transform .08s ease, border-color .2s ease; }
+.lut:active{ transform:translateY(2px); }
+.lut .sw{ width:100%; aspect-ratio:2.35/1; border-radius:2px; background:#222; background-size:cover; background-position:center; }
+.lut .nm{ display:flex; align-items:center; gap:7px; font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+.lut .led{ width:7px; height:7px; border-radius:50%; background:#3A3A44; flex:none; }
+.lut[aria-pressed="true"]{ border-color:var(--accent); }
+.lut[aria-pressed="true"] .led{ background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.knob{ padding:4px 12px 12px; }
+.knob .kl{ display:flex; justify-content:space-between; font-size:11px; color:var(--dim); }
+.knob .kl b{ color:var(--text); font-weight:500; }
+input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:24px; background:transparent; cursor:pointer; }
+input[type=range]::-webkit-slider-runnable-track{ height:4px; border-radius:2px; background:linear-gradient(90deg, var(--accent) var(--p,100%), #2A2A33 var(--p,100%)); }
+input[type=range]::-moz-range-track{ height:4px; background:#2A2A33; }
+input[type=range]::-moz-range-progress{ height:4px; background:var(--accent); }
+input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:20px; margin-top:-8px; border-radius:3px; background:linear-gradient(180deg, #E9E9EE, #9C9CA6); border:1px solid #000; }
+input[type=range]::-moz-range-thumb{ width:12px; height:18px; border-radius:3px; background:#D6D6DC; border:1px solid #000; }
+.scopes canvas{ width:100%; height:110px; background:#050506; }
+.scope-row{ padding:8px 10px 10px; display:grid; gap:8px; }
+.scope-row .lbl{ display:flex; justify-content:space-between; }
+
+/* timeline */
+.timeline{ margin-top:10px; }
+.tl{ position:relative; padding:0 10px 12px; user-select:none; -webkit-user-select:none; }
+.ruler{ position:relative; height:22px; margin-left:54px; border-bottom:1px solid var(--edge); cursor:pointer; }
+.ruler span{ position:absolute; top:4px; font-size:9.5px; color:var(--faint); transform:translateX(-50%); }
+.ruler i{ position:absolute; bottom:0; width:1px; height:6px; background:var(--faint); }
+.track{ display:grid; grid-template-columns:54px 1fr; align-items:center; height:38px; border-bottom:1px solid #18181E; }
+.track .th{ font-size:10.5px; color:var(--dim); letter-spacing:.08em; padding-left:4px; }
+.lane{ position:relative; height:30px; }
+.clip{ position:absolute; top:2px; bottom:2px; border-radius:3px; overflow:hidden; font-size:10px; padding:3px 6px; color:#fff; white-space:nowrap; border:1px solid rgba(255,255,255,.18); cursor:pointer; transition:filter .2s ease, outline-color .2s ease; outline:2px solid transparent; outline-offset:-2px; }
+.clip:hover{ filter:brightness(1.2); }
+.clip.on{ outline-color:var(--accent); }
+.clip.v{ background:linear-gradient(180deg, #3A4C8C, #27325C); }
+.clip.t{ background:linear-gradient(180deg, #7A3FA0, #4E2868); }
+.clip.a{ background:#1E4A33; padding:0; }
+.clip.a canvas{ width:100%; height:100%; }
+.clip.vo{ background:#4A3A1E; padding:0; }
+.clip .th-img{ position:absolute; inset:0; background-size:cover; background-position:center; opacity:.35; }
+.clip span{ position:relative; }
+.playhead{ position:absolute; top:0; bottom:12px; width:2px; margin-left:-1px; background:var(--accent); pointer-events:none; z-index:3; }
+.playhead::before{ content:''; position:absolute; top:0; left:50%; width:14px; height:14px; margin-left:-7px; background:var(--accent); clip-path:polygon(0 0, 100% 0, 100% 55%, 50% 100%, 0 55%); }
+
+/* sections */
+.sec{ padding:clamp(80px,10vw,130px) 0; border-top:1px solid var(--edge); margin-top:clamp(60px,8vw,100px); }
+.sec h2{ font-family:var(--display); font-weight:400; font-size:clamp(46px,7vw,100px); line-height:.9; letter-spacing:.01em; }
+.sec h2 span{ color:var(--accent); }
+.specs{ margin-top:40px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.spec{ padding:18px; background:var(--panel); border:1px solid var(--edge); border-radius:6px; }
+.spec b{ display:block; font-family:var(--display); font-size:40px; font-weight:400; letter-spacing:.02em; color:var(--text); }
+.spec span{ font-size:11.5px; color:var(--dim); }
+.cta{ text-align:center; padding:clamp(90px,12vw,150px) 0; }
+.cta p{ color:var(--dim); margin:16px auto 28px; max-width:420px; }
+.foot{ border-top:1px solid var(--edge); padding:22px 0 calc(22px + env(safe-area-inset-bottom,0px)); font-size:12px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:500; }
+.foot a:hover{ color:var(--accent); }
+.note{ font-size:11px; color:var(--faint); padding:0 12px 10px; }
+
+@media(max-width:1060px){ .suite{ grid-template-columns:1fr; } .side{ display:grid; grid-template-columns:1fr 1fr; } .specs{ grid-template-columns:1fr 1fr; } }
+@media(max-width:640px){ .side{ grid-template-columns:1fr; } .luts{ grid-template-columns:1fr 1fr; } .specs{ grid-template-columns:1fr; } .track{ grid-template-columns:40px 1fr; } .ruler{ margin-left:40px; } .tc{ font-size:16px; min-width:120px; } .hide-sm{ display:none; } }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><b>AFTER<span>GLOW</span></b><small>Grade &amp; Edit Suite</small></a>
+    <div class="top-r">
+      <span class="rec"><i></i>Session · Reel v07</span>
+      <button class="clap" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span class="stick"></span><span class="slate"></span></button>
+    </div>
+  </div>
+</header>
+<nav class="menu" id="menu" aria-label="Main" hidden>
+  <a href="#suite">Grade suite <small>01</small></a>
+  <a href="#deliver">Deliverables <small>02</small></a>
+  <a href="#contact">Book a grade <small>03</small></a>
+  <a href="../index.html#work">Back to Bazozo <small>←</small></a>
+</nav>
+
+<main id="top" class="wrap">
+  <section class="hero">
+    <div>
+      <span class="lbl">Colour grade · Commercial edit · 2.35:1</span>
+      <h1>AFTER<span>GLOW</span></h1>
+      <p>A grading suite in your browser. Drag the wipe to compare the flat camera log with the finished grade, switch film looks, and scrub the cut.</p>
+      <div class="meta-row"><span>Camera <b>ARRI LogC4</b></span><span>Display <b>Rec.709 · 2.4</b></span><span>Frame <b>24.000 fps</b></span></div>
+    </div>
+    <div class="hero-actions">
+      <a class="deck hot" href="#suite"><span class="led"></span>Open suite</a>
+      <a class="deck" href="#contact"><span class="led"></span>Book a grade</a>
+    </div>
+  </section>
+
+  <section class="suite" id="suite" aria-label="Grading suite">
+    <div class="pane">
+      <div class="pane-h"><span>VIEWER · <b id="clipName">SC12_A001</b></span><span id="lutName">Kodak 2383</span></div>
+      <div class="viewer-wrap">
+        <div class="viewer" id="viewer" role="slider" tabindex="0" aria-label="Before and after wipe. Use left and right arrow keys." aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+          <canvas id="cv" width="1200" height="510"></canvas>
+          <div class="grain" aria-hidden="true"></div>
+          <div class="safe" aria-hidden="true"></div>
+          <span class="tag l">RAW · LOG</span><span class="tag r" id="gradeTag">GRADED</span>
+          <div class="wipe" id="wipe" style="left:50%"></div>
+          <div class="hud"><span id="hudShot">SC12 · TK3</span><span>ISO 800 · T2.0 · 180°</span></div>
+        </div>
+      </div>
+      <div class="transport">
+        <span class="tc" id="tc">00:00:00:00</span>
+        <button class="deck" id="playBtn" type="button" aria-pressed="false"><span class="led"></span><span id="playLbl">Play</span></button>
+        <button class="deck" id="bypassBtn" type="button" aria-pressed="false"><span class="led"></span>Bypass grade</button>
+        <button class="deck hide-sm" id="grainBtn" type="button" aria-pressed="true"><span class="led"></span>Film grain</button>
+      </div>
+      <p class="note" id="note"></p>
+    </div>
+    <div class="side">
+      <div class="pane">
+        <div class="pane-h"><span>LUT · <b>Look library</b></span><span>4 looks</span></div>
+        <div class="luts" id="luts" role="group" aria-label="LUT presets"></div>
+        <div class="knob"><div class="kl"><span>Strength</span><b id="strOut">100%</b></div><input type="range" id="strength" min="0" max="100" value="100" aria-label="LUT strength"></div>
+      </div>
+      <div class="pane scopes">
+        <div class="pane-h"><span>SCOPES · <b>Live</b></span><span>IRE</span></div>
+        <div class="scope-row">
+          <span class="lbl"><span>RGB Parade</span><span>0–100</span></span>
+          <canvas id="parade" width="300" height="110"></canvas>
+          <span class="lbl"><span>Histogram</span><span>Luma + RGB</span></span>
+          <canvas id="histo" width="300" height="110"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane timeline" aria-label="Timeline">
+    <div class="pane-h"><span>TIMELINE · <b>AFTERGLOW_COMMERCIAL_v07</b></span><span id="tlDur">00:00:30:00 · 24p</span></div>
+    <div class="tl" id="tl">
+      <div class="ruler" id="ruler"></div>
+      <div class="track"><span class="th">V2</span><div class="lane" id="laneV2"></div></div>
+      <div class="track"><span class="th">V1</span><div class="lane" id="laneV1"></div></div>
+      <div class="track"><span class="th">A1</span><div class="lane" id="laneA1"></div></div>
+      <div class="track"><span class="th">A2</span><div class="lane" id="laneA2"></div></div>
+      <div class="playhead" id="playhead"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="deliver">
+    <span class="lbl">Deliverables</span>
+    <h2 style="margin-top:10px">One grade. <span>Every screen.</span></h2>
+    <div class="specs">
+      <div class="spec"><b>4K DCI</b><span>DCP for cinema, P3-D65, 48 nits</span></div>
+      <div class="spec"><b>REC.709</b><span>Broadcast and web masters, gamma 2.4</span></div>
+      <div class="spec"><b>HDR10</b><span>PQ grade for streaming platforms, 1,000 nits</span></div>
+      <div class="spec"><b>9:16</b><span>Social cutdowns reframed by hand, not auto-cropped</span></div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <span class="lbl">Book a grade</span>
+    <h2 style="margin-top:12px;font-family:var(--display);font-weight:400;font-size:clamp(52px,9vw,140px);line-height:.85">Bring us your <span style="color:var(--accent)">LOG.</span></h2>
+    <p>Send a reference still and a flat frame. We'll come back with a look test within 48 hours.</p>
+    <a class="deck hot" href="../index.html#contact"><span class="led"></span>Start a project</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="afterglow.js" defer></script>
+</body>
+</html>

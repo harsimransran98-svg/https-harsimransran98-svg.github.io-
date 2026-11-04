@@ -3,125 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Readloop — Case Study by Bazozo</title>
-<meta name="description" content="Reading tracker with yearly stats and streaks.">
+<title>Readloop — audio stories for travellers, live on an iPhone · Built by Bazozo Studio</title>
+<meta name="description" content="Readloop: an iOS audio-story app you can use inside a live iPhone 16 Pro: swipe a card stack, play stories from the mini player and open full-screen synced lyrics. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0D0B14">
 <link rel="canonical" href="https://bazozo.in/demo/ios/readloop.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#0D0B14;
+  --text:#F6F3FF;
+  --dim:rgba(246,243,255,.62);
+  --faint:rgba(246,243,255,.34);
+  --pink:#EC4899;
+  --indigo:#6366F1;
+  --accent:#EC4899;
+  --grad:linear-gradient(120deg, #EC4899, #A855F7 50%, #6366F1);
+  --glass:rgba(255,255,255,.08);
+  --glass-line:rgba(255,255,255,.14);
+  --ios:-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --serif:'Instrument Serif', Georgia, serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--ios); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; min-height:100vh; position:relative; }
+.aurora{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+.aurora i{ position:absolute; border-radius:50%; filter:blur(100px); opacity:.55; animation:drift 18s ease-in-out infinite alternate; }
+.aurora i:nth-child(1){ width:50vw; height:50vw; left:-12vw; top:-18vw; background:#7C1D5B; }
+.aurora i:nth-child(2){ width:44vw; height:44vw; right:-14vw; top:10vh; background:#2E2A8F; animation-delay:-6s; }
+.aurora i:nth-child(3){ width:36vw; height:36vw; left:30vw; bottom:-22vw; background:#5B21B6; animation-delay:-12s; }
+@keyframes drift{ to{ transform:translate(6vw, 4vh) scale(1.15); } }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--pink); outline-offset:2px; }
+
+/* ---------- page chrome ---------- */
+.top{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); padding-top:calc(18px + env(safe-area-inset-top,0px)); }
+.brand{ font-weight:800; font-size:18px; letter-spacing:-.02em; }
+.brand span{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.back{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px; border:1px solid var(--glass-line); background:var(--glass); backdrop-filter:blur(12px); font-size:13.5px; font-weight:600; color:var(--dim); transition:all .35s var(--spring); }
+.back:hover{ color:#fff; border-color:rgba(236,72,153,.6); box-shadow:0 0 30px -8px var(--pink); transform:translateX(-3px); }
+.layout{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:clamp(20px,3vw,48px); align-items:center; padding:10px clamp(16px,3vw,40px) 60px; max-width:1500px; margin:0 auto; }
+.kick{ display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; border:1px solid var(--glass-line); background:var(--glass); font-size:12px; font-weight:600; color:var(--dim); margin-bottom:16px; }
+.kick i{ width:7px; height:7px; border-radius:50%; background:var(--grad); }
+.side h1{ font-family:var(--serif); font-weight:400; font-size:clamp(52px,5.4vw,84px); letter-spacing:-.02em; line-height:.9; }
+.side h1 em{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.side p.lede{ margin-top:16px; color:var(--dim); font-size:16px; max-width:400px; }
+.glass{ border-radius:24px; border:1px solid var(--glass-line); background:var(--glass); backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%); }
+.try{ margin-top:26px; padding:18px; max-width:410px; }
+.try-h{ display:flex; justify-content:space-between; font-weight:700; font-size:14px; }
+.try-h b{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.try-bar{ height:6px; border-radius:6px; background:rgba(255,255,255,.1); margin:12px 0 14px; overflow:hidden; }
+.try-bar i{ display:block; height:100%; width:0; background:var(--grad); border-radius:inherit; transition:width .7s var(--spring); }
+.try ul{ list-style:none; display:grid; gap:10px; }
+.try li{ display:flex; gap:12px; align-items:center; font-size:14.5px; color:var(--dim); }
+.try li i{ width:20px; height:20px; flex:none; border-radius:50%; border:1.5px solid var(--faint); transition:all .5s var(--spring); position:relative; }
+.try li.done{ color:var(--text); }
+.try li.done i{ background:var(--grad); border-color:transparent; transform:scale(1.12); box-shadow:0 0 14px -2px var(--pink); }
+.try li.done i::after{ content:''; position:absolute; left:6px; top:3px; width:5px; height:9px; border-right:2.5px solid #fff; border-bottom:2.5px solid #fff; transform:rotate(45deg); }
+.spec-h{ font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; }
+.spec{ overflow:hidden; }
+.spec div{ display:grid; grid-template-columns:104px 1fr; gap:10px; padding:13px 16px; border-bottom:1px solid var(--glass-line); font-size:14px; }
+.spec div:last-child{ border-bottom:none; }
+.spec dt{ color:var(--dim); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding-top:2px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+.metric{ padding:14px; }
+.metric b{ display:block; font-size:22px; font-weight:800; letter-spacing:-.03em; }
+.metric span{ font-size:11.5px; color:var(--dim); }
+.jump{ margin-top:12px; display:flex; flex-wrap:wrap; gap:6px; }
+.jump button{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--glass-line); background:var(--glass); font-size:12.5px; font-weight:600; color:var(--dim); transition:all .35s var(--spring); }
+.jump button:hover{ color:#fff; border-color:var(--pink); transform:translateY(-2px); }
+.cta{ position:relative; isolation:isolate; display:inline-flex; align-items:center; gap:10px; margin-top:16px; height:50px; padding:0 24px; border-radius:999px; color:#fff; font-weight:700; font-size:15px; background:var(--grad); background-size:200% 100%; box-shadow:0 14px 34px -14px var(--pink); transition:background-position .6s ease, transform .4s var(--spring); }
+.cta:hover{ background-position:100% 0; transform:translateY(-3px) scale(1.02); }
+
+/* ---------- iPhone 16 Pro (desert titanium) ---------- */
+.stage{ display:flex; justify-content:center; }
+.scale-box{ position:relative; width:calc(390px * var(--s,1)); height:calc(820px * var(--s,1)); }
+.device{ position:absolute; top:0; left:0; width:390px; height:820px; transform:scale(var(--s,1)); transform-origin:0 0; border-radius:68px; padding:13px;
+  background:linear-gradient(135deg, #B9A491 0%, #5E5045 18%, #C8B4A0 38%, #4E4239 55%, #A8937F 78%, #5A4D42 100%);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3), inset 0 0 0 4px #120F0D, 0 60px 120px -40px rgba(0,0,0,.9), 0 0 140px -40px rgba(236,72,153,.45); }
+.device::before{ content:''; position:absolute; left:-3px; top:180px; width:4px; height:34px; border-radius:2px; background:#7A6857; box-shadow:0 56px 0 #7A6857, 0 120px 0 #7A6857; }
+.device::after{ content:''; position:absolute; right:-3px; top:230px; width:4px; height:96px; border-radius:2px; background:#7A6857; }
+.screen{ position:relative; width:100%; height:100%; border-radius:56px; overflow:hidden; background:var(--bg); isolation:isolate; }
+.screen-aurora{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+.screen-aurora i{ position:absolute; border-radius:50%; filter:blur(50px); opacity:.55; transition:background 1s ease; }
+.screen-aurora i:nth-child(1){ width:300px; height:300px; left:-100px; top:-60px; background:var(--a1,#9D174D); }
+.screen-aurora i:nth-child(2){ width:260px; height:260px; right:-110px; top:220px; background:var(--a2,#3730A3); }
+.status{ position:absolute; z-index:40; top:0; left:0; right:0; height:54px; display:flex; justify-content:space-between; align-items:center; padding:6px 34px 0 40px; font-size:16px; font-weight:600; pointer-events:none; }
+.status .icons{ display:flex; gap:6px; align-items:center; }
+.status svg{ height:12px; }
+.island{ position:absolute; z-index:50; top:11px; left:50%; width:124px; height:36px; margin-left:-62px; border-radius:22px; background:#000; display:flex; align-items:center; justify-content:space-between; padding:0 9px; overflow:hidden; }
+.island .art{ width:22px; height:22px; border-radius:6px; background-size:cover; background-position:center; opacity:0; }
+.island .eq{ display:flex; gap:2px; align-items:center; height:16px; opacity:0; }
+.island .eq i{ width:3px; border-radius:2px; background:var(--pink); height:6px; }
+.island.live .eq i{ animation:eq .7s ease-in-out infinite alternate; }
+.island.live .eq i:nth-child(2){ animation-delay:-.2s; } .island.live .eq i:nth-child(3){ animation-delay:-.45s; } .island.live .eq i:nth-child(4){ animation-delay:-.1s; }
+@keyframes eq{ from{ height:4px; } to{ height:15px; } }
+.home-ind{ position:absolute; z-index:60; bottom:8px; left:50%; width:136px; height:5px; margin-left:-68px; border-radius:3px; background:rgba(255,255,255,.8); pointer-events:none; }
+
+/* ---------- app ---------- */
+.view{ position:absolute; inset:0; z-index:1; overflow-y:auto; overflow-x:hidden; padding:60px 18px 170px; scrollbar-width:none; }
+.view::-webkit-scrollbar{ display:none; }
+.app-h{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px; }
+.app-h small{ display:block; color:var(--dim); font-size:13px; font-weight:600; }
+.app-h h2{ font-family:var(--serif); font-weight:400; font-size:38px; line-height:1; letter-spacing:-.01em; }
+.app-h h2 em{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.av{ width:38px; height:38px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-weight:700; }
+.filters{ display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; scrollbar-width:none; }
+.filters button{ flex:none; height:32px; padding:0 13px; border-radius:999px; background:var(--glass); border:1px solid var(--glass-line); font-size:12.5px; font-weight:600; color:var(--dim); transition:all .3s var(--spring); }
+.filters button[aria-pressed="true"]{ background:#fff; color:#0D0B14; border-color:#fff; }
+.stack{ position:relative; height:430px; touch-action:none; }
+.scard{ position:absolute; inset:0; border-radius:28px; overflow:hidden; background:#1A1626; box-shadow:0 30px 50px -24px rgba(0,0,0,.8); will-change:transform; cursor:grab; user-select:none; -webkit-user-select:none; }
+.scard:active{ cursor:grabbing; }
+.scard img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+.scard::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(13,11,20,0) 35%, rgba(13,11,20,.92) 92%); }
+.scard .info{ position:absolute; z-index:2; left:18px; right:18px; bottom:18px; }
+.scard .where{ display:inline-flex; align-items:center; gap:6px; padding:5px 10px; border-radius:999px; background:rgba(255,255,255,.16); backdrop-filter:blur(10px); font-size:11.5px; font-weight:700; }
+.scard h3{ font-family:var(--serif); font-weight:400; font-size:34px; line-height:1; margin-top:10px; }
+.scard p{ color:var(--dim); font-size:13px; margin-top:4px; }
+.scard .tags{ display:flex; gap:6px; margin-top:10px; }
+.scard .tags span{ font-size:11px; font-weight:600; padding:3px 9px; border-radius:999px; border:1px solid rgba(255,255,255,.25); }
+.stamp{ position:absolute; z-index:3; top:26px; padding:6px 14px; border-radius:10px; border:3px solid; font-weight:800; font-size:22px; letter-spacing:.06em; opacity:0; transform:rotate(-14deg); }
+.stamp.save{ left:20px; color:#34D399; border-color:#34D399; }
+.stamp.skip{ right:20px; color:#F87171; border-color:#F87171; transform:rotate(14deg); }
+.acts{ display:flex; justify-content:center; align-items:center; gap:18px; margin-top:16px; }
+.act{ width:58px; height:58px; border-radius:50%; display:grid; place-items:center; background:var(--glass); border:1px solid var(--glass-line); backdrop-filter:blur(12px); transition:transform .35s var(--spring), box-shadow .3s ease; }
+.act:active{ transform:scale(.88); }
+.act.big{ width:72px; height:72px; background:var(--grad); border:none; box-shadow:0 14px 30px -12px var(--pink); }
+.act svg{ width:24px; height:24px; }
+.empty{ position:absolute; inset:0; display:grid; place-items:center; text-align:center; border-radius:28px; border:1.5px dashed var(--glass-line); padding:30px; color:var(--dim); font-size:14px; }
+.empty b{ display:block; font-family:var(--serif); font-weight:400; font-size:30px; color:var(--text); margin-bottom:6px; }
+.empty button{ margin-top:14px; height:42px; padding:0 18px; border-radius:999px; background:#fff; color:#0D0B14; font-weight:700; }
+.lib-row{ display:flex; gap:12px; align-items:center; padding:10px; border-radius:18px; margin-bottom:8px; background:var(--glass); border:1px solid var(--glass-line); width:100%; text-align:left; }
+.lib-row img{ width:56px; height:56px; border-radius:12px; object-fit:cover; flex:none; }
+.lib-row div{ flex:1; min-width:0; }
+.lib-row b{ display:block; font-size:15px; }
+.lib-row small{ color:var(--dim); font-size:12.5px; }
+.lib-row .pl{ width:36px; height:36px; border-radius:50%; background:#fff; color:#0D0B14; display:grid; place-items:center; flex:none; }
+.lib-empty{ color:var(--dim); text-align:center; padding:60px 20px; font-size:14px; }
+
+/* mini player */
+.mini{ position:absolute; z-index:28; left:10px; right:10px; bottom:96px; height:62px; display:flex; align-items:center; gap:10px; padding:8px 10px 8px 8px; border-radius:20px; background:rgba(40,34,58,.72); border:1px solid var(--glass-line); backdrop-filter:blur(24px) saturate(170%); -webkit-backdrop-filter:blur(24px) saturate(170%); cursor:pointer; overflow:hidden; }
+.mini img{ width:46px; height:46px; border-radius:11px; object-fit:cover; flex:none; }
+.mini .mt{ flex:1; min-width:0; }
+.mini .mt b{ display:block; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mini .mt small{ color:var(--dim); font-size:12px; }
+.mini .pp{ width:40px; height:40px; border-radius:50%; display:grid; place-items:center; flex:none; transition:transform .3s var(--spring); }
+.mini .pp:active{ transform:scale(.85); }
+.mini .bar{ position:absolute; left:14px; right:14px; bottom:3px; height:2px; border-radius:2px; background:rgba(255,255,255,.12); }
+.mini .bar i{ display:block; height:100%; width:0; border-radius:inherit; background:var(--grad); }
+
+/* now playing sheet */
+.np{ position:absolute; z-index:35; inset:0; display:flex; flex-direction:column; padding:54px 22px 30px; background:#0D0B14; overflow:hidden; }
+.np-bg{ position:absolute; inset:-40px; background-size:cover; background-position:center; filter:blur(50px) saturate(1.5) brightness(.45); transform:scale(1.2); z-index:-1; }
+.np-top{ display:flex; justify-content:space-between; align-items:center; }
+.np-top button{ width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.12); display:grid; place-items:center; }
+.np-top small{ font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); }
+.np-art{ margin:16px auto 0; width:250px; height:250px; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px -20px rgba(0,0,0,.8); transition:transform .5s var(--spring); }
+.np-art img{ width:100%; height:100%; object-fit:cover; }
+.np-art.paused{ transform:scale(.86); }
+.np-t{ margin-top:18px; display:flex; justify-content:space-between; align-items:flex-end; gap:10px; }
+.np-t b{ display:block; font-family:var(--serif); font-weight:400; font-size:30px; line-height:1; }
+.np-t small{ color:var(--dim); font-size:13.5px; }
+.heart{ width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.12); display:grid; place-items:center; transition:transform .4s var(--spring); }
+.heart[aria-pressed="true"]{ color:var(--pink); }
+.scrub{ margin-top:14px; position:relative; height:22px; touch-action:none; cursor:pointer; }
+.scrub .tr{ position:absolute; left:0; right:0; top:9px; height:4px; border-radius:4px; background:rgba(255,255,255,.18); }
+.scrub .fill{ position:absolute; left:0; top:9px; height:4px; border-radius:4px; background:#fff; width:0; }
+.scrub .knob{ position:absolute; top:4px; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:#fff; transform:scale(.8); transition:transform .2s ease; }
+.scrub:active .knob{ transform:scale(1.3); }
+.times{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim); font-variant-numeric:tabular-nums; }
+.ctrls{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.ctrls button{ display:grid; place-items:center; transition:transform .3s var(--spring); }
+.ctrls button:active{ transform:scale(.86); }
+.ctrls .main{ width:70px; height:70px; border-radius:50%; background:#fff; color:#0D0B14; }
+.ctrls .sm{ width:46px; height:46px; font-size:12px; font-weight:700; position:relative; }
+.ctrls .rate{ width:52px; height:34px; border-radius:999px; background:rgba(255,255,255,.12); font-size:13px; font-weight:700; }
+.lyrics{ margin-top:12px; flex:1; overflow:hidden; position:relative; mask-image:linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent); -webkit-mask-image:linear-gradient(180deg, transparent, #000 18%, #000 70%, transparent); }
+.lyrics-in{ will-change:transform; }
+.lyrics p{ font-size:21px; font-weight:700; letter-spacing:-.02em; line-height:1.25; padding:6px 0; color:rgba(255,255,255,.28); transition:color .4s ease, transform .4s var(--spring); transform-origin:left center; cursor:pointer; }
+.lyrics p.on{ color:#fff; transform:scale(1.03); }
+.lyrics p.past{ color:rgba(255,255,255,.5); }
+
+/* tab bar */
+.tabbar{ position:absolute; z-index:30; left:0; right:0; bottom:0; height:90px; padding:8px 10px 26px; display:grid; grid-template-columns:repeat(3,1fr); background:rgba(13,11,20,.6); backdrop-filter:blur(24px) saturate(160%); -webkit-backdrop-filter:blur(24px) saturate(160%); border-top:1px solid var(--glass-line); }
+.tabbar button{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10.5px; font-weight:600; color:var(--faint); }
+.tabbar button svg{ width:26px; height:26px; transition:transform .45s var(--spring); }
+.tabbar button[aria-selected="true"]{ color:#fff; }
+.tabbar button[aria-selected="true"] svg{ color:var(--pink); transform:translateY(-2px) scale(1.06); }
+.toast{ position:absolute; z-index:80; left:50%; top:62px; transform:translateX(-50%); padding:9px 16px; border-radius:999px; background:rgba(40,34,58,.9); border:1px solid var(--glass-line); backdrop-filter:blur(14px); font-size:13px; font-weight:600; white-space:nowrap; opacity:0; pointer-events:none; }
+
+.foot{ text-align:center; padding:20px 16px calc(28px + env(safe-area-inset-bottom,0px)); font-size:13px; color:var(--dim); border-top:1px solid var(--glass-line); }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--pink); }
+
+@media(max-width:1180px){ .layout{ grid-template-columns:1fr; justify-items:center; } .stage{ order:-1; } .side{ width:100%; max-width:560px; } .try{ max-width:none; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+</style>
 </head>
-<body data-theme="7">
+<body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
+<header class="top">
   <a class="brand" href="../../index.html">bazozo<span>.</span></a>
   <a class="back" href="../../index.html#work">← Back to Bazozo</a>
 </header>
 
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>iOS Apps</div>
-    <h1 class="device-title">Readloop</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">An app that stays out of your way</p>
-    <div class="device-frame-wrap phone" id="deviceFrameWrap">
-      <div id="demoBody"></div>
+<main class="layout">
+  <section class="side" aria-label="About this app">
+    <span class="kick"><i></i>iOS 18 · SwiftUI · AVFoundation</span>
+    <h1>Read<em>loop</em></h1>
+    <p class="lede">Short audio stories from the places you're travelling to, narrated by people who live there. The iPhone is live, with sound: swipe, play and open the lyrics.</p>
+    <div class="try glass">
+      <div class="try-h"><span>Try it</span><b id="tryCount">0 / 5</b></div>
+      <div class="try-bar"><i id="tryBar"></i></div>
+      <ul id="tryList">
+        <li data-t="swipe"><i></i>Swipe a story card left or right</li>
+        <li data-t="play"><i></i>Play a story (sound on)</li>
+        <li data-t="expand"><i></i>Tap the mini player to expand it</li>
+        <li data-t="lyric"><i></i>Tap a lyric line to jump to it</li>
+        <li data-t="library"><i></i>Find a saved story in Library</li>
+      </ul>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>Readloop is a native app built around a single job: reading tracker with yearly stats and streaks. No fifteen-tab navigation, no feature creep — just the one thing, done well.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
+  <div class="stage" id="stage">
+    <div class="scale-box">
+      <div class="device" id="device">
+        <div class="screen" id="screen">
+          <div class="screen-aurora" id="sAurora" aria-hidden="true"><i></i><i></i></div>
+          <div class="status" aria-hidden="true"><span id="clock">9:41</span><span class="icons">
+            <svg viewBox="0 0 18 12" fill="#fff"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="6" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+            <svg viewBox="0 0 16 12" fill="#fff"><path d="M8 2.5c2.3 0 4.4.9 6 2.4l1.2-1.3A10 10 0 0 0 8 .7 10 10 0 0 0 .8 3.6L2 4.9a8.3 8.3 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.5 6.5 0 0 0 8 4.3a6.5 6.5 0 0 0-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3Zm0 3.5c-.5 0-1 .2-1.3.5L8 11.5l1.3-1.4c-.3-.3-.8-.5-1.3-.5Z"/></svg>
+            <svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#fff" opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.8" fill="#fff"/><rect x="24" y="4" width="2" height="4" rx="1" fill="#fff" opacity=".4"/></svg>
+          </span></div>
+          <div class="island" id="island" aria-hidden="true"><span class="art" id="islArt"></span><span class="eq"><i></i><i></i><i></i><i></i></span></div>
+
+          <!-- DISCOVER -->
+          <section class="view" id="v-discover" aria-label="Discover">
+            <div class="app-h"><div><small>For your trip to Norway</small><h2>Tonight's <em>stories</em></h2></div><span class="av">S</span></div>
+            <div class="filters" role="group" aria-label="Mood"><button type="button" aria-pressed="true">All</button><button type="button" aria-pressed="false">Calm</button><button type="button" aria-pressed="false">Food</button><button type="button" aria-pressed="false">History</button><button type="button" aria-pressed="false">Night walks</button></div>
+            <div class="stack" id="stack" aria-label="Story cards: drag right to save, left to skip"></div>
+            <div class="acts">
+              <button class="act" type="button" id="skipBtn" aria-label="Skip story"><svg viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              <button class="act big" type="button" id="playTop" aria-label="Play this story"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7L8 5Z"/></svg></button>
+              <button class="act" type="button" id="saveBtn" aria-label="Save story"><svg viewBox="0 0 24 24" fill="#34D399"><path d="M12 21s-8-5.3-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.7-8 11-8 11Z"/></svg></button>
+            </div>
+          </section>
+
+          <!-- LIBRARY -->
+          <section class="view" id="v-library" aria-label="Library" hidden>
+            <div class="app-h"><div><small id="libN">0 saved</small><h2>Your <em>library</em></h2></div></div>
+            <div id="lib"></div>
+          </section>
+
+          <!-- ME -->
+          <section class="view" id="v-me" aria-label="Me" hidden>
+            <div class="app-h"><div><small>Listening since 2024</small><h2>Sana's <em>loop</em></h2></div></div>
+            <div class="glass" style="padding:18px;border-radius:22px"><b style="font-size:30px;letter-spacing:-.03em" id="minsN">412</b><span style="color:var(--dim)"> minutes this month</span>
+              <div style="display:flex;gap:4px;align-items:flex-end;height:70px;margin-top:12px" id="minsBars"></div></div>
+            <div class="glass" style="padding:16px;border-radius:22px;margin-top:10px;font-size:14px;color:var(--dim)">Offline downloads <b style="color:#fff;float:right">6 stories</b><br>Sleep timer <b style="color:#fff;float:right">End of story</b><br>CarPlay <b style="color:#fff;float:right">Connected</b></div>
+          </section>
+
+          <div class="mini" id="mini" role="button" tabindex="0" aria-label="Expand now playing" hidden>
+            <img id="miniArt" src="../../images/nordlysarchitect.jpg" alt="">
+            <div class="mt"><b id="miniT">—</b><small id="miniS">—</small></div>
+            <button class="pp" type="button" id="miniPP" aria-label="Play"><svg id="miniIc" width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7L8 5Z"/></svg></button>
+            <span class="bar"><i id="miniBar"></i></span>
+          </div>
+
+          <nav class="tabbar" role="tablist" aria-label="App sections">
+            <button type="button" role="tab" data-v="discover" aria-selected="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.2 5.8-2.3 6.1-6.1 2.3 2.3-6.1 6.1-2.3Z"/></svg>Discover</button>
+            <button type="button" role="tab" data-v="library" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h3v18H4V3Zm5 0h3v18H9V3Zm5.3.6 2.9-.8 4.6 17.4-2.9.8-4.6-17.4Z"/></svg>Library</button>
+            <button type="button" role="tab" data-v="me" aria-selected="false"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5"/><path d="M3 21c0-4.4 4-7 9-7s9 2.6 9 7H3Z"/></svg>Me</button>
+          </nav>
+
+          <section class="np" id="np" role="dialog" aria-modal="true" aria-label="Now playing" hidden>
+            <div class="np-bg" id="npBg"></div>
+            <div class="np-top"><button type="button" id="npClose" aria-label="Close now playing"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button><small>Now playing</small><button type="button" id="npSound" aria-label="Mute"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path id="npWave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button></div>
+            <div class="np-art" id="npArt"><img id="npImg" src="../../images/nordlysarchitect.jpg" alt=""></div>
+            <div class="np-t"><div><b id="npT">—</b><small id="npS">—</small></div><button class="heart" type="button" id="npHeart" aria-pressed="false" aria-label="Save story"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.3-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.7-8 11-8 11Z"/></svg></button></div>
+            <div class="scrub" id="scrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="tr"></span><span class="fill" id="sFill"></span><span class="knob" id="sKnob"></span></div>
+            <div class="times"><span id="tNow">0:00</span><span id="tLeft">-0:00</span></div>
+            <div class="ctrls">
+              <button class="rate" type="button" id="rateBtn" aria-label="Playback speed">1×</button>
+              <button class="sm" type="button" id="back15" aria-label="Back 15 seconds"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></button>
+              <button class="main" type="button" id="npPP" aria-label="Play"><svg id="npIc" width="30" height="30" viewBox="0 0 24 24" fill="#0D0B14"><path d="M8 5v14l11-7L8 5Z"/></svg></button>
+              <button class="sm" type="button" id="fwd30" aria-label="Forward 30 seconds"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg></button>
+              <button class="rate" type="button" id="sleepBtn" aria-label="Sleep timer">☾</button>
+            </div>
+            <div class="lyrics" id="lyrics"><div class="lyrics-in" id="lyricsIn"></div></div>
+          </section>
+          <div class="toast" id="toast" role="status"></div>
+          <div class="home-ind" aria-hidden="true"></div>
         </div>
       </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>Native Performance</h4><p>Built directly for the platform, not wrapped in a cross-platform shell.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Minimal Permissions</h4><p>Only asks for exactly what it needs to function, nothing more.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Offline-First</h4><p>Core features work fully without a network connection.</p></div>
-      </div>
     </div>
   </div>
-</section>
 
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
+  <section class="side" aria-label="Architecture">
+    <h2 class="spec-h">Architecture</h2>
+    <dl class="spec glass">
+      <div><dt>UI</dt><dd>SwiftUI · matchedGeometryEffect for the player</dd></div>
+      <div><dt>Audio</dt><dd>AVFoundation · background playback · AirPlay 2</dd></div>
+      <div><dt>System</dt><dd>Now Playing, Live Activity in the Dynamic Island, CarPlay</dd></div>
+      <div><dt>Sync</dt><dd>Word-level timestamps drive the lyric view</dd></div>
+      <div><dt>Offline</dt><dd>Background downloads before you board</dd></div>
+      <div><dt>Social</dt><dd>Share a 30s clip with the line that's playing</dd></div>
+    </dl>
+    <div class="metrics"><div class="metric glass"><b>60 fps</b><span>card physics</span></div><div class="metric glass"><b>&lt;1s</b><span>to first audio</span></div><div class="metric glass"><b>4.8★</b><span>beta rating</span></div></div>
+    <div class="jump" role="group" aria-label="Jump to a screen"><button type="button" data-jump="discover">Discover</button><button type="button" data-jump="play">Now playing</button><button type="button" data-jump="library">Library</button></div>
+    <a class="cta" href="../../index.html#contact">Build an app like this →</a>
+  </section>
+</main>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
 
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects[142]);
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-ios');
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="readloop.js" defer></script>
 </body>
 </html>

@@ -3,173 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northline Robotics — Case Study by Bazozo</title>
-<meta name="description" content="Northline Robotics built an interactive spec visualizer so buyers can inspect tolerances before a call.">
+<title>Northline Robotics — Precision, assembled · Built by Bazozo Studio</title>
+<meta name="description" content="Northline Robotics: a precision-engineering site with a scroll-driven exploded view of a robot joint actuator, live callout specs and a model spec visualizer. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0F1115">
 <link rel="canonical" href="https://bazozo.in/work/northlinerobotic.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
 <link rel="preload" as="image" href="../images/northlinerobotic.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#6ac9c0; --site-hero-image:url('../images/northlinerobotic.jpg'); }</style>
+<style>
+:root{
+  --bg:#0F1115;
+  --bg-2:#14171D;
+  --steel:#1B1F27;
+  --text:#E5E7EB;
+  --dim:#9CA3AF;
+  --faint:#5B6270;
+  --gold:#D4AF37;
+  --gold-2:#F0D27A;
+  --gold-3:#8C7120;
+  --line:rgba(229,231,235,.1);
+  --serif:'Cinzel', 'Trajan Pro', serif;
+  --sans:'Plus Jakarta Sans', system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:80px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+img{ max-width:100%; display:block; }
+.wrap{ width:100%; max-width:1280px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+::selection{ background:var(--gold); color:var(--bg); }
+:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+.eyebrow{ font-family:var(--serif); font-size:12px; font-weight:600; letter-spacing:.32em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:14px; }
+.eyebrow::before{ content:''; width:34px; height:1px; background:linear-gradient(90deg, transparent, var(--gold)); }
+/* brushed-metal texture used on panels */
+.brushed{ background:repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px), linear-gradient(160deg, #1D2129, #12151A 60%, #1A1E25); }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); transition:background .4s ease, box-shadow .4s ease; }
+.nav.scrolled{ background:rgba(15,17,21,.86); backdrop-filter:blur(12px); box-shadow:0 1px 0 var(--line); }
+.nav-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.logo{ display:flex; flex-direction:column; line-height:1; }
+.logo b{ font-family:var(--serif); font-weight:700; font-size:21px; letter-spacing:.24em; }
+.logo span{ margin-top:6px; font-size:9.5px; letter-spacing:.42em; text-transform:uppercase; color:var(--gold); }
+.nav-r{ display:flex; align-items:center; gap:14px; }
+.gears{ position:relative; width:56px; height:56px; border-radius:50%; border:1px solid rgba(212,175,55,.45); background:radial-gradient(circle at 35% 30%, #2A2F38, #12151A); cursor:pointer; display:grid; place-items:center; transition:box-shadow .3s ease, border-color .3s ease; }
+.gears:hover{ border-color:var(--gold); box-shadow:0 0 0 4px rgba(212,175,55,.12), 0 0 24px -6px var(--gold); }
+.gears svg{ width:40px; height:40px; overflow:visible; }
+.gears .g{ fill:var(--gold); }
+.gears .g2{ fill:#C7CBD3; }
+.gears .hub{ fill:#12151A; }
+.gears[aria-expanded="true"]{ border-color:var(--gold); }
+.side{ position:fixed; z-index:75; top:0; right:0; bottom:0; width:min(460px, 100vw); padding:calc(var(--nav-h) + 30px) 40px 40px; display:flex; flex-direction:column; gap:6px;
+  border-left:1px solid rgba(212,175,55,.3); transform:translateX(102%); transition:transform .8s cubic-bezier(.7,0,.2,1); }
+.side.open{ transform:none; }
+.side a.lnk{ display:flex; align-items:baseline; gap:18px; padding:14px 0; border-bottom:1px solid var(--line); font-family:var(--serif); font-size:clamp(26px,4vw,34px); font-weight:600; letter-spacing:.08em; transition:color .3s ease, padding .4s var(--ease); }
+.side a.lnk small{ font-family:var(--sans); font-size:11px; letter-spacing:.2em; color:var(--gold); }
+.side a.lnk:hover{ color:var(--gold-2); padding-left:12px; }
+.side .meta{ margin-top:auto; font-size:12px; color:var(--dim); line-height:1.8; }
+.scrim{ position:fixed; inset:0; z-index:74; background:rgba(5,6,8,.6); opacity:0; transition:opacity .5s ease; }
+.scrim.open{ opacity:1; }
+
+/* metallic sheen buttons */
+.sheen{ position:relative; overflow:hidden; display:inline-flex; align-items:center; gap:12px; height:54px; padding:0 28px; border-radius:2px; cursor:pointer;
+  border:1px solid rgba(229,231,235,.25); color:var(--text); font-family:var(--serif); font-weight:600; font-size:13px; letter-spacing:.2em; text-transform:uppercase;
+  background:linear-gradient(180deg, #2B3039, #191C22); box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 10px 24px -14px #000; transition:border-color .3s ease, transform .3s var(--ease); }
+.sheen::after{ content:''; position:absolute; top:-20%; bottom:-20%; left:0; width:45%; transform:translateX(-160%) skewX(-22deg);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.08) 20%, rgba(255,248,220,.55) 50%, rgba(255,255,255,.08) 80%, transparent); transition:transform .9s var(--ease); }
+.sheen:hover{ border-color:var(--gold); transform:translateY(-2px); }
+.sheen:hover::after{ transform:translateX(330%) skewX(-22deg); }
+.sheen.gold{ color:#1A1406; border-color:var(--gold-3); background:linear-gradient(180deg, #F0D27A 0%, #D4AF37 45%, #A88A26 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 12px 30px -14px var(--gold); }
+
+/* ---------- hero ---------- */
+.hero{ min-height:100svh; padding:calc(var(--nav-h) + 40px) 0 60px; display:flex; align-items:center; position:relative; overflow:hidden; }
+.hero::before{ content:''; position:absolute; width:900px; height:900px; left:50%; top:40%; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle, rgba(212,175,55,.09), transparent 60%); pointer-events:none; }
+.hero-grid{ position:relative; display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(30px,5vw,70px); align-items:center; }
+.hero h1{ font-family:var(--serif); font-weight:600; font-size:clamp(46px,7vw,104px); line-height:1; letter-spacing:.02em; margin-top:22px; }
+.hero h1 .ln{ display:block; overflow:hidden; }
+.hero h1 .ln > span{ display:block; }
+.hero h1 em{ font-style:normal; background:linear-gradient(180deg, var(--gold-2), var(--gold) 55%, var(--gold-3)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero p{ margin-top:26px; max-width:440px; color:var(--dim); font-size:17px; }
+.hero-ctas{ margin-top:34px; display:flex; gap:12px; flex-wrap:wrap; }
+.hero-panel{ position:relative; border:1px solid rgba(212,175,55,.28); padding:12px; }
+.hero-panel img{ width:100%; aspect-ratio:4/4.3; max-height:calc(100svh - 220px); object-fit:cover; object-position:68% 40%; filter:grayscale(.85) contrast(1.1) brightness(.85); }
+.hero-panel::after{ content:''; position:absolute; inset:12px; background:linear-gradient(180deg, transparent 50%, rgba(15,17,21,.85)); pointer-events:none; }
+.hero-spec{ position:absolute; z-index:2; left:28px; right:28px; bottom:26px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.hero-spec div{ border-top:1px solid var(--gold); padding-top:8px; }
+.hero-spec b{ display:block; font-family:var(--serif); font-size:22px; color:var(--gold-2); }
+.hero-spec span{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.corner{ position:absolute; width:16px; height:16px; border-color:var(--gold); border-style:solid; }
+.corner.tl{ top:-1px; left:-1px; border-width:2px 0 0 2px; } .corner.tr{ top:-1px; right:-1px; border-width:2px 2px 0 0; }
+.corner.bl{ bottom:-1px; left:-1px; border-width:0 0 2px 2px; } .corner.br{ bottom:-1px; right:-1px; border-width:0 2px 2px 0; }
+
+/* ---------- exploded view ---------- */
+.explode{ position:relative; min-height:100svh; padding:calc(var(--nav-h) + 20px) 0 40px; display:flex; align-items:center; border-block:1px solid var(--line); }
+.ex-grid{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:clamp(20px,4vw,60px); align-items:center; width:100%; }
+.ex-stage{ position:relative; }
+.ex-stage svg{ width:100%; height:auto; max-height:calc(100svh - var(--nav-h) - 80px); display:block; overflow:visible; }
+.part{ cursor:pointer; }
+.part .side-f{ stroke:rgba(0,0,0,.6); stroke-width:.8; }
+.part .top-f{ stroke:rgba(255,255,255,.18); stroke-width:.8; }
+.part .deco{ stroke:rgba(255,255,255,.22); stroke-width:1; }
+.part.hl .top-f{ stroke:var(--gold-2); stroke-width:1.6; }
+.callout{ pointer-events:none; }
+.callout line{ stroke:var(--gold); stroke-width:.8; }
+.callout circle{ fill:var(--gold); }
+.callout .t1{ font:600 12px var(--serif); letter-spacing:.12em; fill:var(--text); }
+.callout .t2{ font:500 10px var(--sans); fill:var(--dim); letter-spacing:.04em; }
+.axis{ stroke:rgba(212,175,55,.35); stroke-width:1; stroke-dasharray:3 6; }
+.ex-copy h2{ font-family:var(--serif); font-weight:600; font-size:clamp(34px,4.4vw,60px); line-height:1.05; letter-spacing:.02em; margin-top:16px; }
+.ex-copy h2 em{ font-style:normal; color:var(--gold); }
+.ex-copy > p{ margin-top:16px; color:var(--dim); max-width:420px; }
+.slider{ margin-top:28px; padding:18px 20px; border:1px solid var(--line); }
+.slider .sh{ display:flex; justify-content:space-between; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+.slider .sh b{ color:var(--gold-2); font-family:var(--serif); font-size:15px; letter-spacing:.06em; }
+.slider input{ -webkit-appearance:none; appearance:none; width:100%; height:30px; background:transparent; cursor:pointer; margin-top:8px; }
+.slider input::-webkit-slider-runnable-track{ height:4px; border-radius:4px; background:linear-gradient(90deg, var(--gold) var(--p,0%), #2A2F38 var(--p,0%)); }
+.slider input::-moz-range-track{ height:4px; border-radius:4px; background:#2A2F38; }
+.slider input::-moz-range-progress{ height:4px; border-radius:4px; background:var(--gold); }
+.slider input::-webkit-slider-thumb{ -webkit-appearance:none; width:24px; height:24px; margin-top:-10px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #F0D27A, #A88A26); border:2px solid #0F1115; box-shadow:0 0 0 1px var(--gold), 0 4px 10px rgba(0,0,0,.6); }
+.slider input::-moz-range-thumb{ width:22px; height:22px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #F0D27A, #A88A26); border:2px solid #0F1115; }
+.part-card{ margin-top:16px; padding:18px 20px; border:1px solid rgba(212,175,55,.3); min-height:132px; }
+.part-card .pn{ font-size:10.5px; letter-spacing:.2em; color:var(--gold); text-transform:uppercase; }
+.part-card h3{ font-family:var(--serif); font-weight:600; font-size:22px; letter-spacing:.06em; margin-top:4px; }
+.part-card p{ color:var(--dim); font-size:14px; margin-top:6px; }
+.part-card dl{ margin-top:10px; display:flex; flex-wrap:wrap; gap:4px 18px; font-size:12.5px; }
+.part-card dt{ color:var(--faint); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px; }
+.part-card dd{ color:var(--text); font-weight:600; }
+.ex-hint{ margin-top:10px; font-size:12px; color:var(--faint); }
+
+/* ---------- models ---------- */
+.sec{ padding:clamp(100px,13vw,160px) 0; }
+.sec-h{ display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap; margin-bottom:46px; }
+.sec-h h2{ font-family:var(--serif); font-weight:600; font-size:clamp(34px,4.6vw,62px); line-height:1.05; letter-spacing:.02em; max-width:16ch; margin-top:14px; }
+.sec-h h2 em{ font-style:normal; color:var(--gold); }
+.sec-h p{ max-width:380px; color:var(--dim); }
+.models{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.model{ position:relative; padding:28px; border:1px solid var(--line); cursor:pointer; text-align:left; background:var(--bg-2); transition:border-color .3s ease, transform .4s var(--ease); }
+.model:hover{ border-color:rgba(212,175,55,.5); transform:translateY(-4px); }
+.model[aria-pressed="true"]{ border-color:var(--gold); box-shadow:0 0 0 1px var(--gold), 0 20px 50px -30px var(--gold); }
+.model .mn{ font-family:var(--serif); font-size:30px; font-weight:700; letter-spacing:.06em; }
+.model .ms{ font-size:13px; color:var(--dim); }
+.bars{ margin-top:22px; display:grid; gap:14px; }
+.bar .bl{ display:flex; justify-content:space-between; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
+.bar .bl b{ color:var(--text); letter-spacing:.04em; }
+.bar .bt{ margin-top:6px; height:4px; background:#232831; border-radius:4px; overflow:hidden; }
+.bar .bt i{ display:block; height:100%; width:0; background:linear-gradient(90deg, var(--gold-3), var(--gold-2)); border-radius:inherit; }
+
+/* ---------- datasheet cta ---------- */
+.cta{ padding:clamp(100px,14vw,170px) 0; border-top:1px solid var(--line); text-align:center; position:relative; overflow:hidden; }
+.cta h2{ font-family:var(--serif); font-weight:600; font-size:clamp(40px,7vw,96px); line-height:1; letter-spacing:.03em; }
+.cta h2 em{ font-style:normal; color:var(--gold); }
+.cta p{ margin:20px auto 34px; max-width:440px; color:var(--dim); }
+.cta .eyebrow{ justify-content:center; }
+.foot{ border-top:1px solid var(--line); padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a:hover{ color:var(--gold); }
+
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:980px){
+  .hero-grid, .ex-grid{ grid-template-columns:1fr; }
+  .hero-panel{ max-width:520px; }
+  .models{ grid-template-columns:1fr; }
+  .explode{ min-height:0; padding:120px 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+@media(max-width:520px){ .nav-r > .sheen{ display:none; } }
+</style>
 </head>
 <body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top"><b>NORTHLINE</b><span>Robotics · Est. 1998</span></a>
+    <div class="nav-r">
+      <a class="sheen" href="#datasheet" style="height:46px;padding:0 20px;font-size:11.5px">Datasheet</a>
+      <button class="gears" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="side">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <g id="gA" transform="translate(15 22)"></g>
+          <g id="gB" transform="translate(29.2 11.2)"></g>
+          <g id="gC" transform="translate(30.4 30.6)"></g>
+        </svg>
+      </button>
+    </div>
   </div>
 </header>
+<div class="scrim" id="scrim" hidden></div>
+<nav class="side brushed" id="side" aria-label="Main" hidden>
+  <a class="lnk" href="#assembly"><small>I</small>Assembly</a>
+  <a class="lnk" href="#models"><small>II</small>Models</a>
+  <a class="lnk" href="#datasheet"><small>III</small>Datasheets</a>
+  <a class="lnk" href="../index.html#work"><small>←</small>Bazozo</a>
+  <div class="meta">Northline Robotics AB<br>Västerås, Sweden<br>ISO 9001 · ISO 10218-1</div>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Industrial Robotics</div>
-    <h1><span class="word"><span class="word-inner">Precision</span></span> <span class="word"><span class="word-inner">you</span></span> <span class="word"><span class="word-inner">can</span></span> <span class="word"><span class="word-inner">inspect</span></span></h1>
-    <p>Northline Robotics built an interactive spec visualizer so buyers can inspect tolerances before a call.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Northline builds precision robotic arms for manufacturing lines. Because industrial buyers need real specs, not marketing language, the site's centerpiece is an interactive visualizer — payload, reach, and repeatability, all inspectable live.</p>
-      <p>Every model page links to a downloadable CAD file and full technical datasheet.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Interactive Spec Visualizer</h3><p>Payload, reach, and repeatability are explorable live, not buried in a PDF.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>CAD Downloads</h3><p>Every model ships with a downloadable CAD file for integration planning.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Line Integration Notes</h3><p>Real case studies show integration timelines on existing manufacturing lines.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Request a spec sheet</h2>
-    <p class="reveal">Full datasheets available immediately, no gated form required.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Get the datasheet</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
       <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+        <span class="eyebrow rv-h">Precision robot joints</span>
+        <h1><span class="ln"><span>Precision,</span></span><span class="ln"><span><em>assembled.</em></span></span></h1>
+        <p class="rv-h">Every Northline arm is built from the same sealed joint: eight parts, machined to a repeatability of ±0.02 mm. Take one apart below.</p>
+        <div class="hero-ctas rv-h">
+          <a class="sheen gold" href="#assembly">Explode the joint <span aria-hidden="true">↓</span></a>
+          <a class="sheen" href="#models">Compare models</a>
+        </div>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
+      <div class="hero-panel rv-h" id="heroPanel">
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+        <img src="../images/northlinerobotic.jpg" alt="An industrial robot arm with servo motors at each joint on a factory test line" width="1920" height="1280">
+        <div class="hero-spec"><div><b>±0.02</b><span>mm repeat.</span></div><div><b>25 kg</b><span>max payload</span></div><div><b>1,850</b><span>mm reach</span></div></div>
+      </div>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <section class="explode" id="assembly">
+    <div class="wrap ex-grid">
+      <div class="ex-stage">
+        <svg id="ex" viewBox="0 0 560 780" role="img" aria-label="Exploded view of the Northline joint actuator">
+          <defs>
+            <linearGradient id="mSide" x1="0" x2="1"><stop offset="0" stop-color="#3A3F48"/><stop offset=".22" stop-color="#9AA0AA"/><stop offset=".45" stop-color="#5A606A"/><stop offset=".7" stop-color="#C9CED6"/><stop offset="1" stop-color="#40454E"/></linearGradient>
+            <linearGradient id="gSide" x1="0" x2="1"><stop offset="0" stop-color="#6B5715"/><stop offset=".25" stop-color="#E8C766"/><stop offset=".5" stop-color="#9C7F22"/><stop offset=".75" stop-color="#F3DA8A"/><stop offset="1" stop-color="#6B5715"/></linearGradient>
+            <linearGradient id="dSide" x1="0" x2="1"><stop offset="0" stop-color="#16181D"/><stop offset=".3" stop-color="#3B4049"/><stop offset=".6" stop-color="#22262D"/><stop offset="1" stop-color="#121418"/></linearGradient>
+            <radialGradient id="mTop" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#D5D9DF"/><stop offset=".6" stop-color="#8E949E"/><stop offset="1" stop-color="#5B616B"/></radialGradient>
+            <radialGradient id="gTop" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#FBE7A6"/><stop offset=".6" stop-color="#D4AF37"/><stop offset="1" stop-color="#8C7120"/></radialGradient>
+            <radialGradient id="dTop" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#4A505A"/><stop offset="1" stop-color="#1A1D22"/></radialGradient>
+          </defs>
+          <line class="axis" id="axis" x1="230" y1="40" x2="230" y2="760"/>
+          <g id="parts"></g>
+          <g id="callouts"></g>
+        </svg>
+      </div>
+      <div class="ex-copy">
+        <span class="eyebrow">I — Assembly</span>
+        <h2>Eight parts. <em>One</em> sealed joint.</h2>
+        <p>Scroll, or drag the slider, to separate the actuator layer by layer. Hover or tap any part for its specification.</p>
+        <div class="slider">
+          <div class="sh"><span>Separation</span><b id="sepOut">0%</b></div>
+          <input type="range" id="sep" min="0" max="100" value="0" aria-label="Separate the assembly">
+        </div>
+        <div class="part-card" aria-live="polite">
+          <span class="pn" id="pcNo">Part 01 / 08</span>
+          <h3 id="pcName">—</h3>
+          <p id="pcDesc"></p>
+          <dl id="pcSpecs"></dl>
+        </div>
+        <p class="ex-hint">The gear sets turn as the assembly opens, at their real reduction ratios.</p>
+      </div>
     </div>
+  </section>
+
+  <section class="sec" id="models">
+    <div class="wrap">
+      <div class="sec-h">
+        <div><span class="eyebrow rv">II — Models</span><h2 class="rv">Same joint. <em>Three</em> reaches.</h2></div>
+        <p class="rv">Payload, reach and repeatability for every model, compared live. Pick one to see its numbers.</p>
+      </div>
+      <div class="models" id="modelGrid">
+        <button class="model rv" type="button" data-m="0" aria-pressed="true"><div class="mn">NL-6</div><div class="ms">Compact cell · electronics</div><div class="bars"></div></button>
+        <button class="model rv" type="button" data-m="1" aria-pressed="false"><div class="mn">NL-12</div><div class="ms">General handling · machine tending</div><div class="bars"></div></button>
+        <button class="model rv" type="button" data-m="2" aria-pressed="false"><div class="mn">NL-25</div><div class="ms">Heavy payload · palletising</div><div class="bars"></div></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta brushed" id="datasheet">
+    <div class="wrap">
+      <span class="eyebrow rv">III — Datasheets</span>
+      <h2 class="rv" style="margin-top:18px">Read the <em>numbers.</em></h2>
+      <p class="rv">Full datasheets and CAD files for every model, available immediately. No gated form.</p>
+      <a class="sheen gold rv" href="../index.html#contact">Request the datasheet <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="northlinerobotic.js" defer></script>
 </body>
 </html>

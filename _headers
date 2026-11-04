@@ -1,12 +1,16 @@
 # Security headers for Cloudflare Pages / Netlify. Applies to every path.
+# NOTE: bazozo.in is served by GitHub Pages, which ignores this file. index.html and
+# coming-soon.html therefore also carry a <meta> Content-Security-Policy + referrer policy.
+# Keep this file for a future move to Cloudflare Pages, where it enables frame-ancestors too.
 # - GSAP + Three.js load from cdnjs, Lenis from jsDelivr, fonts from Google Fonts.
+# - Video pages stream royalty-free stock clips and photos from Pexels (videos/images.pexels.com).
 # - WhatsApp (wa.me) links are normal navigations; CSP doesn't block those,
 #   so wa.me is listed in form-action only in case a form ever posts there.
 # - 'unsafe-inline' in script-src is still required: every /work and /demo page
 #   has inline <script> blocks and onclick/onload attributes. Moving those into
 #   .js files would let us drop it.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me https://api.whatsapp.com; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.pexels.com https://images.unsplash.com; media-src 'self' blob: https://videos.pexels.com; connect-src 'self'; worker-src 'self' blob:; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me https://api.whatsapp.com; upgrade-insecure-requests
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

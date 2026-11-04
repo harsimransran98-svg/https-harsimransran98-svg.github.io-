@@ -3,125 +3,414 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PrintQueue+ — Case Study by Bazozo</title>
-<meta name="description" content="Simplified print job manager for shared printers.">
+<title>PrintQueue+ — POS, inventory &amp; GST billing for shops · Built by Bazozo Studio</title>
+<meta name="description" content="PrintQueue+: a live Windows desktop simulator of a point-of-sale, inventory and GST billing suite. Scan barcodes, build a bill, apply discounts, switch light and dark mode, and print or export a thermal receipt. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0B132B">
 <link rel="canonical" href="https://bazozo.in/demo/windows/printqueue.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#0B132B;
+  --text:#E8EEFC;
+  --accent:#3A86FF;
+  --accent-2:#7FB0FF;
+  --ok:#22C55E;
+  --warn:#F59E0B;
+  --bad:#EF4444;
+  --page-dim:#93A1C4;
+  --page-faint:#5F6E94;
+  --page-line:rgba(147,161,196,.16);
+  --sans:'Inter', 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+/* the app window has its own theme tokens, swapped by the dark/light toggle */
+.win{ --app:#0E1733; --rail:#0A1128; --card:#152045; --card-2:#1C2A57; --ink:#E8EEFC; --mut:#93A1C4; --fnt:#5F6E94; --ln:rgba(147,161,196,.16); --chip:#1A2650; --shadow:0 32px 70px rgba(0,0,0,.6); }
+.win[data-theme="light"]{ --app:#F4F7FD; --rail:#E8EEF9; --card:#FFFFFF; --card-2:#EEF3FC; --ink:#0B132B; --mut:#4A5878; --fnt:#8592AE; --ln:rgba(11,19,43,.1); --chip:#E3EAF7; --shadow:0 32px 70px rgba(0,0,0,.45); }
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.mono{ font-family:var(--mono); }
+
+/* ---------- page chrome ---------- */
+.top{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); padding-top:calc(18px + env(safe-area-inset-top,0px)); }
+.brand{ font-weight:800; font-size:18px; letter-spacing:-.02em; }
+.brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:6px; border:1px solid var(--page-line); background:#111B3A; font-size:13.5px; font-weight:500; color:var(--page-dim); transition:all .25s ease; }
+.back:hover{ color:#fff; border-color:rgba(58,134,255,.6); box-shadow:0 0 0 3px rgba(58,134,255,.18), 0 0 24px -6px var(--accent); }
+.wrap{ max-width:1320px; margin:0 auto; padding:0 clamp(16px,3vw,40px); }
+.intro{ display:grid; grid-template-columns:1fr auto; gap:20px 40px; align-items:end; padding:6px 0 22px; }
+.kick{ font-family:var(--mono); font-size:12px; color:var(--accent-2); }
+.intro h1{ margin-top:8px; font-size:clamp(38px,5vw,64px); font-weight:800; letter-spacing:-.05em; line-height:.95; }
+.intro h1 span{ color:var(--accent); }
+.intro p{ margin-top:12px; color:var(--page-dim); max-width:580px; font-size:15.5px; }
+.try{ display:flex; flex-wrap:wrap; gap:6px; max-width:580px; justify-content:flex-end; }
+.try-h{ width:100%; text-align:right; font-family:var(--mono); font-size:12px; color:var(--page-faint); }
+.try-h b{ color:var(--accent-2); }
+.chipt{ display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 12px; border-radius:6px; border:1px solid var(--page-line); background:#111B3A; font-size:12.5px; color:var(--page-dim); transition:all .35s var(--spring); }
+.chipt i{ width:14px; height:14px; border-radius:4px; border:1.5px solid var(--page-faint); position:relative; }
+.chipt.done{ color:#fff; border-color:rgba(58,134,255,.55); box-shadow:0 0 18px -8px var(--accent); }
+.chipt.done i{ background:var(--accent); border-color:var(--accent); }
+.chipt.done i::after{ content:''; position:absolute; left:3.5px; top:1px; width:3.5px; height:7px; border-right:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(45deg); }
+
+/* ---------- desktop ---------- */
+.desk-wrap{ width:min(100%, 1200px); margin-inline:auto; border-radius:10px; overflow-x:auto; overflow-y:hidden; box-shadow:0 0 0 1px var(--page-line), 0 50px 100px -40px rgba(0,0,0,.9), 0 0 160px -60px rgba(58,134,255,.55); scrollbar-width:thin; }
+.desk-box{ position:relative; width:calc(1200px * var(--s,1)); height:calc(720px * var(--s,1)); }
+.desk{ position:absolute; top:0; left:0; width:1200px; height:720px; transform:scale(var(--s,1)); transform-origin:0 0; overflow:hidden; font-size:13px; isolation:isolate; user-select:none;
+  background:radial-gradient(520px 520px at 50% 115%, #3A86FF 0%, transparent 60%), radial-gradient(800px 500px at 50% 120%, #1E3A8A 0%, transparent 70%), linear-gradient(180deg, #0B132B, #0A1A44 70%, #12307A); }
+.desk::before{ content:''; position:absolute; left:50%; bottom:-260px; width:900px; height:520px; margin-left:-450px; border-radius:50%; border:1px solid rgba(127,176,255,.25); box-shadow:0 0 120px rgba(58,134,255,.35) inset; }
+
+.win{ position:absolute; z-index:20; left:40px; top:20px; width:1120px; height:640px; border-radius:8px; overflow:hidden; display:flex; flex-direction:column; background:var(--app); color:var(--ink); border:1px solid rgba(255,255,255,.12); box-shadow:var(--shadow); transform-origin:50% 100%; transition:background .4s ease, color .4s ease; }
+.titlebar{ height:38px; flex:none; display:flex; align-items:center; gap:10px; padding-left:12px; background:var(--rail); border-bottom:1px solid var(--ln); cursor:grab; transition:background .4s ease; }
+.titlebar:active{ cursor:grabbing; }
+.appic{ width:18px; height:18px; border-radius:5px; background:linear-gradient(135deg,#7FB0FF,#3A86FF 50%,#1E40AF); display:grid; place-items:center; }
+.titlebar .t{ font-size:12.5px; font-weight:600; }
+.titlebar .t span{ color:var(--fnt); font-weight:500; }
+.titlebar .sp{ flex:1; }
+.theme{ position:relative; width:58px; height:26px; border-radius:999px; background:var(--chip); border:1px solid var(--ln); display:flex; align-items:center; justify-content:space-between; padding:0 7px; color:var(--fnt); }
+.theme svg{ width:13px; height:13px; position:relative; z-index:1; }
+.theme .knob{ position:absolute; top:2px; left:2px; width:22px; height:20px; border-radius:999px; background:var(--accent); box-shadow:0 2px 8px rgba(58,134,255,.6); transition:transform .5s cubic-bezier(.68,-.6,.32,1.6); }
+.win[data-theme="light"] .theme .knob{ transform:translateX(30px); }
+.theme .moon{ color:#fff; } .win[data-theme="light"] .theme .moon{ color:var(--fnt); } .win[data-theme="light"] .theme .sun{ color:#fff; }
+.caps{ display:flex; height:100%; }
+.caps button{ width:46px; height:100%; display:grid; place-items:center; color:var(--ink); transition:background .1s ease; }
+.caps button:hover{ background:rgba(127,127,127,.16); }
+.caps .x:hover{ background:#C42B1C; color:#fff; }
+.caps svg{ width:10px; height:10px; }
+
+.wbody{ flex:1; display:grid; grid-template-columns:62px 1fr; min-height:0; }
+.rail{ background:var(--rail); border-right:1px solid var(--ln); display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 0; position:relative; transition:background .4s ease; }
+.rail button{ width:50px; padding:7px 0 5px; border-radius:8px; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10.5px; font-weight:500; color:var(--mut); transition:all .2s ease; position:relative; }
+.rail button:hover{ background:rgba(127,127,127,.12); color:var(--ink); }
+.rail button[aria-current="page"]{ color:var(--accent); background:rgba(58,134,255,.12); }
+.rail svg{ width:19px; height:19px; }
+.rail .bdg{ position:absolute; top:3px; right:7px; min-width:15px; height:15px; padding:0 4px; border-radius:8px; background:var(--bad); color:#fff; font-size:9.5px; font-weight:700; display:grid; place-items:center; }
+.rail .pip{ position:absolute; left:0; width:3px; height:20px; border-radius:2px; background:var(--accent); }
+.view{ min-width:0; min-height:0; display:flex; }
+
+/* sell view */
+.sell{ flex:1; display:grid; grid-template-columns:1fr 372px; min-height:0; }
+.shelf{ display:flex; flex-direction:column; min-width:0; min-height:0; padding:14px 16px 0; gap:10px; }
+.scanrow{ display:flex; gap:8px; }
+.scan{ flex:1; position:relative; }
+.scan input{ width:100%; height:40px; border-radius:8px; border:1px solid var(--ln); background:var(--card); padding:0 12px 0 40px; font-family:var(--mono); font-size:13px; color:var(--ink); transition:border-color .2s ease, box-shadow .2s ease, background .4s ease; }
+.scan input::placeholder{ color:var(--fnt); font-family:var(--sans); }
+.scan input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(58,134,255,.2); }
+.scan svg{ position:absolute; left:12px; top:11px; width:18px; height:18px; color:var(--fnt); }
+.scan .laser{ position:absolute; left:8px; right:8px; top:50%; height:2px; background:var(--bad); box-shadow:0 0 10px 2px rgba(239,68,68,.7); opacity:0; pointer-events:none; }
+.btn{ height:40px; padding:0 14px; border-radius:8px; display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; background:var(--card); border:1px solid var(--ln); color:var(--ink); transition:transform .25s var(--spring), border-color .2s ease, box-shadow .25s ease, background .4s ease; }
+.btn:hover{ border-color:var(--accent); transform:translateY(-1px); box-shadow:0 6px 18px -8px var(--accent); }
+.btn svg{ width:16px; height:16px; }
+.btn.pri{ background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 8px 22px -10px var(--accent); }
+.cats{ display:flex; gap:6px; flex-wrap:wrap; }
+.cat{ height:28px; padding:0 12px; border-radius:999px; font-size:12px; font-weight:500; color:var(--mut); background:var(--chip); transition:all .25s var(--spring); }
+.cat:hover{ color:var(--ink); }
+.cat[aria-pressed="true"]{ color:#fff; background:var(--accent); }
+.grid{ flex:1; overflow-y:auto; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; align-content:start; padding-bottom:14px; scrollbar-width:thin; }
+.prod{ position:relative; text-align:left; padding:10px; border-radius:10px; background:var(--card); border:1px solid var(--ln); transition:transform .3s var(--spring), border-color .2s ease, box-shadow .3s ease, background .4s ease; }
+.prod:hover{ transform:translateY(-3px); border-color:rgba(58,134,255,.55); box-shadow:0 12px 26px -14px var(--accent); }
+.prod:active{ transform:scale(.97); }
+.prod .ic{ height:54px; border-radius:7px; display:grid; place-items:center; font-weight:800; font-size:18px; color:#fff; letter-spacing:-.02em; margin-bottom:8px; }
+.prod b{ display:block; font-size:12.5px; font-weight:600; line-height:1.25; height:32px; overflow:hidden; }
+.prod .row{ display:flex; justify-content:space-between; align-items:center; margin-top:4px; }
+.prod .pr{ font-family:var(--mono); font-size:13px; font-weight:700; }
+.prod .stk{ font-size:10.5px; color:var(--mut); }
+.prod .stk.low{ color:var(--warn); font-weight:600; }
+.prod .bc{ display:block; font-family:var(--mono); font-size:9.5px; color:var(--fnt); margin-top:2px; }
+.prod .qtyb{ position:absolute; top:6px; right:6px; min-width:22px; height:22px; padding:0 6px; border-radius:11px; background:var(--accent); color:#fff; font-size:11.5px; font-weight:700; display:grid; place-items:center; box-shadow:0 4px 10px rgba(58,134,255,.5); }
+.prod:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* bill */
+.bill{ background:var(--card); border-left:1px solid var(--ln); display:flex; flex-direction:column; min-height:0; transition:background .4s ease; }
+.bill-h{ display:flex; justify-content:space-between; align-items:center; padding:12px 16px 10px; border-bottom:1px solid var(--ln); }
+.bill-h b{ font-size:14px; }
+.bill-h span{ font-family:var(--mono); font-size:11.5px; color:var(--fnt); }
+.lines{ flex:1; overflow-y:auto; padding:4px 0; scrollbar-width:thin; }
+.empty{ padding:40px 24px; text-align:center; color:var(--fnt); font-size:12.5px; }
+.empty svg{ width:42px; height:42px; display:block; margin:0 auto 10px; opacity:.6; }
+.line{ display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:8px 16px; }
+.line .n{ font-size:12.5px; font-weight:600; line-height:1.25; }
+.line .n small{ display:block; font-weight:400; color:var(--fnt); font-size:11px; font-family:var(--mono); }
+.step{ display:flex; align-items:center; border-radius:7px; background:var(--chip); }
+.step button{ width:24px; height:24px; border-radius:6px; font-weight:700; color:var(--mut); }
+.step button:hover{ color:#fff; background:var(--accent); }
+.step span{ min-width:22px; text-align:center; font-family:var(--mono); font-size:12.5px; font-weight:600; }
+.line .amt{ font-family:var(--mono); font-size:12.5px; font-weight:600; min-width:66px; text-align:right; }
+.disc{ padding:8px 16px; border-top:1px solid var(--ln); display:flex; align-items:center; gap:6px; font-size:12px; color:var(--mut); }
+.disc .sp{ flex:1; }
+.dchip{ height:24px; padding:0 9px; border-radius:6px; background:var(--chip); font-size:11.5px; font-weight:600; color:var(--mut); transition:all .25s var(--spring); }
+.dchip:hover{ color:var(--ink); transform:translateY(-1px); }
+.dchip[aria-pressed="true"]{ background:var(--accent); color:#fff; }
+.tot{ padding:8px 16px 4px; border-top:1px solid var(--ln); font-size:12px; color:var(--mut); }
+.tot div{ display:flex; justify-content:space-between; padding:1.5px 0; }
+.tot div span:last-child{ font-family:var(--mono); color:var(--ink); }
+.tot .gst span:first-child{ padding-left:10px; font-size:11.5px; }
+.tot .dsc span:last-child{ color:var(--ok); }
+.grand{ display:flex; justify-content:space-between; align-items:baseline; padding:6px 16px 8px; }
+.grand span{ font-size:12px; color:var(--mut); }
+.grand b{ font-family:var(--mono); font-size:26px; font-weight:700; letter-spacing:-.03em; }
+.pay{ display:flex; gap:6px; padding:0 16px 10px; }
+.pay button{ flex:1; height:30px; border-radius:7px; font-size:12px; font-weight:600; background:var(--chip); color:var(--mut); border:1px solid transparent; transition:all .25s var(--spring); }
+.pay button[aria-pressed="true"]{ border-color:var(--accent); color:var(--accent); background:rgba(58,134,255,.1); }
+.charge{ margin:0 16px 14px; height:46px; border-radius:10px; background:var(--accent); color:#fff; font-size:14.5px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; position:relative; overflow:hidden; box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 14px 30px -12px var(--accent); transition:transform .3s var(--spring), box-shadow .3s ease, opacity .2s ease; }
+.charge:hover{ transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.25) inset, 0 20px 40px -12px var(--accent); }
+.charge::after{ content:''; position:absolute; top:0; bottom:0; left:-40%; width:30%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent); transform:skewX(-20deg); transition:left .7s ease; }
+.charge:hover::after{ left:120%; }
+.charge:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+.charge kbd{ font-family:var(--mono); font-size:10.5px; padding:1px 5px; border-radius:4px; background:rgba(255,255,255,.2); }
+
+/* inventory, queue, reports */
+.pane{ flex:1; overflow-y:auto; padding:18px 22px; scrollbar-width:thin; }
+.pane h2{ font-size:20px; font-weight:700; letter-spacing:-.02em; margin-bottom:4px; }
+.pane .sub{ font-size:12.5px; color:var(--mut); margin-bottom:14px; }
+.tbl{ width:100%; border-collapse:collapse; font-size:12.5px; }
+.tbl th{ text-align:left; font-size:11px; font-weight:600; color:var(--fnt); text-transform:uppercase; letter-spacing:.04em; padding:8px 10px; border-bottom:1px solid var(--ln); }
+.tbl td{ padding:8px 10px; border-bottom:1px solid var(--ln); }
+.tbl td.m{ font-family:var(--mono); }
+.lvl{ width:120px; height:6px; border-radius:3px; background:var(--chip); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:8px; }
+.lvl i{ display:block; height:100%; background:var(--ok); border-radius:3px; }
+.lvl i.low{ background:var(--warn); } .lvl i.out{ background:var(--bad); }
+.mini{ height:26px; padding:0 10px; border-radius:6px; font-size:11.5px; font-weight:600; background:var(--chip); color:var(--accent); transition:all .25s var(--spring); }
+.mini:hover{ background:var(--accent); color:#fff; transform:translateY(-1px); }
+.printers{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:16px; }
+.printer{ display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:10px; background:var(--card); border:1px solid var(--ln); }
+.printer .pi{ width:42px; height:42px; border-radius:9px; background:var(--chip); display:grid; place-items:center; color:var(--accent); }
+.printer b{ display:block; font-size:13px; }
+.printer span{ font-size:11.5px; color:var(--mut); }
+.printer .on{ color:var(--ok); }
+.roll{ margin-left:auto; text-align:right; font-size:11px; color:var(--mut); }
+.roll .lvl{ width:80px; margin:4px 0 0; }
+.job{ display:grid; grid-template-columns:90px 1fr 140px 90px; gap:12px; align-items:center; padding:10px 12px; border-radius:8px; background:var(--card); border:1px solid var(--ln); margin-bottom:6px; font-size:12.5px; }
+.job .m{ font-family:var(--mono); color:var(--mut); }
+.job .pb{ height:6px; border-radius:3px; background:var(--chip); overflow:hidden; }
+.job .pb i{ display:block; height:100%; width:0; background:var(--accent); border-radius:3px; }
+.job .s{ font-size:11.5px; font-weight:600; color:var(--accent); text-align:right; }
+.job .s.ok{ color:var(--ok); }
+.kpis{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+.kpi{ padding:14px; border-radius:10px; background:var(--card); border:1px solid var(--ln); }
+.kpi span{ font-size:11.5px; color:var(--mut); }
+.kpi b{ display:block; font-family:var(--mono); font-size:22px; font-weight:700; letter-spacing:-.03em; margin-top:2px; }
+.chart{ padding:14px; border-radius:10px; background:var(--card); border:1px solid var(--ln); }
+.chart svg{ width:100%; height:220px; display:block; }
+
+/* receipt modal */
+.scrim{ position:absolute; z-index:70; inset:0; background:rgba(5,10,25,.6); backdrop-filter:blur(6px); display:flex; align-items:flex-start; justify-content:center; gap:26px; padding-top:30px; }
+.printer-dev{ position:relative; width:330px; }
+.slot{ position:relative; z-index:2; height:56px; border-radius:14px 14px 6px 6px; background:linear-gradient(#2B3655,#1A2238); box-shadow:0 10px 24px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.15); display:flex; align-items:center; padding:0 16px; gap:8px; }
+.slot::after{ content:''; position:absolute; left:26px; right:26px; bottom:8px; height:4px; border-radius:2px; background:#05070F; }
+.slot .led{ width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 8px var(--ok); }
+.slot span{ font-size:11px; color:#93A1C4; font-weight:600; }
+.paper-clip{ position:relative; z-index:1; margin:-8px 30px 0; max-height:606px; overflow-x:hidden; overflow-y:auto; scrollbar-width:none; }
+.paper-clip::-webkit-scrollbar{ display:none; }
+.paper{ background:#FBFBF7; color:#111; font-family:var(--mono); font-size:11px; line-height:1.45; padding:16px 16px 22px; box-shadow:0 18px 40px rgba(0,0,0,.45); -webkit-mask:linear-gradient(#000 calc(100% - 8px),transparent 0), conic-gradient(from 135deg at 50% 100%, #000 90deg, transparent 0) 0 100%/12px 8px repeat-x; mask:linear-gradient(#000 calc(100% - 8px),transparent 0), conic-gradient(from 135deg at 50% 100%, #000 90deg, transparent 0) 0 100%/12px 8px repeat-x; }
+.paper .c{ text-align:center; }
+.paper .big{ font-size:15px; font-weight:700; letter-spacing:.06em; }
+.paper .hr{ border-top:1px dashed #555; margin:6px 0; }
+.paper .r{ display:flex; justify-content:space-between; gap:8px; white-space:pre; }
+.paper .r.t{ font-weight:700; font-size:13px; }
+.paper .qr{ display:flex; justify-content:center; gap:14px; align-items:center; margin-top:8px; }
+.paper svg{ display:block; }
+.side{ width:250px; display:flex; flex-direction:column; gap:10px; padding-top:70px; }
+.side h3{ font-size:18px; color:#fff; letter-spacing:-.02em; }
+.side p{ font-size:12.5px; color:#93A1C4; }
+.side .btn{ width:100%; justify-content:center; --ink:#E8EEFC; background:#152045; border-color:rgba(147,161,196,.25); color:#E8EEFC; }
+.side .btn.pri{ background:var(--accent); border-color:var(--accent); color:#fff; }
+
+.taskbar{ position:absolute; z-index:40; left:0; right:0; bottom:0; height:48px; display:flex; align-items:center; justify-content:center; gap:2px; background:rgba(16,22,44,.82); backdrop-filter:blur(30px); border-top:1px solid rgba(255,255,255,.08); }
+.taskbar .ic{ position:relative; width:40px; height:40px; border-radius:5px; display:grid; place-items:center; }
+.taskbar .ic:hover{ background:rgba(255,255,255,.08); }
+.taskbar .ic i{ width:24px; height:24px; border-radius:6px; }
+.taskbar .open::after{ content:''; position:absolute; bottom:2px; left:50%; width:16px; height:3px; margin-left:-8px; border-radius:2px; background:var(--accent-2); transition:all .3s ease; }
+.taskbar .min::after{ width:6px; margin-left:-3px; background:#93A1C4; }
+.taskbar .clk{ position:absolute; right:12px; font-size:12px; text-align:right; line-height:1.3; color:#fff; }
+.toast{ position:absolute; z-index:80; right:12px; bottom:58px; width:300px; padding:12px 14px; border-radius:8px; background:rgba(28,36,64,.96); border:1px solid rgba(255,255,255,.1); box-shadow:0 16px 40px rgba(0,0,0,.5); font-size:12.5px; color:#E8EEFC; }
+.toast b{ display:block; font-size:13px; margin-bottom:2px; }
+.toast span{ color:#93A1C4; }
+
+/* below */
+.below{ display:grid; grid-template-columns:1.2fr 1fr; gap:24px; padding:30px 0 70px; }
+.sh{ font-family:var(--mono); font-size:12px; color:var(--page-faint); margin-bottom:10px; font-weight:500; }
+.spec{ border:1px solid var(--page-line); border-radius:10px; overflow:hidden; background:#0E1733; }
+.spec div{ display:grid; grid-template-columns:120px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--page-line); font-size:14px; }
+.spec div:last-child{ border-bottom:none; }
+.spec dt{ font-family:var(--mono); font-size:12px; color:var(--page-faint); padding-top:1px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.metric{ padding:16px; border-radius:10px; background:#0E1733; border:1px solid var(--page-line); }
+.metric b{ display:block; font-size:24px; font-weight:800; letter-spacing:-.03em; color:var(--accent-2); }
+.metric span{ font-size:12px; color:var(--page-faint); }
+.cta{ display:inline-flex; align-items:center; gap:10px; margin-top:16px; height:46px; padding:0 22px; border-radius:8px; background:var(--accent); color:#fff; font-weight:700; font-size:14.5px; box-shadow:0 0 0 1px rgba(255,255,255,.15) inset, 0 12px 30px -12px var(--accent); transition:transform .3s var(--spring), box-shadow .3s ease; }
+.cta:hover{ transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,255,255,.25) inset, 0 18px 40px -12px var(--accent); }
+.hint{ margin-top:12px; font-size:13px; color:var(--page-faint); }
+.hint kbd{ font-family:var(--mono); font-size:.85em; padding:1px 6px; border-radius:5px; border:1px solid var(--page-line); background:#111B3A; }
+.mobile-note{ display:none; font-size:12.5px; color:var(--page-faint); margin-top:10px; }
+.foot{ text-align:center; padding:20px 16px calc(28px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--page-faint); border-top:1px solid var(--page-line); }
+.foot b{ color:#fff; font-weight:600; }
+.foot a{ color:var(--accent-2); }
+@media(max-width:900px){ .intro, .below{ grid-template-columns:1fr; } .try{ justify-content:flex-start; } .try-h{ text-align:left; } .mobile-note{ display:block; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+</style>
 </head>
-<body data-theme="8">
+<body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
+<header class="top">
   <a class="brand" href="../../index.html">bazozo<span>.</span></a>
   <a class="back" href="../../index.html#work">← Back to Bazozo</a>
 </header>
 
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>Windows Applications</div>
-    <h1 class="device-title">PrintQueue+</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Runs quiet, works hard</p>
-    <div class="device-frame-wrap desktop" id="deviceFrameWrap">
-      <div id="demoBody"></div>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <span class="kick">Windows 11 · WinUI 3 · offline-first SQLite · ESC/POS</span>
+      <h1>PrintQueue<span>+</span></h1>
+      <p>Billing, inventory and receipt printing for a busy shop counter. Scan a barcode, the bill builds itself with GST split out, and the receipt is printed before the customer reaches for their bag. This desktop is live.</p>
     </div>
-  </div>
-</section>
+    <div class="try" id="tryList" aria-label="Try it checklist">
+      <div class="try-h">try it · <b id="tryCount">0/5</b></div>
+      <span class="chipt" data-t="scan"><i></i>Scan a barcode</span>
+      <span class="chipt" data-t="add"><i></i>Add 3 items to the bill</span>
+      <span class="chipt" data-t="disc"><i></i>Apply a discount</span>
+      <span class="chipt" data-t="theme"><i></i>Switch light / dark</span>
+      <span class="chipt" data-t="print"><i></i>Print the thermal receipt</span>
+    </div>
+  </section>
 
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>PrintQueue+ is a native desktop utility built around one job: simplified print job manager for shared printers. It runs quietly in the background until you actually need it.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
+  <div class="desk-wrap" id="deskWrap">
+    <div class="desk-box">
+      <div class="desk" id="desk">
+        <section class="win" id="win" data-theme="dark" aria-label="PrintQueue+ window">
+          <div class="titlebar" id="titlebar">
+            <span class="appic" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M6 2h12v6H6zM3 9h18v9h-3v4H6v-4H3zm5 6v5h8v-5z"/></svg></span>
+            <span class="t">PrintQueue+ <span>· Counter 1 · Sharma General Store</span></span>
+            <span class="sp"></span>
+            <button class="theme" type="button" id="themeBtn" role="switch" aria-checked="false" aria-label="Light mode">
+              <span class="knob"></span>
+              <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+              <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/></svg>
+            </button>
+            <div class="caps"><button type="button" id="wMin" aria-label="Minimise"><svg viewBox="0 0 10 10" stroke="currentColor"><path d="M0 5h10"/></svg></button><button type="button" id="wMax" aria-label="Maximise"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor"><rect x=".5" y=".5" width="9" height="9" rx="1"/></svg></button><button class="x" type="button" id="wClose" aria-label="Close"><svg viewBox="0 0 10 10" stroke="currentColor"><path d="M0 0l10 10M10 0 0 10"/></svg></button></div>
+          </div>
+          <div class="wbody">
+            <nav class="rail" id="rail" aria-label="Sections">
+              <span class="pip" id="pip"></span>
+              <button type="button" data-v="sell" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.8L20 8H6.2"/><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>Sell</button>
+              <button type="button" data-v="inv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l9-4 9 4-9 4zM3 7v10l9 4 9-4V7M12 11v10"/></svg>Stock<span class="bdg" id="lowBdg" hidden>0</span></button>
+              <button type="button" data-v="queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>Queue</button>
+              <button type="button" data-v="rep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Reports</button>
+            </nav>
+
+            <div class="view" data-view="sell">
+              <div class="sell">
+                <div class="shelf">
+                  <div class="scanrow">
+                    <label class="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M7 8v8M10 8v8M13 8v8M16 8v8"/></svg><input id="scanIn" inputmode="numeric" maxlength="20" placeholder="Scan or type a barcode / item name, then Enter" aria-label="Barcode or item search" autocomplete="off"><span class="laser" id="laser"></span></label>
+                    <button class="btn pri" type="button" id="scanBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M8 12h8"/></svg>Scan</button>
+                  </div>
+                  <div class="cats" id="cats" role="group" aria-label="Categories"></div>
+                  <div class="grid" id="grid"></div>
+                </div>
+                <aside class="bill" aria-label="Current bill">
+                  <div class="bill-h"><b>Bill <span id="billNo">#—</span></b><span id="billCust">Walk-in customer</span></div>
+                  <div class="lines" id="lines"></div>
+                  <div class="disc"><span>Discount</span><span class="sp"></span><button class="dchip" type="button" data-d="0" aria-pressed="true">None</button><button class="dchip" type="button" data-d="5" aria-pressed="false">5%</button><button class="dchip" type="button" data-d="10" aria-pressed="false">10%</button><button class="dchip" type="button" data-d="flat50" aria-pressed="false">₹50 off</button></div>
+                  <div class="tot" id="tot"></div>
+                  <div class="grand"><span>Total payable</span><b id="grand">₹0.00</b></div>
+                  <div class="pay" role="group" aria-label="Payment method"><button type="button" data-p="UPI" aria-pressed="true">UPI</button><button type="button" data-p="Cash" aria-pressed="false">Cash</button><button type="button" data-p="Card" aria-pressed="false">Card</button></div>
+                  <button class="charge" type="button" id="chargeBtn" disabled><span id="chargeTxt">Add items to bill</span><kbd>F9</kbd></button>
+                </aside>
+              </div>
+            </div>
+
+            <div class="view" data-view="inv" hidden>
+              <div class="pane">
+                <h2>Stock</h2>
+                <p class="sub">Stock updates as each bill is printed. Low items are flagged in amber.</p>
+                <table class="tbl"><thead><tr><th>Item</th><th>Barcode</th><th>GST</th><th>Price</th><th>Stock</th><th></th></tr></thead><tbody id="invBody"></tbody></table>
+              </div>
+            </div>
+
+            <div class="view" data-view="queue" hidden>
+              <div class="pane">
+                <h2>Print queue</h2>
+                <p class="sub">Every receipt and label goes through one queue, so a busy counter never jams.</p>
+                <div class="printers">
+                  <div class="printer"><span class="pi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V3h12v6M6 18H4V11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7h-2"/><rect x="6" y="14" width="12" height="7"/></svg></span><div><b>Counter thermal · 80 mm</b><span class="on">● Online</span> <span>· USB · ESC/POS</span></div><div class="roll">Paper roll <b id="rollPct">92%</b><div class="lvl"><i id="rollBar" style="width:92%"></i></div></div></div>
+                  <div class="printer"><span class="pi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M10 10v4M13 10v4M16 10v4"/></svg></span><div><b>Label printer · 50×25</b><span class="on">● Online</span> <span>· Wi-Fi · shelf labels</span></div><div class="roll">Labels <b>340</b></div></div>
+                </div>
+                <div id="jobs"></div>
+              </div>
+            </div>
+
+            <div class="view" data-view="rep" hidden>
+              <div class="pane">
+                <h2>Today</h2>
+                <p class="sub">Live from this counter. Totals include GST.</p>
+                <div class="kpis"><div class="kpi"><span>Sales</span><b id="kSales">₹0</b></div><div class="kpi"><span>Bills</span><b id="kBills">0</b></div><div class="kpi"><span>Avg bill</span><b id="kAvg">₹0</b></div><div class="kpi"><span>GST collected</span><b id="kGst">₹0</b></div></div>
+                <div class="chart"><svg id="chart" viewBox="0 0 800 220" role="img" aria-label="Sales by hour"></svg></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="scrim" id="scrim" hidden>
+          <div class="printer-dev">
+            <div class="slot"><span class="led"></span><span>THERMAL · 80 mm</span></div>
+            <div class="paper-clip"><div class="paper" id="paper"></div></div>
+          </div>
+          <div class="side">
+            <h3>Receipt preview</h3>
+            <p>Exactly what the 80 mm printer will print, including the GST split and a UPI QR for the next visit.</p>
+            <button class="btn pri" type="button" id="printBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4V11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7h-2"/><rect x="6" y="14" width="12" height="7"/></svg>Print receipt</button>
+            <button class="btn" type="button" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Export as .txt</button>
+            <button class="btn" type="button" id="closeRc">Back to bill</button>
+          </div>
         </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>Native, Not a Web Shell</h4><p>Built directly against the platform's own UI toolkit for real performance.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Low Resource Use</h4><p>Sits quietly in the background without eating RAM or battery.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Starts Instantly</h4><p>No splash screen, no loading spinner — it's ready the moment you open it.</p></div>
+
+        <div class="toast" id="toast" role="status" hidden><b id="toastT"></b><span id="toastB"></span></div>
+        <nav class="taskbar" aria-label="Taskbar">
+          <span class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="#7FB0FF"><rect x="2" y="2" width="9.5" height="9.5" rx="1"/><rect x="12.5" y="2" width="9.5" height="9.5" rx="1"/><rect x="2" y="12.5" width="9.5" height="9.5" rx="1"/><rect x="12.5" y="12.5" width="9.5" height="9.5" rx="1"/></svg></span>
+          <span class="ic" aria-hidden="true"><i style="background:#F7C948"></i></span>
+          <span class="ic" aria-hidden="true"><i style="background:linear-gradient(135deg,#34C3A3,#0F6CBD);border-radius:50%"></i></span>
+          <button class="ic open" type="button" id="tbApp" aria-label="PrintQueue+"><i style="background:linear-gradient(135deg,#7FB0FF,#3A86FF 50%,#1E40AF)"></i></button>
+          <span class="clk" id="clock">—</span>
+        </nav>
       </div>
     </div>
   </div>
-</section>
+  <p class="mobile-note">Best on a laptop or desktop. On a phone, scroll sideways inside the desktop.</p>
 
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
+  <section class="below">
+    <div>
+      <h2 class="sh">// architecture</h2>
+      <dl class="spec">
+        <div><dt>shell</dt><dd>WinUI 3 desktop app with touch-friendly targets for counter screens</dd></div>
+        <div><dt>data</dt><dd>Offline-first SQLite; syncs to the cloud when the shop's internet is back</dd></div>
+        <div><dt>billing</dt><dd>GST slabs per item with CGST/SGST split, round-off and e-invoice export</dd></div>
+        <div><dt>printing</dt><dd>ESC/POS over USB, LAN or Bluetooth through one fault-tolerant print queue</dd></div>
+        <div><dt>scanners</dt><dd>Any USB or Bluetooth barcode scanner works as keyboard input</dd></div>
+        <div><dt>safety</dt><dd>Role-based logins; every bill edit is logged</dd></div>
+      </dl>
+    </div>
+    <div>
+      <h2 class="sh">// numbers</h2>
+      <div class="metrics"><div class="metric"><b>4 s</b><span>scan to printed bill</span></div><div class="metric"><b>100%</b><span>works offline</span></div><div class="metric"><b>0</b><span>missed GST lines</span></div></div>
+      <p class="hint">Tip: type <kbd>8901</kbd> into the scan box and press <kbd>Enter</kbd>, or press <kbd>F9</kbd> to charge.</p>
+      <a class="cta" href="../../index.html#contact">Build a desktop app like this →</a>
+    </div>
+  </section>
+</main>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
 
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects[156]);
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-windows');
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="printqueue.js" defer></script>
 </body>
 </html>

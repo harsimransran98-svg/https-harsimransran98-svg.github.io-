@@ -3,173 +3,358 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marrow Studio — Case Study by Bazozo</title>
-<meta name="description" content="Marrow's booking site runs on a grainy film aesthetic — the same texture the collective tattoos in.">
+<title>Marrow Studio — Tattoo collective · Built by Bazozo Studio</title>
+<meta name="description" content="Marrow Studio: a brutalist tattoo collective site with a magnified flash-sheet gallery and a live placement and price calculator. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0A0A0A">
 <link rel="canonical" href="https://bazozo.in/work/marrowstudio.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="preload" as="image" href="../images/marrowstudio.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#8a5c8a; --site-hero-image:url('../images/marrowstudio.jpg'); }</style>
+<style>
+:root{
+  --bg:#0A0A0A;
+  --bg-2:#121111;
+  --text:#F2EFE9;
+  --dim:rgba(242,239,233,.6);
+  --faint:rgba(242,239,233,.32);
+  --accent:#D92B2B;
+  --line:rgba(242,239,233,.18);
+  --display:'Unbounded', 'Arial Black', sans-serif;
+  --mono:'Space Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.7,0,.2,1);
+  --nav-h:74px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--mono); font-size:15px; line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, select, input{ font:inherit; color:inherit; }
+img{ max-width:100%; display:block; }
+.wrap{ width:100%; max-width:1320px; margin:0 auto; padding:0 clamp(18px,3.5vw,44px); }
+::selection{ background:var(--accent); color:var(--text); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.tag{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+.tag b{ color:var(--accent); font-weight:700; }
+/* film grain over everything */
+.grain{ position:fixed; inset:-50%; z-index:200; pointer-events:none; opacity:.09;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1s steps(6) infinite; }
+@keyframes grain{ 0%{ transform:translate(0,0); } 20%{ transform:translate(-4%,3%); } 40%{ transform:translate(3%,-4%); } 60%{ transform:translate(-2%,-2%); } 80%{ transform:translate(4%,2%); } 100%{ transform:translate(0,0); } }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); border-bottom:1px solid transparent; transition:background .3s ease, border-color .3s ease; }
+.nav.scrolled{ background:var(--bg); border-color:var(--line); }
+.nav-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.logo{ font-family:var(--display); font-weight:900; font-size:22px; letter-spacing:-.04em; text-transform:uppercase; }
+.logo span{ color:var(--accent); }
+.nav-r{ display:flex; align-items:center; gap:14px; }
+.status{ display:none; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); align-items:center; gap:8px; }
+.status i{ width:8px; height:8px; background:var(--accent); border-radius:50%; animation:blink 1.2s steps(2) infinite; }
+@keyframes blink{ 50%{ opacity:.2; } }
+@media(min-width:760px){ .status{ display:flex; } }
+
+/* dual-blade asymmetric hamburger */
+.blades{ position:relative; width:54px; height:54px; border:1px solid var(--text); background:var(--bg); cursor:pointer; }
+.blades i{ position:absolute; right:12px; height:3px; background:var(--text); clip-path:polygon(0 0, 100% 0, calc(100% - 4px) 100%, 4px 100%); transition:transform .5s var(--ease), width .5s var(--ease), top .5s var(--ease), background .3s ease; }
+.blades i:nth-child(1){ top:20px; width:30px; }
+.blades i:nth-child(2){ top:30px; width:18px; }
+.blades:hover i:nth-child(2){ width:30px; }
+.blades[aria-expanded="true"]{ border-color:var(--accent); }
+.blades[aria-expanded="true"] i{ background:var(--accent); }
+.blades[aria-expanded="true"] i:nth-child(1){ top:25px; width:32px; transform:rotate(45deg) translateX(1px); }
+.blades[aria-expanded="true"] i:nth-child(2){ top:25px; width:32px; transform:rotate(-45deg) translateX(1px); }
+.slash-menu{ position:fixed; inset:0; z-index:75; background:var(--accent); display:flex; flex-direction:column; justify-content:center; padding:calc(var(--nav-h) + 20px) clamp(18px,3.5vw,44px) 30px;
+  clip-path:polygon(100% 0, 100% 0, 100% 0, 100% 0); transition:clip-path .7s var(--ease); }
+.slash-menu.open{ clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+.slash-menu a{ display:block; font-family:var(--display); font-weight:900; font-size:clamp(46px,10vw,120px); line-height:.95; text-transform:uppercase; letter-spacing:-.05em; color:var(--bg); transition:color .2s ease, transform .4s var(--ease); }
+.slash-menu a:hover{ color:var(--text); transform:translateX(18px) skewX(-8deg); }
+.slash-menu .small{ margin-top:30px; font-family:var(--mono); font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--bg); }
+
+/* liquid ink buttons: a circle of ink spreads from wherever the cursor enters */
+.ink{ --x:50%; --y:50%; position:relative; isolation:isolate; overflow:hidden; display:inline-flex; align-items:center; gap:12px; height:56px; padding:0 26px; border:1px solid var(--text); background:transparent; cursor:pointer;
+  font-family:var(--mono); font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--text); transition:color .45s var(--ease); }
+.ink::before{ content:''; position:absolute; inset:0; z-index:-1; background:var(--text); clip-path:circle(0% at var(--x) var(--y)); transition:clip-path .6s var(--ease); }
+.ink:hover, .ink:focus-visible{ color:var(--bg); }
+.ink:hover::before, .ink:focus-visible::before{ clip-path:circle(150% at var(--x) var(--y)); }
+.ink.red{ background:var(--accent); border-color:var(--accent); }
+.ink.red::before{ background:var(--text); }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; min-height:100svh; padding-top:var(--nav-h); display:grid; grid-template-rows:1fr auto; overflow:hidden; border-bottom:1px solid var(--line); }
+.hero-photo{ position:absolute; inset:var(--nav-h) 0 0 38%; overflow:hidden; }
+.hero-photo img{ width:100%; height:100%; object-fit:cover; object-position:40% 40%; filter:grayscale(1) contrast(1.25) brightness(.75); }
+.hero-photo::after{ content:''; position:absolute; inset:0; background:var(--accent); mix-blend-mode:multiply; opacity:.55; }
+.hero-photo::before{ content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg, var(--bg) 0%, transparent 40%); }
+.hero-txt{ position:relative; z-index:2; align-self:end; padding-bottom:30px; }
+.hero h1{ font-family:var(--display); font-weight:900; font-size:clamp(68px,17vw,270px); line-height:.78; letter-spacing:-.07em; text-transform:uppercase; }
+.hero h1 .row{ display:block; overflow:hidden; }
+.hero h1 .row > span{ display:inline-block; }
+.hero h1 .stroke{ color:transparent; -webkit-text-stroke:2px var(--text); }
+.hero-bar{ position:relative; z-index:2; display:grid; grid-template-columns:1.3fr 1fr auto; gap:24px; align-items:end; border-top:1px solid var(--line); padding:22px 0 28px; }
+.hero-bar p{ max-width:420px; color:var(--dim); }
+
+/* ---------- marquee ---------- */
+.ticker{ border-bottom:1px solid var(--line); overflow:hidden; background:var(--accent); color:var(--bg); }
+.ticker-row{ display:flex; gap:40px; width:max-content; padding:12px 0; font-family:var(--display); font-weight:800; font-size:20px; text-transform:uppercase; letter-spacing:-.02em; animation:tick 26s linear infinite; }
+.ticker-row span::after{ content:'✕'; margin-left:40px; }
+@keyframes tick{ to{ transform:translateX(-50%); } }
+
+/* ---------- sections ---------- */
+.sec{ padding:clamp(90px,12vw,150px) 0; border-bottom:1px solid var(--line); }
+.sec-h{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:50px; }
+.sec-h h2{ font-family:var(--display); font-weight:900; font-size:clamp(40px,7vw,104px); line-height:.85; letter-spacing:-.06em; text-transform:uppercase; }
+.sec-h h2 span{ color:var(--accent); }
+.sec-h p{ max-width:400px; color:var(--dim); }
+
+/* artists */
+.artists{ display:grid; grid-template-columns:repeat(6,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+.artist{ border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px; display:flex; flex-direction:column; gap:12px; min-height:220px; transition:background .3s ease, color .3s ease; }
+.artist:hover{ background:var(--text); color:var(--bg); }
+.artist .n{ font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.03em; text-transform:uppercase; line-height:1; }
+.artist .s{ font-size:12px; opacity:.7; }
+.artist .w{ margin-top:auto; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.artist .w b{ font-family:var(--display); font-size:28px; display:block; letter-spacing:-.04em; }
+.artist .open{ color:var(--accent); }
+
+/* flash sheet + magnifier */
+.flash-wrap{ display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:24px; align-items:start; }
+.sheet{ position:relative; background:#EFE9DD; color:#151313; padding:16px; border:1px solid var(--line); cursor:none; touch-action:pan-y;
+  background-image:radial-gradient(rgba(0,0,0,.05) 1px, transparent 1.4px); background-size:5px 5px; }
+.sheet-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.design{ position:relative; aspect-ratio:1; border:1.5px dashed rgba(21,19,19,.25); display:grid; place-items:center; padding:8%; background:none; cursor:none; }
+.design svg{ width:100%; height:100%; overflow:visible; }
+.design svg .o, .big svg .o{ fill:none; stroke:#151313; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
+.design svg .r, .big svg .r{ fill:var(--accent); stroke:#151313; stroke-width:2.2; stroke-linejoin:round; }
+.design svg .k, .big svg .k{ fill:#151313; }
+.design .lbl{ position:absolute; left:8px; bottom:6px; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:#6b635a; }
+.design.sel{ border-color:var(--accent); border-style:solid; }
+.lens{ position:absolute; z-index:5; width:200px; height:200px; margin:-100px 0 0 -100px; border-radius:50%; overflow:hidden; pointer-events:none;
+  border:3px solid #151313; box-shadow:0 0 0 2px #EFE9DD, 0 18px 40px rgba(0,0,0,.55), inset 0 0 30px rgba(0,0,0,.25); background:#EFE9DD; opacity:0; transform:scale(.6); transition:opacity .2s ease, transform .3s var(--ease); }
+.lens.on{ opacity:1; transform:scale(1); }
+.lens .zoom{ position:absolute; left:0; top:0; transform-origin:0 0; }
+.lens::after{ content:''; position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.35), transparent 40%); }
+.detail{ border:1px solid var(--line); padding:24px; position:sticky; top:calc(var(--nav-h) + 20px); }
+.detail .big{ background:#EFE9DD; aspect-ratio:1; display:grid; place-items:center; padding:14%; margin-bottom:18px; }
+.detail .big svg{ width:100%; height:100%; overflow:visible; }
+.detail h3{ font-family:var(--display); font-weight:800; font-size:28px; letter-spacing:-.04em; text-transform:uppercase; line-height:1; }
+.detail dl{ margin:14px 0 20px; display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:13px; }
+.detail dt{ color:var(--faint); text-transform:uppercase; letter-spacing:.1em; font-size:11px; padding-top:2px; }
+.flash-note{ margin-top:12px; font-size:12px; color:var(--faint); }
+
+/* calculator */
+.calc{ display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:24px; }
+.bodymap{ border:1px solid var(--line); padding:20px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.bodymap svg{ width:min(100%, 280px); height:auto; }
+.zone{ fill:#1C1A1A; stroke:var(--faint); stroke-width:1; cursor:pointer; transition:fill .25s ease; outline:none; }
+.zone:hover, .zone:focus-visible{ fill:#3A1414; }
+.zone.on{ fill:var(--accent); stroke:var(--text); }
+.view-toggle{ display:flex; border:1px solid var(--line); }
+.view-toggle button{ border:none; background:none; padding:8px 16px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; color:var(--dim); }
+.view-toggle button[aria-pressed="true"]{ background:var(--text); color:var(--bg); }
+.form{ border:1px solid var(--line); display:grid; }
+.row{ padding:20px; border-bottom:1px solid var(--line); }
+.row:last-child{ border-bottom:none; }
+.row .rh{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px; }
+.row .rh b{ font-family:var(--display); font-weight:800; font-size:13px; letter-spacing:.02em; text-transform:uppercase; }
+.row .rh span{ font-size:12px; color:var(--dim); }
+.opts{ display:flex; flex-wrap:wrap; gap:6px; }
+.opt{ padding:9px 14px; border:1px solid var(--line); background:none; cursor:pointer; font-size:12px; letter-spacing:.06em; text-transform:uppercase; transition:background .2s ease, color .2s ease, border-color .2s ease; }
+.opt:hover{ border-color:var(--text); }
+.opt[aria-pressed="true"]{ background:var(--text); color:var(--bg); border-color:var(--text); }
+input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:28px; background:transparent; cursor:pointer; }
+input[type=range]::-webkit-slider-runnable-track{ height:3px; background:linear-gradient(90deg, var(--accent) var(--p,30%), var(--line) var(--p,30%)); }
+input[type=range]::-moz-range-track{ height:3px; background:var(--line); }
+input[type=range]::-moz-range-progress{ height:3px; background:var(--accent); }
+input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:22px; height:22px; margin-top:-9.5px; background:var(--text); border:3px solid var(--accent); clip-path:polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+input[type=range]::-moz-range-thumb{ width:20px; height:20px; background:var(--text); border:3px solid var(--accent); border-radius:0; transform:rotate(45deg); }
+.size-out{ font-family:var(--display); font-weight:900; font-size:44px; letter-spacing:-.05em; line-height:1; }
+.size-out small{ font-family:var(--mono); font-size:13px; letter-spacing:0; color:var(--dim); font-weight:400; }
+.quote{ background:var(--text); color:var(--bg); padding:24px 20px; display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; }
+.quote .price{ grid-column:1 / -1; }
+.quote .price small{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.6; }
+.quote .price div{ font-family:var(--display); font-weight:900; font-size:clamp(40px,6vw,68px); letter-spacing:-.06em; line-height:.95; }
+.quote .k{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; opacity:.6; }
+.quote .v{ font-family:var(--display); font-weight:800; font-size:20px; letter-spacing:-.03em; }
+.quote .note{ grid-column:1 / -1; font-size:12px; opacity:.7; border-top:1px dashed rgba(10,10,10,.3); padding-top:12px; }
+.quote .ink{ grid-column:1 / -1; border-color:var(--bg); color:var(--bg); justify-content:center; }
+.quote .ink::before{ background:var(--accent); }
+.quote .ink:hover{ color:var(--text); }
+
+/* aftercare + cta */
+.care{ display:grid; grid-template-columns:repeat(4,1fr); border-left:1px solid var(--line); border-top:1px solid var(--line); }
+.care div{ border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px; }
+.care b{ display:block; font-family:var(--display); font-weight:900; font-size:40px; color:var(--accent); letter-spacing:-.05em; line-height:1; }
+.care h4{ margin-top:14px; font-family:var(--display); font-weight:800; font-size:15px; text-transform:uppercase; letter-spacing:-.01em; }
+.care p{ margin-top:6px; font-size:13px; color:var(--dim); }
+.cta{ padding:clamp(100px,14vw,170px) 0; text-align:center; }
+.cta h2{ font-family:var(--display); font-weight:900; font-size:clamp(52px,12vw,190px); line-height:.8; letter-spacing:-.07em; text-transform:uppercase; }
+.cta h2 span{ color:var(--accent); }
+.cta p{ margin:24px auto 34px; max-width:420px; color:var(--dim); }
+.foot{ border-top:1px solid var(--line); padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px)); font-size:12px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); }
+.foot a:hover{ color:var(--accent); }
+
+.rv{ opacity:0; transform:translateY(40px); }
+
+@media(max-width:1080px){ .artists{ grid-template-columns:repeat(3,1fr); } .care{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:900px){
+  .flash-wrap, .calc{ grid-template-columns:1fr; }
+  .detail{ position:static; }
+  .hero-photo{ inset:var(--nav-h) 0 40% 0; }
+  .hero-photo::before{ background:linear-gradient(0deg, var(--bg) 0%, transparent 50%); }
+  .hero-bar{ grid-template-columns:1fr; }
+}
+@media(max-width:560px){ .artists{ grid-template-columns:1fr 1fr; } .care{ grid-template-columns:1fr; } .sheet-grid{ gap:6px; } .quote{ grid-template-columns:1fr; } }
+@media (hover:none){ .sheet, .design{ cursor:pointer; } }
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+@media(max-width:520px){ .nav-r > .ink{ display:none; } }
+</style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top">Marrow<span>.</span></a>
+    <div class="nav-r">
+      <span class="status"><i></i>Waitlist open · Sundays 9pm</span>
+      <a class="ink red" href="#calculator" style="height:54px">Get a quote</a>
+      <button class="blades" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+    </div>
   </div>
 </header>
+<nav class="slash-menu" id="menu" aria-label="Main" hidden>
+  <a href="#artists">Artists</a>
+  <a href="#flash">Flash</a>
+  <a href="#calculator">Quote</a>
+  <a href="#aftercare">Aftercare</a>
+  <div class="small"><a href="../index.html#work" style="font-size:inherit;font-family:inherit;letter-spacing:inherit;display:inline">← Back to Bazozo</a></div>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Tattoo Collective</div>
-    <h1><span class="word"><span class="word-inner">Ink</span></span> <span class="word"><span class="word-inner">that</span></span> <span class="word"><span class="word-inner">outlives</span></span> <span class="word"><span class="word-inner">the</span></span> <span class="word"><span class="word-inner">trend</span></span></h1>
-    <p>Marrow's booking site runs on a grainy film aesthetic — the same texture the collective tattoos in.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Marrow is six artists sharing one studio and one waitlist. The site exists mainly to manage that waitlist honestly — real availability, real wait times, no fake urgency.</p>
-      <p>Every artist's portfolio is shot on film, scanned, and left ungraded, because that's closer to how the work actually looks on skin.</p>
+<main id="top">
+  <section class="hero">
+    <div class="hero-photo" id="heroPhoto"><img src="../images/marrowstudio.jpg" alt="A tattoo artist in black gloves working on a client's hand" width="1920" height="1280"></div>
+    <div class="wrap hero-txt">
+      <span class="tag rv-h"><b>●</b> Six artists · one waitlist · Est. 2016</span>
+      <h1 style="margin-top:18px"><span class="row"><span>Ink</span></span><span class="row"><span class="stroke">that</span></span><span class="row"><span>stays.</span></span></h1>
     </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Grain-True Galleries</h3><p>Portfolio shots keep their film grain — no smoothing filters over healed work.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Real Waitlists</h3><p>Live booking windows per artist, updated weekly, no fake countdown timers.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Aftercare Library</h3><p>A full aftercare guide ships with every booking confirmation automatically.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Join the waitlist</h2>
-    <p class="reveal">Openings post every Sunday night.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Check availability</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+    <div class="wrap">
+      <div class="hero-bar rv-h">
+        <p>Marrow is six tattooers sharing one studio and one honest waitlist. Real availability, real prices, no fake countdowns.</p>
+        <span class="tag">Shot on film · left ungraded</span>
+        <a class="ink" href="#flash">See the flash <span aria-hidden="true">↓</span></a>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-row"><span>Fine line</span><span>Blackwork</span><span>Neo-traditional</span><span>Realism</span><span>Lettering</span><span>Walk-in Fridays</span><span>Fine line</span><span>Blackwork</span><span>Neo-traditional</span><span>Realism</span><span>Lettering</span><span>Walk-in Fridays</span></div></div>
+
+  <section class="sec" id="artists">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">Six<br><span>hands.</span></h2><p class="rv">Waitlists are updated every Sunday. If a number says two weeks, it means two weeks.</p></div>
+      <div class="artists">
+        <div class="artist rv"><span class="tag">01</span><span class="n">Vera Lind</span><span class="s">Fine line, botanicals</span><span class="w"><b>2 wks</b>waitlist</span></div>
+        <div class="artist rv"><span class="tag">02</span><span class="n">Okan Ruiz</span><span class="s">Blackwork, ornamental</span><span class="w"><b>5 wks</b>waitlist</span></div>
+        <div class="artist rv"><span class="tag">03</span><span class="n">Mia Sato</span><span class="s">Neo-traditional, colour</span><span class="w"><b>3 wks</b>waitlist</span></div>
+        <div class="artist rv"><span class="tag">04</span><span class="n">Dev Arora</span><span class="s">Black &amp; grey realism</span><span class="w"><b>8 wks</b>waitlist</span></div>
+        <div class="artist rv"><span class="tag">05</span><span class="n">June Okafor</span><span class="s">Lettering, script</span><span class="w open"><b>Open</b>this week</span></div>
+        <div class="artist rv"><span class="tag">06</span><span class="n">Theo Brandt</span><span class="s">Traditional flash</span><span class="w"><b>1 wk</b>waitlist</span></div>
+      </div>
     </div>
+  </section>
+
+  <section class="sec" id="flash">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">Flash<br><span>sheet.</span></h2><p class="rv">Move over the sheet to look closer. Pick a design to see its size and price, then send it straight to the calculator.</p></div>
+      <div class="flash-wrap">
+        <div class="rv">
+          <div class="sheet" id="sheet">
+            <div class="sheet-grid" id="sheetGrid"></div>
+            <div class="lens" id="lens" aria-hidden="true"></div>
+          </div>
+          <p class="flash-note">Original flash by Theo Brandt. Each design is tattooed a maximum of three times.</p>
+        </div>
+        <aside class="detail rv" aria-live="polite">
+          <div class="big" id="detailArt"></div>
+          <span class="tag" id="detailNo">No. 01</span>
+          <h3 id="detailName" style="margin-top:6px">—</h3>
+          <dl><dt>Style</dt><dd id="dStyle">—</dd><dt>Best size</dt><dd id="dSize">—</dd><dt>From</dt><dd id="dPrice">—</dd><dt>Times used</dt><dd id="dUsed">—</dd></dl>
+          <button class="ink red" id="useDesign" type="button">Price this design <span aria-hidden="true">→</span></button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="calculator">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">Place it.<br><span>Price it.</span></h2><p class="rv">Pick a body zone, a size and a style. The estimate updates live, including how many sittings it will take.</p></div>
+      <div class="calc">
+        <div class="bodymap rv">
+          <div class="view-toggle" role="group" aria-label="Body view"><button type="button" data-view="front" aria-pressed="true">Front</button><button type="button" data-view="back" aria-pressed="false">Back</button></div>
+          <svg id="body" viewBox="0 0 200 400" role="group" aria-label="Body placement map"></svg>
+          <span class="tag" id="zoneName">Forearm</span>
+        </div>
+        <div class="rv">
+          <div class="form">
+            <div class="row"><div class="rh"><b>Placement</b><span id="zoneInfo">Low pain · flat canvas</span></div><div class="opts" id="zoneOpts"></div></div>
+            <div class="row"><div class="rh"><b>Size</b><span>Longest side</span></div><div class="size-out"><span id="sizeOut">10</span> <small>cm</small></div><input type="range" id="size" min="3" max="40" value="10" aria-label="Size in centimetres"></div>
+            <div class="row"><div class="rh"><b>Style</b><span id="styleInfo"></span></div><div class="opts" id="styleOpts"></div></div>
+            <div class="row"><div class="rh"><b>Ink</b><span>Colour adds packing time</span></div><div class="opts" id="inkOpts"><button class="opt" type="button" data-ink="1" aria-pressed="true">Black &amp; grey</button><button class="opt" type="button" data-ink="1.25" aria-pressed="false">Full colour</button></div></div>
+          </div>
+          <div class="quote" aria-live="polite">
+            <div class="price"><small>Estimated price</small><div><span id="pLow">$0</span>–<span id="pHigh">$0</span></div></div>
+            <div><div class="k">Time in chair</div><div class="v" id="qHours">—</div></div>
+            <div><div class="k">Sessions</div><div class="v" id="qSessions">—</div></div>
+            <div><div class="k">Deposit</div><div class="v" id="qDeposit">—</div></div>
+            <div><div class="k">Best artist</div><div class="v" id="qArtist">—</div></div>
+            <p class="note" id="qNote">Estimate only. Your artist confirms the final price after a stencil consult.</p>
+            <a class="ink" href="../index.html#contact">Join the waitlist with this quote</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="aftercare">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">After<span>care.</span></h2><p class="rv">The full guide ships with every booking confirmation. Here's the short version.</p></div>
+      <div class="care">
+        <div class="rv"><b>2h</b><h4>Keep it wrapped</h4><p>Leave the film on for two hours, then wash with lukewarm water and fragrance-free soap.</p></div>
+        <div class="rv"><b>3×</b><h4>Thin layers</h4><p>A rice-grain of balm, three times a day. More is not better.</p></div>
+        <div class="rv"><b>14d</b><h4>No soaking</h4><p>No baths, pools or sea for two weeks. Showers are fine.</p></div>
+        <div class="rv"><b>∞</b><h4>SPF forever</h4><p>Sun fades ink faster than anything else. SPF 50 on healed work.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <span class="tag rv">Openings post every Sunday night</span>
+      <h2 class="rv" style="margin-top:20px">Join the<br><span>list.</span></h2>
+      <p class="rv">One form, one waitlist, all six artists. You'll hear back within a week either way.</p>
+      <a class="ink red rv" href="../index.html#contact">Check availability <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="marrowstudio.js" defer></script>
 </body>
 </html>

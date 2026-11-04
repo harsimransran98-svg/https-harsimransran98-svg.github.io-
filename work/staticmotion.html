@@ -3,173 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Static Motion — Case Study by Bazozo</title>
-<meta name="description" content="Static Motion's reel site is built on looping fullscreen showreels that subtly evolve each pass.">
+<title>Static Motion — Beat-sync &amp; speed-ramp studio · Built by Bazozo Studio</title>
+<meta name="description" content="Static Motion: a high-energy commercial edit studio with a live 4-camera switcher, a 60/120fps speed-ramp curve editor and a scrubbable beat-synced waveform. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#090A0F">
 <link rel="canonical" href="https://bazozo.in/work/staticmotion.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="preload" as="image" href="../images/staticmotion.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#c95c9e; --site-hero-image:url('../images/staticmotion.jpg'); }</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --bg:#090A0F;
+  --panel:#101219;
+  --panel-2:#161922;
+  --edge:#232733;
+  --text:#F2F4F7;
+  --dim:#8B92A3;
+  --faint:#4F5566;
+  --accent:#CCFF00;
+  --cyan:#00E5FF;
+  --magenta:#FF2BD6;
+  --orange:#FF8A00;
+  --display:'Anton', 'Impact', sans-serif;
+  --sans:'Inter', system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:70px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.55; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; cursor:pointer; }
+canvas, svg{ display:block; }
+.wrap{ width:100%; max-width:1400px; margin:0 auto; padding:0 clamp(14px,3vw,40px); }
+::selection{ background:var(--accent); color:#000; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.k{ font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+.k b{ color:var(--accent); }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); transition:background .3s ease; }
+.nav.scrolled{ background:rgba(9,10,15,.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--edge); }
+.nav .wrap{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.logo{ font-family:var(--display); font-size:26px; letter-spacing:.02em; text-transform:uppercase; line-height:1; }
+.logo span{ color:var(--accent); }
+.nav-r{ display:flex; align-items:center; gap:12px; }
+/* equalizer hamburger */
+.eq{ position:relative; width:52px; height:52px; border-radius:12px; border:1px solid var(--edge); background:var(--panel); display:flex; align-items:center; justify-content:center; gap:4px; }
+.eq i{ width:4px; border-radius:2px; background:var(--text); height:var(--h); transition:height .3s ease, transform .4s cubic-bezier(.5,1.6,.4,1), opacity .2s ease, background .2s ease; }
+.eq i:nth-child(1){ --h:10px; } .eq i:nth-child(2){ --h:22px; } .eq i:nth-child(3){ --h:16px; } .eq i:nth-child(4){ --h:8px; }
+.eq:hover i{ background:var(--accent); animation:eq .6s ease-in-out infinite alternate; }
+.eq:hover i:nth-child(2){ animation-delay:-.2s; } .eq:hover i:nth-child(3){ animation-delay:-.4s; } .eq:hover i:nth-child(4){ animation-delay:-.1s; }
+@keyframes eq{ 0%{ height:6px; } 100%{ height:24px; } }
+.eq[aria-expanded="true"] i{ animation:none; background:var(--accent); }
+.eq[aria-expanded="true"] i:nth-child(1), .eq[aria-expanded="true"] i:nth-child(4){ opacity:0; transform:scaleY(0); }
+.eq[aria-expanded="true"] i:nth-child(2){ height:26px; transform:translateX(4px) rotate(45deg); }
+.eq[aria-expanded="true"] i:nth-child(3){ height:26px; transform:translateX(-4px) rotate(-45deg); }
+.menu{ position:fixed; inset:0; z-index:75; background:var(--accent); color:#000; display:flex; flex-direction:column; justify-content:center; padding:calc(var(--nav-h) + 20px) clamp(14px,3vw,40px) 30px; }
+.menu a.big{ display:block; font-family:var(--display); font-size:clamp(56px,13vw,150px); line-height:.92; text-transform:uppercase; transition:transform .3s var(--ease), color .2s ease; }
+.menu a.big:hover{ transform:translateX(16px) skewX(-6deg); color:#fff; -webkit-text-stroke:2px #000; }
+.menu .back{ margin-top:24px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; font-size:13px; }
+
+/* kinetic glitch buttons */
+.glitch{ position:relative; display:inline-flex; align-items:center; gap:10px; height:54px; padding:0 26px; border:none; border-radius:10px; background:var(--accent); color:#000;
+  font-family:var(--display); font-size:19px; letter-spacing:.04em; text-transform:uppercase; overflow:hidden; transition:transform .15s ease; }
+.glitch span{ position:relative; z-index:1; }
+.glitch::before, .glitch::after{ content:attr(data-text); position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; font:inherit; letter-spacing:inherit; pointer-events:none; }
+.glitch::before{ color:var(--magenta); }
+.glitch::after{ color:var(--cyan); }
+.glitch:hover{ transform:skewX(-6deg); }
+.glitch:hover span{ animation:jit .25s steps(2) infinite; }
+.glitch:hover::before{ opacity:.9; animation:gl1 .35s steps(3) infinite; }
+.glitch:hover::after{ opacity:.9; animation:gl2 .35s steps(3) infinite; }
+@keyframes gl1{ 0%{ clip-path:inset(0 0 70% 0); transform:translate(-4px,0); } 50%{ clip-path:inset(40% 0 30% 0); transform:translate(3px,0); } 100%{ clip-path:inset(75% 0 0 0); transform:translate(-2px,0); } }
+@keyframes gl2{ 0%{ clip-path:inset(60% 0 10% 0); transform:translate(4px,0); } 50%{ clip-path:inset(10% 0 60% 0); transform:translate(-3px,0); } 100%{ clip-path:inset(30% 0 45% 0); transform:translate(2px,0); } }
+@keyframes jit{ 50%{ transform:translate(1px,-1px); } }
+.glitch.ghost{ background:transparent; color:var(--text); box-shadow:inset 0 0 0 2px var(--edge); }
+.glitch.ghost:hover{ box-shadow:inset 0 0 0 2px var(--accent); }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; isolation:isolate; min-height:88svh; padding:calc(var(--nav-h) + 30px) 0 40px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+.hero-bg{ position:absolute; inset:0; z-index:-1; }
+.hero-bg img{ width:100%; height:100%; object-fit:cover; opacity:.45; filter:saturate(1.3); }
+.hero-bg::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(9,10,15,.2), var(--bg) 92%); }
+.hero h1{ font-family:var(--display); font-weight:400; font-size:clamp(70px,15vw,230px); line-height:.86; text-transform:uppercase; letter-spacing:-.01em; }
+.hero h1 .row{ display:block; overflow:hidden; }
+.hero h1 .row > span{ display:inline-block; }
+.hero h1 .lime{ color:var(--accent); }
+.hero-foot{ margin-top:26px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+.hero-foot p{ max-width:440px; color:var(--dim); font-size:17px; }
+.hero-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+.strip{ border-block:1px solid var(--edge); background:var(--panel); overflow:hidden; }
+.strip-row{ display:flex; gap:44px; width:max-content; padding:14px 0; font-family:var(--display); font-size:22px; text-transform:uppercase; animation:scroll 22s linear infinite; }
+.strip-row span{ display:inline-flex; align-items:center; gap:44px; }
+.strip-row span::after{ content:'●'; color:var(--accent); font-size:12px; }
+@keyframes scroll{ to{ transform:translateX(-50%); } }
+
+/* ---------- studio ---------- */
+.studio{ padding:clamp(70px,9vw,120px) 0; }
+.sh{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:28px; }
+.sh h2{ font-family:var(--display); font-weight:400; font-size:clamp(46px,7vw,104px); line-height:.9; text-transform:uppercase; }
+.sh h2 span{ color:var(--accent); }
+.sh p{ max-width:420px; color:var(--dim); }
+.grid{ display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:12px; }
+.card{ background:var(--panel); border:1px solid var(--edge); border-radius:14px; overflow:hidden; }
+.ch{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--edge); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.ch b{ color:var(--text); }
+.pgm{ position:relative; aspect-ratio:16/9; background:#000; }
+.pgm canvas{ width:100%; height:100%; }
+.tally{ position:absolute; top:12px; left:12px; display:flex; gap:8px; align-items:center; padding:5px 10px; border-radius:6px; background:#E0002A; font-size:11px; font-weight:800; letter-spacing:.14em; }
+.tally i{ width:7px; height:7px; border-radius:50%; background:#fff; animation:blink 1s steps(2) infinite; }
+@keyframes blink{ 50%{ opacity:.3; } }
+.pgm-hud{ position:absolute; left:12px; right:12px; bottom:10px; display:flex; justify-content:space-between; gap:10px; font-size:12px; font-weight:700; letter-spacing:.06em; text-shadow:0 1px 3px #000; pointer-events:none; font-variant-numeric:tabular-nums; }
+.pgm-hud .spd{ color:var(--accent); }
+.beat-dots{ position:absolute; top:12px; right:12px; display:flex; gap:5px; }
+.beat-dots i{ width:10px; height:10px; border-radius:3px; background:rgba(255,255,255,.2); transition:background .05s; }
+.beat-dots i.on{ background:var(--accent); box-shadow:0 0 10px var(--accent); }
+.cams{ display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px; }
+.cam{ position:relative; aspect-ratio:16/9; border-radius:8px; overflow:hidden; border:2px solid transparent; background:#000; padding:0; transition:border-color .1s ease, transform .2s var(--ease); }
+.cam canvas{ width:100%; height:100%; }
+.cam .lab{ position:absolute; left:6px; top:6px; padding:2px 7px; border-radius:4px; background:rgba(0,0,0,.65); font-size:11px; font-weight:800; letter-spacing:.08em; }
+.cam .kbd{ position:absolute; right:6px; top:6px; padding:1px 6px; border-radius:4px; border:1px solid rgba(255,255,255,.3); font-size:10px; color:rgba(255,255,255,.75); }
+.cam .nm{ position:absolute; left:6px; bottom:5px; font-size:10.5px; color:rgba(255,255,255,.8); text-shadow:0 1px 2px #000; }
+.cam:hover{ transform:scale(1.02); }
+.cam[aria-pressed="true"]{ border-color:#E0002A; }
+.cam.pvw{ border-color:#18C964; }
+.toolbar{ display:flex; flex-wrap:wrap; gap:8px; padding:10px; border-top:1px solid var(--edge); }
+.pill{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:999px; border:1px solid var(--edge); background:var(--panel-2); font-size:12.5px; font-weight:700; letter-spacing:.04em; transition:border-color .2s ease, background .2s ease, color .2s ease; }
+.pill:hover{ border-color:var(--accent); }
+.pill[aria-pressed="true"]{ background:var(--accent); color:#000; border-color:var(--accent); }
+.pill .dot{ width:8px; height:8px; border-radius:50%; background:currentColor; }
+.lower{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.35fr); gap:12px; margin-top:12px; }
+.ramp svg{ width:100%; height:auto; touch-action:none; }
+.ramp .ax{ stroke:var(--edge); stroke-width:1; }
+.ramp .axt{ font:600 10px var(--sans); fill:var(--faint); letter-spacing:.06em; }
+.ramp .floor{ stroke:var(--magenta); stroke-width:1.2; stroke-dasharray:4 4; }
+.ramp .floor-t{ font:700 10px var(--sans); fill:var(--magenta); letter-spacing:.06em; }
+.ramp .curve{ fill:none; stroke:var(--accent); stroke-width:3; filter:drop-shadow(0 0 6px rgba(204,255,0,.5)); }
+.ramp .area{ fill:rgba(204,255,0,.08); }
+.ramp .arm{ stroke:rgba(242,244,247,.4); stroke-width:1; }
+.ramp .h{ fill:var(--bg); stroke:var(--accent); stroke-width:2.5; cursor:grab; }
+.ramp .h:active{ cursor:grabbing; }
+.ramp .end{ fill:var(--accent); }
+.ramp .ph{ fill:#fff; }
+.ramp-read{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:0 14px 12px; font-size:12px; color:var(--dim); font-variant-numeric:tabular-nums; }
+.ramp-read code{ font-family:ui-monospace, monospace; color:var(--accent); }
+.wave{ position:relative; padding:10px 14px 14px; }
+.wave canvas{ width:100%; height:120px; border-radius:8px; background:#07080C; cursor:col-resize; touch-action:none; }
+.cuts{ position:relative; height:26px; margin-top:8px; border-radius:6px; background:#07080C; overflow:hidden; }
+.cuts span{ position:absolute; top:3px; bottom:3px; border-radius:4px; font-size:10px; font-weight:800; color:#000; padding:3px 5px; overflow:hidden; white-space:nowrap; }
+.tr{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:0 14px 14px; }
+.tr .tc{ font-weight:800; font-size:18px; letter-spacing:.04em; font-variant-numeric:tabular-nums; margin-right:auto; }
+.tr .tc small{ font-size:11px; color:var(--dim); font-weight:600; margin-left:6px; letter-spacing:.1em; }
+.hint{ padding:0 14px 12px; font-size:12px; color:var(--faint); }
+
+/* reels + cta */
+.reels{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:40px; }
+.reel{ position:relative; border-radius:14px; overflow:hidden; aspect-ratio:4/5; background:var(--panel); border:1px solid var(--edge); }
+.reel img{ width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease), filter .4s ease; filter:grayscale(.4) contrast(1.1); }
+.reel:hover img{ transform:scale(1.06); filter:none; }
+.reel .info{ position:absolute; inset:auto 0 0 0; padding:18px; background:linear-gradient(transparent, rgba(0,0,0,.85)); }
+.reel h3{ font-family:var(--display); font-weight:400; font-size:30px; text-transform:uppercase; line-height:1; }
+.reel p{ font-size:13px; color:var(--dim); margin-top:4px; }
+.reel .stat{ position:absolute; top:14px; left:14px; padding:4px 10px; border-radius:999px; background:var(--accent); color:#000; font-size:11px; font-weight:800; letter-spacing:.06em; }
+.cta{ text-align:center; padding:clamp(100px,13vw,170px) 0; border-top:1px solid var(--edge); }
+.cta h2{ font-family:var(--display); font-weight:400; font-size:clamp(64px,13vw,200px); line-height:.86; text-transform:uppercase; }
+.cta h2 span{ color:var(--accent); }
+.cta p{ margin:20px auto 30px; max-width:440px; color:var(--dim); }
+.foot{ border-top:1px solid var(--edge); padding:24px 0 calc(24px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a:hover{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:1000px){ .grid, .lower{ grid-template-columns:1fr; } .reels{ grid-template-columns:1fr 1fr; } }
+@media(max-width:560px){ .reels{ grid-template-columns:1fr; } .nav-r .glitch{ display:none; } }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition-duration:.01ms !important; } .rv{ opacity:1; transform:none; } }
+</style>
 </head>
 <body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Static<span>/</span>Motion</a>
+    <div class="nav-r">
+      <a class="glitch" href="#studio" data-text="Open studio" style="height:46px;font-size:16px;padding:0 18px"><span>Open studio</span></a>
+      <button class="eq" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i><i></i></button>
+    </div>
   </div>
 </header>
+<nav class="menu" id="menu" aria-label="Main" hidden>
+  <a class="big" href="#studio">Studio</a>
+  <a class="big" href="#reels">Reels</a>
+  <a class="big" href="#contact">Book a cut</a>
+  <a class="back" href="../index.html#work">← Back to Bazozo</a>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Motion Design Studio</div>
-    <h1><span class="word"><span class="word-inner">Loops</span></span> <span class="word"><span class="word-inner">that</span></span> <span class="word"><span class="word-inner">never</span></span> <span class="word"><span class="word-inner">quite</span></span> <span class="word"><span class="word-inner">repeat</span></span></h1>
-    <p>Static Motion's reel site is built on looping fullscreen showreels that subtly evolve each pass.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Static Motion is a two-person motion design studio working mostly in brand identity animation. The showreel on this site loops seamlessly but shifts slightly with each cycle — a small signature of the craft.</p>
-      <p>Every reel links to the full project breakdown: brief, style frames, and final delivery specs.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Evolving Loop Reels</h3><p>Showreels loop seamlessly but subtly evolve — never a static repeat.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Style Frame Breakdowns</h3><p>Every project includes the original style frames alongside the final animation.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Delivery Specs Listed</h3><p>Format, frame rate, and codec specs are published per project for technical clients.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Start a motion project</h2>
-    <p class="reveal">Static Motion takes on select brand animation work.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Discuss your brief</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+<main id="top">
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"><img src="../images/staticmotion.jpg" alt="" width="1920" height="1280"></div>
+    <div class="wrap">
+      <span class="k rv-h"><b>●</b> Commercials · Reels · Launch spots</span>
+      <h1 style="margin-top:14px"><span class="row"><span>Cut on</span></span><span class="row"><span class="lime">the beat.</span></span></h1>
+      <div class="hero-foot rv-h">
+        <p>Static Motion cuts high-energy commercials and social reels: speed ramps that land on the kick, multicam switched live, nothing off-grid.</p>
+        <div class="hero-actions">
+          <a class="glitch" href="#studio" data-text="Try the studio"><span>Try the studio</span></a>
+          <a class="glitch ghost" href="#reels" data-text="Watch reels"><span>Watch reels</span></a>
+        </div>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <div class="strip" aria-hidden="true"><div class="strip-row"><span>120 fps slow-mo</span><span>Beat-synced cuts</span><span>4-cam live switch</span><span>Speed ramps</span><span>9:16 · 16:9 · 1:1</span><span>120 fps slow-mo</span><span>Beat-synced cuts</span><span>4-cam live switch</span><span>Speed ramps</span><span>9:16 · 16:9 · 1:1</span></div></div>
+
+  <section class="studio" id="studio">
+    <div class="wrap">
+      <div class="sh"><h2 class="rv">Beat-sync &amp;<br><span>speed-ramp studio.</span></h2><p class="rv">Press play (sound on), then cut cameras with 1–4 or let auto-cut land every bar. Drag the curve handles to shape the slow-motion ramp.</p></div>
+      <div class="grid">
+        <div class="card rv">
+          <div class="ch"><span>Program · <b id="pgmCam">Cam A</b></span><span id="pgmFmt">1080p · 24p timeline</span></div>
+          <div class="pgm">
+            <canvas id="pgm" width="1280" height="720"></canvas>
+            <span class="tally"><i></i>PGM</span>
+            <div class="beat-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="pgm-hud"><span id="hudCam">CAM A · WIDE</span><span class="spd" id="hudSpd">SPEED 100%</span><span id="hudFps">SHOT 120 FPS</span></div>
+          </div>
+        </div>
+        <div class="card rv">
+          <div class="ch"><span>Multicam · <b>Live switcher</b></span><span>Keys 1–4</span></div>
+          <div class="cams" id="cams" role="group" aria-label="Camera switcher"></div>
+          <div class="toolbar">
+            <button class="pill" id="autoBtn" type="button" aria-pressed="true"><span class="dot"></span>Auto-cut on bar</button>
+            <button class="pill" id="clearBtn" type="button">Clear cuts</button>
+          </div>
+        </div>
+      </div>
+      <div class="lower">
+        <div class="card ramp rv">
+          <div class="ch"><span>Speed ramp · <b>Velocity curve</b></span>
+            <span role="group" aria-label="Capture frame rate" style="display:flex;gap:6px"><button class="pill" type="button" data-fps="60" aria-pressed="false" style="height:30px;padding:0 10px">60 fps</button><button class="pill" type="button" data-fps="120" aria-pressed="true" style="height:30px;padding:0 10px">120 fps</button></span></div>
+          <svg id="ramp" viewBox="0 0 420 220" role="img" aria-label="Speed ramp curve editor: drag the two handles"></svg>
+          <div class="ramp-read"><span>Ease: <code id="bez">cubic-bezier(.30, .00, .70, .00)</code></span><span id="rampMin">Min speed 20%</span></div>
+          <div class="toolbar" style="border-top:none;padding-top:0" role="group" aria-label="Ramp presets">
+            <button class="pill" type="button" data-pre="hero" aria-pressed="true">Hero ramp</button>
+            <button class="pill" type="button" data-pre="whip" aria-pressed="false">Whip in</button>
+            <button class="pill" type="button" data-pre="drop" aria-pressed="false">Drop &amp; snap</button>
+            <button class="pill" type="button" data-pre="none" aria-pressed="false">Real time</button>
+          </div>
+        </div>
+        <div class="card rv">
+          <div class="ch"><span>Audio · <b>Track “Static Pulse” · 120 BPM</b></span><span id="barOut">Bar 1 · Beat 1</span></div>
+          <div class="wave"><canvas id="wave" width="1200" height="240" aria-label="Audio waveform: drag to scrub"></canvas><div class="cuts" id="cuts" aria-label="Cut list"></div></div>
+          <div class="tr">
+            <span class="tc" id="tc">00:00:00<small>/ 00:08:00</small></span>
+            <button class="glitch" id="playBtn" type="button" data-text="Play" style="height:44px;font-size:16px;padding:0 18px"><span id="playLbl">Play</span></button>
+            <button class="pill" id="muteBtn" type="button" aria-pressed="false"><span class="dot"></span>Sound on</button>
+          </div>
+          <p class="hint">The drums are synthesised live in your browser, so nothing is downloaded. Cuts snap to the nearest beat.</p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <section class="studio" id="reels" style="padding-top:0">
+    <div class="wrap">
+      <div class="sh"><h2 class="rv">Recent <span>reels.</span></h2><p class="rv">Every reel is delivered in three aspect ratios, reframed by hand.</p></div>
+      <div class="reels">
+        <article class="reel rv"><img src="../images/ironcladfitness.jpg" alt="Athlete holding a barbell in a front squat in a dark gym" loading="lazy" width="1920" height="1275"><span class="stat">+212% watch time</span><div class="info"><h3>Ironclad · Lift</h3><p>30s gym launch spot · 4-cam · 120 fps ramps</p></div></article>
+        <article class="reel rv"><img src="../images/staticmotion.jpg" alt="Swirling streaks of blue and orange light" loading="lazy" width="1920" height="1280"><span class="stat">2.4M views</span><div class="info"><h3>Afterimage</h3><p>Brand ident · light-painting plates · 15s</p></div></article>
+        <article class="reel rv"><img src="../images/nomadsupplyco.jpg" alt="Hiker with trekking poles next to a red tent in a white studio" loading="lazy" width="1920" height="1280"><span class="stat">9:16 · 16:9 · 1:1</span><div class="info"><h3>Nomad · Pack light</h3><p>Product reel · speed-ramped gear reveals</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contact">
+    <div class="wrap">
+      <span class="k rv">Booking Q3</span>
+      <h2 class="rv" style="margin-top:14px">Make it <span>hit.</span></h2>
+      <p class="rv">Send the rushes and the track. First cut back in 72 hours.</p>
+      <a class="glitch rv" href="../index.html#contact" data-text="Book a cut"><span>Book a cut</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="staticmotion.js" defer></script>
 </body>
 </html>

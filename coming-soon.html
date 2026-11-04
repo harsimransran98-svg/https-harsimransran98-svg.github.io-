@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Showcase Launching Soon — Bazozo Product &amp; Engineering Studio</title>
+<meta name="description" content="This Bazozo showcase is in production. Request a private demo of the stack and see live work before it goes public.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#09090b">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional">
+<link rel="stylesheet" href="coming-soon.css">
+</head>
+<body>
+
+<header class="cs-nav">
+  <a href="index.html" class="cs-brand">bazozo<span>.</span></a>
+  <a href="index.html#craft" class="cs-back" id="backTop"><i aria-hidden="true">&larr;</i> Back to Bazozo Studio</a>
+  <button class="cs-gear-toggle" id="csMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="csMenu">
+    <span class="mono" id="csMenuLabel">Index</span>
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M23.97 12.70L24.40 14.05L28.03 14.48L28.03 17.52L24.40 17.95L23.97 19.30L23.32 20.56L25.58 23.43L23.43 25.58L20.56 23.32L19.30 23.97L17.95 24.40L17.52 28.03L14.48 28.03L14.05 24.40L12.70 23.97L11.44 23.32L8.57 25.58L6.42 23.43L8.68 20.56L8.03 19.30L7.60 17.95L3.97 17.52L3.97 14.48L7.60 14.05L8.03 12.70L8.68 11.44L6.42 8.57L8.57 6.42L11.44 8.68L12.70 8.03L14.05 7.60L14.48 3.97L17.52 3.97L17.95 7.60L19.30 8.03L20.56 8.68L23.43 6.42L25.58 8.57L23.32 11.44ZM19.6 16A3.6 3.6 0 1 0 12.4 16A3.6 3.6 0 1 0 19.6 16Z"/></svg>
+  </button>
+</header>
+
+<div class="cs-menu" id="csMenu" aria-hidden="true" inert>
+  <nav aria-label="Menu">
+    <a href="index.html#work" style="--i:0"><span class="mono">01</span>Selected work</a>
+    <a href="index.html#craft" style="--i:1"><span class="mono">02</span>Craft</a>
+    <a href="index.html#services" style="--i:2"><span class="mono">03</span>Services</a>
+    <a href="index.html#contact" style="--i:3"><span class="mono">04</span>Contact</a>
+  </nav>
+</div>
+
+<main class="cs-main">
+  <section class="cs-hero">
+    <div class="cs-copy">
+      <p class="cs-kicker mono"><span class="cs-dot"></span> R&amp;D bay · case study in production</p>
+      <h1 class="cs-title"><span class="cs-topic" id="csTopic">Next Build</span> <span class="cs-sub">Showcase — Launching Soon</span></h1>
+      <p class="cs-lede" id="csLede">We're engineering a public showcase for this stack right now. Want to see the work before it ships? Ask for a private walkthrough with live builds, code structure and performance numbers.</p>
+
+      <div class="cs-cta">
+        <a class="cs-btn beam" id="csWa" href="https://wa.me/917347500770" target="_blank" rel="noopener noreferrer"><span><i aria-hidden="true">&#9679;</i> Request Private Demo for This Stack</span></a>
+        <a class="cs-btn liquid" id="csMail" href="mailto:hello@bazozo.in"><span>Email the studio</span></a>
+      </div>
+      <a href="index.html#craft" class="cs-back-lg" id="backBottom"><i aria-hidden="true">&larr;</i> Back to Bazozo Studio</a>
+
+      <dl class="cs-spec mono">
+        <div><dt>Stack</dt><dd id="csSpecStack">Next Build</dd></div>
+        <div><dt>Status</dt><dd>In production</dd></div>
+        <div><dt>Demo</dt><dd>Private, on request</dd></div>
+      </dl>
+    </div>
+
+    <figure class="cs-loader" aria-label="Blueprint gear loader. Drag to turn the gears.">
+      <svg id="csRig" viewBox="0 0 420 420" role="img" aria-labelledby="csRigTitle">
+        <title id="csRigTitle">Blueprint gear train, drag to turn</title>
+      </svg>
+      <figcaption class="mono"><span>Drag or scroll to turn the drivetrain</span><b id="csPct">00%</b></figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer class="cs-foot mono">
+  <span>© <span id="csYear"></span> Bazozo · Product &amp; Engineering Studio</span>
+  <a href="index.html">bazozo.in</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="coming-soon.js" defer></script>
+</body>
+</html>

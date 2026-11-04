@@ -3,173 +3,320 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fjord Capital — Case Study by Bazozo</title>
-<meta name="description" content="A venture fund site built around a filterable, data-driven portfolio grid — the whole thesis, laid out in the open.">
+<title>Fjord — AI finance autopilot for growing teams · Built by Bazozo Studio</title>
+<meta name="description" content="Fjord: an AI finance SaaS landing page with a live ledger demo and an interactive ROI and revenue calculator that animates its charts in real time. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#080612">
 <link rel="canonical" href="https://bazozo.in/work/fjordcapital.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="preload" as="image" href="../images/fjordcapital.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#3fbfad; --site-hero-image:url('../images/fjordcapital.jpg'); }</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#080612;
+  --bg-2:#0E0B1F;
+  --panel:#120E26;
+  --text:#F3F0FF;
+  --dim:rgba(243,240,255,.62);
+  --faint:rgba(243,240,255,.34);
+  --violet:#8B5CF6;
+  --violet-2:#A78BFA;
+  --emerald:#10B981;
+  --emerald-2:#34D399;
+  --rose:#FB7185;
+  --line:rgba(243,240,255,.1);
+  --display:'Bricolage Grotesque', system-ui, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:76px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--display); font-size:16px; line-height:1.55; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+.wrap{ width:100%; max-width:1240px; margin:0 auto; padding:0 clamp(18px,4vw,44px); }
+.mono{ font-family:var(--mono); }
+::selection{ background:var(--violet); color:#fff; }
+:focus-visible{ outline:2px solid var(--violet-2); outline-offset:3px; }
+.aurora{ position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+.aurora i{ position:absolute; border-radius:50%; filter:blur(110px); opacity:.45; }
+.aurora i:nth-child(1){ width:60vw; height:60vw; left:-20vw; top:-30vw; background:#3B1C8C; }
+.aurora i:nth-child(2){ width:40vw; height:40vw; right:-14vw; top:30vh; background:#0B5C46; opacity:.3; }
+.dotgrid{ position:fixed; inset:0; z-index:-1; pointer-events:none; background-image:radial-gradient(rgba(243,240,255,.08) 1px, transparent 1.3px); background-size:26px 26px; mask-image:radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%); }
+.chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; border:1px solid rgba(139,92,246,.35); background:rgba(139,92,246,.1); font-family:var(--mono); font-size:11.5px; letter-spacing:.04em; color:var(--violet-2); }
+.chip i{ width:6px; height:6px; border-radius:50%; background:var(--emerald); box-shadow:0 0 10px var(--emerald); }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); transition:background .3s ease, border-color .3s ease; border-bottom:1px solid transparent; }
+.nav.scrolled{ background:rgba(8,6,18,.75); backdrop-filter:blur(14px); border-color:var(--line); }
+.nav-inner{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+.logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:22px; letter-spacing:-.03em; }
+.logo svg{ width:28px; height:28px; }
+.links{ display:flex; gap:28px; font-size:14.5px; color:var(--dim); }
+.links a:hover{ color:var(--text); }
+.nav-r{ display:flex; align-items:center; gap:10px; }
+
+/* 9-dot matrix → X */
+.dots{ position:relative; width:48px; height:48px; border-radius:14px; border:1px solid var(--line); background:rgba(243,240,255,.04); cursor:pointer; transition:border-color .3s ease, box-shadow .3s ease; }
+.dots:hover{ border-color:rgba(139,92,246,.6); box-shadow:0 0 22px -6px var(--violet); }
+.dots i{ position:absolute; width:5px; height:5px; margin:-2.5px 0 0 -2.5px; border-radius:50%; background:var(--text); box-shadow:0 0 8px rgba(167,139,250,.9);
+  left:var(--x); top:var(--y); transition:left .55s cubic-bezier(.5,1.6,.4,1), top .55s cubic-bezier(.5,1.6,.4,1), background .3s ease, transform .4s ease; }
+.dots[aria-expanded="true"]{ border-color:var(--violet); box-shadow:0 0 28px -4px var(--violet); }
+.dots[aria-expanded="true"] i{ background:var(--violet-2); left:var(--xx); top:var(--yy); }
+.menu{ position:fixed; z-index:78; inset:calc(var(--nav-h) + 6px) clamp(12px,3vw,40px) auto auto; width:min(380px, calc(100vw - 24px)); padding:18px; border-radius:22px; border:1px solid rgba(139,92,246,.35);
+  background:rgba(14,11,31,.85); backdrop-filter:blur(20px); box-shadow:0 30px 80px -30px #000, 0 0 60px -30px var(--violet); transform-origin:top right; }
+.menu a{ display:flex; justify-content:space-between; align-items:center; padding:14px 14px; border-radius:14px; font-size:20px; font-weight:600; letter-spacing:-.02em; transition:background .2s ease; }
+.menu a span{ font-family:var(--mono); font-size:11px; color:var(--faint); }
+.menu a:hover{ background:rgba(139,92,246,.15); }
+
+/* neon border-beam buttons */
+@property --ang{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
+.beam{ position:relative; isolation:isolate; display:inline-flex; align-items:center; justify-content:center; gap:10px; height:54px; padding:0 26px; border-radius:14px; border:none; cursor:pointer; font-weight:600; font-size:15px; color:var(--text); background:none; }
+.beam::before{ content:''; position:absolute; inset:0; z-index:-2; border-radius:inherit; padding:1.5px;
+  background:conic-gradient(from var(--ang), transparent 0 55%, var(--violet) 70%, var(--emerald-2) 80%, transparent 92%), linear-gradient(var(--line), var(--line));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; animation:beam 3.2s linear infinite; }
+.beam::after{ content:''; position:absolute; inset:1.5px; z-index:-1; border-radius:12.5px; background:rgba(14,11,31,.92); transition:background .3s ease; }
+.beam:hover::before{ animation-duration:1.4s; filter:drop-shadow(0 0 6px var(--violet)); }
+.beam:hover::after{ background:rgba(30,22,62,.92); }
+.beam.solid::after{ background:linear-gradient(135deg, #7C4DFF, #5B2FD6); }
+.beam.solid:hover::after{ background:linear-gradient(135deg, #8B5CF6, #6D3BEB); }
+@keyframes beam{ to{ --ang:360deg; } }
+
+/* ---------- hero ---------- */
+.hero{ min-height:100svh; padding:calc(var(--nav-h) + 40px) 0 60px; display:flex; align-items:center; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(30px,5vw,60px); align-items:center; }
+.hero h1{ margin-top:20px; font-weight:800; font-size:clamp(46px,6.8vw,98px); line-height:.95; letter-spacing:-.05em; }
+.hero h1 .ln{ display:block; overflow:hidden; padding-bottom:.06em; }
+.hero h1 .ln > span{ display:block; }
+.grad{ background:linear-gradient(100deg, var(--violet-2), #E9D5FF 45%, var(--emerald-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero p{ margin-top:22px; max-width:460px; color:var(--dim); font-size:18px; }
+.hero-ctas{ margin-top:32px; display:flex; gap:12px; flex-wrap:wrap; }
+.hero .hero-meta{ margin-top:26px; font-family:var(--mono); font-size:12px; color:var(--faint); }
+.ledger{ position:relative; border-radius:22px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(18,14,38,.95), rgba(10,8,22,.95)); box-shadow:0 40px 100px -40px #000, 0 0 80px -40px var(--violet); overflow:hidden; }
+.ledger-h{ display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:12px; color:var(--dim); }
+.ledger-h b{ color:var(--text); font-weight:600; }
+.rows{ padding:8px 10px; display:grid; gap:4px; min-height:300px; }
+.lrow{ display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:10px 10px; border-radius:12px; font-family:var(--mono); font-size:12.5px; }
+.lrow .who{ color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lrow .who small{ display:block; color:var(--faint); font-size:10.5px; }
+.lrow .amt{ font-weight:600; }
+.lrow .amt.neg{ color:var(--text); } .lrow .amt.pos{ color:var(--emerald-2); }
+.badge{ padding:4px 8px; border-radius:7px; font-size:10.5px; font-weight:600; white-space:nowrap; }
+.badge.ok{ background:rgba(16,185,129,.14); color:var(--emerald-2); }
+.badge.flag{ background:rgba(251,113,133,.14); color:var(--rose); }
+.badge.wait{ background:rgba(243,240,255,.06); color:var(--faint); }
+.lrow.flagged{ background:rgba(251,113,133,.06); }
+.ledger-f{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); }
+.ledger-f div{ padding:14px 18px; border-right:1px solid var(--line); }
+.ledger-f div:last-child{ border-right:none; }
+.ledger-f b{ display:block; font-size:22px; font-weight:700; letter-spacing:-.03em; }
+.ledger-f span{ font-family:var(--mono); font-size:10.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.08em; }
+
+/* logos */
+.logos{ border-block:1px solid var(--line); padding:26px 0; }
+.logos .wrap{ display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; font-family:var(--mono); font-size:14px; color:var(--faint); letter-spacing:.1em; text-transform:uppercase; }
+
+/* ---------- features ---------- */
+.sec{ padding:clamp(100px,12vw,150px) 0; }
+.sec-h{ max-width:720px; margin-bottom:50px; }
+.sec-h h2{ margin-top:16px; font-weight:800; font-size:clamp(38px,5vw,68px); line-height:1; letter-spacing:-.045em; }
+.sec-h p{ margin-top:16px; color:var(--dim); font-size:17px; max-width:540px; }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.feat{ position:relative; padding:26px; border-radius:22px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(18,14,38,.8), rgba(10,8,22,.6)); overflow:hidden; transition:border-color .3s ease, transform .5s var(--ease); }
+.feat:hover{ border-color:rgba(139,92,246,.5); transform:translateY(-4px); }
+.feat::after{ content:''; position:absolute; inset:auto -30% -50% auto; width:70%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle, rgba(139,92,246,.25), transparent 65%); opacity:0; transition:opacity .4s ease; }
+.feat:hover::after{ opacity:1; }
+.feat svg{ width:100%; height:110px; display:block; }
+.feat h3{ margin-top:18px; font-size:22px; font-weight:700; letter-spacing:-.03em; }
+.feat p{ margin-top:6px; color:var(--dim); font-size:15px; }
+.feat .k{ margin-top:16px; font-family:var(--mono); font-size:12px; color:var(--emerald-2); }
+
+/* ---------- ROI calculator ---------- */
+.roi{ border-radius:28px; border:1px solid rgba(139,92,246,.3); background:linear-gradient(180deg, rgba(18,14,38,.92), rgba(10,8,22,.92)); box-shadow:0 0 100px -50px var(--violet); display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); overflow:hidden; }
+.controls{ padding:clamp(22px,3vw,36px); border-right:1px solid var(--line); display:grid; gap:24px; align-content:start; }
+.ctl .cl{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+.ctl .cl span{ font-size:14px; color:var(--dim); }
+.ctl .cl b{ font-family:var(--mono); font-size:16px; font-weight:600; color:var(--text); }
+.ctl input{ -webkit-appearance:none; appearance:none; width:100%; height:30px; background:transparent; cursor:pointer; margin-top:6px; }
+.ctl input::-webkit-slider-runnable-track{ height:6px; border-radius:6px; background:linear-gradient(90deg, var(--violet) 0, var(--violet-2) var(--p,50%), rgba(243,240,255,.1) var(--p,50%)); }
+.ctl input::-moz-range-track{ height:6px; border-radius:6px; background:rgba(243,240,255,.1); }
+.ctl input::-moz-range-progress{ height:6px; border-radius:6px; background:var(--violet); }
+.ctl input::-webkit-slider-thumb{ -webkit-appearance:none; width:22px; height:22px; margin-top:-8px; border-radius:50%; background:#fff; border:5px solid var(--violet); box-shadow:0 0 0 4px rgba(139,92,246,.25), 0 0 18px var(--violet); transition:transform .2s ease; }
+.ctl input:active::-webkit-slider-thumb{ transform:scale(1.15); }
+.ctl input::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:#fff; border:5px solid var(--violet); }
+.ctl small{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:10.5px; color:var(--faint); }
+.plan{ padding:14px 16px; border-radius:14px; background:rgba(139,92,246,.1); border:1px solid rgba(139,92,246,.25); font-size:13.5px; color:var(--dim); }
+.plan b{ color:var(--text); }
+.out{ padding:clamp(22px,3vw,36px); display:flex; flex-direction:column; gap:20px; }
+.kpis{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.kpi{ padding:14px 16px; border-radius:16px; background:rgba(243,240,255,.04); border:1px solid var(--line); }
+.kpi span{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); }
+.kpi b{ display:block; margin-top:4px; font-size:clamp(22px,2.6vw,32px); font-weight:800; letter-spacing:-.04em; line-height:1.1; }
+.kpi.em b{ color:var(--emerald-2); }
+.chart{ position:relative; }
+.chart svg{ width:100%; height:auto; display:block; overflow:visible; }
+.chart .gridl{ stroke:rgba(243,240,255,.07); stroke-width:1; }
+.chart .ax{ font:500 10px var(--mono); fill:var(--faint); }
+.chart .base-line{ fill:none; stroke:var(--rose); stroke-width:2; stroke-dasharray:5 5; }
+.chart .fj-line{ fill:none; stroke:var(--emerald-2); stroke-width:2.5; filter:drop-shadow(0 0 6px rgba(52,211,153,.6)); }
+.chart .xh{ stroke:rgba(243,240,255,.35); stroke-width:1; stroke-dasharray:3 4; }
+.chart .be{ fill:var(--emerald-2); }
+.chart .be-t{ font:600 10.5px var(--mono); fill:var(--emerald-2); }
+.tip{ position:absolute; pointer-events:none; padding:10px 12px; border-radius:12px; background:rgba(14,11,31,.95); border:1px solid rgba(139,92,246,.4); font-family:var(--mono); font-size:11.5px; line-height:1.6; white-space:nowrap; transform:translate(-50%, -110%); }
+.tip b{ color:var(--text); }
+.legend{ display:flex; gap:18px; flex-wrap:wrap; font-family:var(--mono); font-size:11.5px; color:var(--dim); }
+.legend i{ display:inline-block; width:18px; height:3px; border-radius:2px; vertical-align:middle; margin-right:8px; }
+.fine-print{ font-size:12px; color:var(--faint); }
+
+/* cta + footer */
+.cta{ text-align:center; padding:clamp(110px,14vw,170px) 0; }
+.cta h2{ font-weight:800; font-size:clamp(46px,8vw,120px); line-height:.92; letter-spacing:-.055em; }
+.cta p{ margin:20px auto 32px; max-width:440px; color:var(--dim); font-size:17px; }
+.cta .row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.foot{ border-top:1px solid var(--line); padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px)); font-size:13px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a:hover{ color:var(--violet-2); }
+
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:1000px){
+  .hero-grid, .roi{ grid-template-columns:1fr; }
+  .controls{ border-right:none; border-bottom:1px solid var(--line); }
+  .feats{ grid-template-columns:1fr; }
+  .links{ display:none; }
+}
+@media(max-width:520px){ .kpis{ grid-template-columns:1fr; } .ledger-f{ grid-template-columns:1fr 1fr; } .ledger-f div:last-child{ display:none; } }
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
+</style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"><i></i><i></i></div>
+<div class="dotgrid" aria-hidden="true"></div>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top"><svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#34D399"/></linearGradient></defs><path d="M4 24 L12 8 L18 18 L22 12 L28 24 Z" fill="url(#lg)"/></svg>Fjord</a>
+    <nav class="links" aria-label="Main"><a href="#product">Product</a><a href="#roi">ROI calculator</a><a href="#start">Pricing</a></nav>
+    <div class="nav-r">
+      <a class="beam solid" href="#roi" style="height:46px;padding:0 18px;font-size:14px">Calculate ROI</a>
+      <button class="dots" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <i style="--x:14px;--y:14px;--xx:14px;--yy:14px"></i><i style="--x:24px;--y:14px;--xx:19px;--yy:19px"></i><i style="--x:34px;--y:14px;--xx:34px;--yy:14px"></i>
+        <i style="--x:14px;--y:24px;--xx:19px;--yy:29px"></i><i style="--x:24px;--y:24px;--xx:24px;--yy:24px"></i><i style="--x:34px;--y:24px;--xx:29px;--yy:19px"></i>
+        <i style="--x:14px;--y:34px;--xx:14px;--yy:34px"></i><i style="--x:24px;--y:34px;--xx:29px;--yy:29px"></i><i style="--x:34px;--y:34px;--xx:34px;--yy:34px"></i>
+      </button>
+    </div>
   </div>
 </header>
+<nav class="menu" id="menu" aria-label="Menu" hidden>
+  <a href="#product">Product <span>01</span></a>
+  <a href="#roi">ROI calculator <span>02</span></a>
+  <a href="#start">Pricing <span>03</span></a>
+  <a href="../index.html#work">Back to Bazozo <span>←</span></a>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Venture Fund</div>
-    <h1><span class="word"><span class="word-inner">Capital</span></span> <span class="word"><span class="word-inner">with</span></span> <span class="word"><span class="word-inner">a</span></span> <span class="word"><span class="word-inner">thesis,</span></span> <span class="word"><span class="word-inner">not</span></span> <span class="word"><span class="word-inner">a</span></span> <span class="word"><span class="word-inner">trend</span></span></h1>
-    <p>A venture fund site built around a filterable, data-driven portfolio grid — the whole thesis, laid out in the open.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Fjord backs eleven companies at a time, deliberately, and publishes the reasoning behind each check. The portfolio grid on this site is filterable by stage, sector, and year — not curated for optics.</p>
-      <p>Founders considering a pitch can see exactly what Fjord has funded before, and why, before the first call.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Filterable Portfolio</h3><p>Every investment is tagged by stage, sector, and check size and can be filtered live.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Thesis Notes</h3><p>Each portfolio company links to the original investment memo, lightly redacted.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Founder Office Hours</h3><p>A public calendar for founders to book time directly, no warm intro required.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Pitch Fjord directly</h2>
-    <p class="reveal">Office hours open every other Thursday.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Book a slot</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
       <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+        <span class="chip rv-h"><i></i>Now reconciling 4.1M transactions a day</span>
+        <h1><span class="ln"><span>Your finance team,</span></span><span class="ln"><span class="grad">minus the busywork.</span></span></h1>
+        <p class="rv-h">Fjord matches every bank line to its invoice, forecasts cash 13 weeks out and flags anything odd before month-end, so your team closes the books in days, not weeks.</p>
+        <div class="hero-ctas rv-h">
+          <a class="beam solid" href="#roi">See your ROI <span aria-hidden="true">→</span></a>
+          <a class="beam" href="#product">How it works</a>
+        </div>
+        <p class="hero-meta rv-h">Read-only bank access · SOC 2 Type II · 14-day trial</p>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
+      <div class="ledger rv-h" aria-label="Live demo: transactions being reconciled automatically">
+        <div class="ledger-h"><span><b>Ledger</b> · Acme Labs</span><span id="clock">auto-match on</span></div>
+        <div class="rows" id="rows"></div>
+        <div class="ledger-f"><div><b id="lfMatched">0</b><span>auto-matched</span></div><div><b id="lfFlag">0</b><span>flagged</span></div><div><b id="lfTime">0.0s</b><span>avg. match</span></div></div>
+      </div>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <div class="logos" aria-label="Customers"><div class="wrap"><span>Northwind</span><span>Kepler&amp;Co</span><span>Halden</span><span>Orbitly</span><span>Meridian</span><span>Tessel</span></div></div>
+
+  <section class="sec" id="product">
+    <div class="wrap">
+      <div class="sec-h"><span class="chip rv">Product</span><h2 class="rv">Three jobs your team <span class="grad">never has to do again.</span></h2><p class="rv">Fjord connects to your bank, card and accounting accounts with read-only access, then works through the boring parts around the clock.</p></div>
+      <div class="feats">
+        <article class="feat rv"><svg viewBox="0 0 300 110" aria-hidden="true"><g fill="none" stroke="#A78BFA" stroke-width="1.5"><rect x="10" y="14" width="110" height="22" rx="6"/><rect x="10" y="44" width="110" height="22" rx="6"/><rect x="10" y="74" width="110" height="22" rx="6"/><rect x="180" y="14" width="110" height="22" rx="6"/><rect x="180" y="44" width="110" height="22" rx="6"/><rect x="180" y="74" width="110" height="22" rx="6"/></g><g stroke="#34D399" stroke-width="2" fill="none"><path d="M120 25 C150 25 150 55 180 55"/><path d="M120 55 C150 55 150 85 180 85"/><path d="M120 85 C150 85 150 25 180 25"/></g></svg><h3>Auto-reconcile</h3><p>Matches bank lines to invoices and receipts, even when the amounts or names don't line up exactly.</p><div class="k">97.4% matched without a human</div></article>
+        <article class="feat rv"><svg viewBox="0 0 300 110" aria-hidden="true"><path d="M10 90 L60 76 L110 80 L160 58 L210 50" fill="none" stroke="#A78BFA" stroke-width="2"/><path d="M210 50 L260 34 L290 26" fill="none" stroke="#34D399" stroke-width="2" stroke-dasharray="5 5"/><path d="M210 50 L260 26 L290 14 L290 40 L260 44 Z" fill="rgba(52,211,153,.15)"/><circle cx="210" cy="50" r="4" fill="#fff"/></svg><h3>Cash forecast</h3><p>A 13-week cash view rebuilt every night from real payment behaviour, not last quarter's spreadsheet.</p><div class="k">±3.1% forecast error at 4 weeks</div></article>
+        <article class="feat rv"><svg viewBox="0 0 300 110" aria-hidden="true"><g fill="#A78BFA" opacity=".55"><rect x="14" y="60" width="18" height="40" rx="3"/><rect x="44" y="52" width="18" height="48" rx="3"/><rect x="74" y="64" width="18" height="36" rx="3"/><rect x="104" y="56" width="18" height="44" rx="3"/><rect x="164" y="58" width="18" height="42" rx="3"/><rect x="194" y="62" width="18" height="38" rx="3"/><rect x="224" y="54" width="18" height="46" rx="3"/><rect x="254" y="60" width="18" height="40" rx="3"/></g><rect x="134" y="12" width="18" height="88" rx="3" fill="#FB7185"/><circle cx="143" cy="8" r="6" fill="none" stroke="#FB7185" stroke-width="2"/></svg><h3>Anomaly guard</h3><p>Duplicate invoices, odd vendor bank changes and unusual spend get flagged before they're paid.</p><div class="k">$1.2M in duplicates stopped last year</div></article>
+      </div>
     </div>
+  </section>
+
+  <section class="sec" id="roi" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h"><span class="chip rv">ROI calculator</span><h2 class="rv">Drag the sliders. <span class="grad">Watch the payback.</span></h2><p class="rv">Plug in your own numbers. The chart compares 24 months of doing it by hand with 24 months on Fjord, including the plan cost and a one-off onboarding fee.</p></div>
+      <div class="roi rv">
+        <div class="controls">
+          <div class="ctl"><div class="cl"><span>Monthly transactions</span><b id="vTx">8,000</b></div><input type="range" id="tx" min="500" max="50000" step="500" value="8000" aria-label="Monthly transactions"><small><span>500</span><span>50k</span></small></div>
+          <div class="ctl"><div class="cl"><span>People in finance</span><b id="vTeam">4</b></div><input type="range" id="team" min="1" max="20" step="1" value="4" aria-label="People in the finance team"><small><span>1</span><span>20</span></small></div>
+          <div class="ctl"><div class="cl"><span>Hours each on manual work / week</span><b id="vHrs">12</b></div><input type="range" id="hrs" min="2" max="30" step="1" value="12" aria-label="Hours per person per week on manual work"><small><span>2</span><span>30</span></small></div>
+          <div class="ctl"><div class="cl"><span>Loaded cost per hour</span><b id="vCost">$65</b></div><input type="range" id="cost" min="30" max="150" step="5" value="65" aria-label="Loaded cost per hour in US dollars"><small><span>$30</span><span>$150</span></small></div>
+          <div class="plan" id="planBox">Plan: <b>Growth</b> · $1,299/mo</div>
+        </div>
+        <div class="out">
+          <div class="kpis" aria-live="polite">
+            <div class="kpi em"><span>Net saving / yr</span><b id="kSave">$0</b></div>
+            <div class="kpi"><span>Payback</span><b id="kPay">—</b></div>
+            <div class="kpi"><span>ROI</span><b id="kRoi">—</b></div>
+          </div>
+          <div class="chart" id="chart">
+            <svg id="chartSvg" viewBox="0 0 640 300" role="img" aria-label="Cumulative cost over 24 months, manual versus Fjord">
+              <defs>
+                <linearGradient id="aBase" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FB7185" stop-opacity=".28"/><stop offset="1" stop-color="#FB7185" stop-opacity="0"/></linearGradient>
+                <linearGradient id="aFj" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34D399" stop-opacity=".35"/><stop offset="1" stop-color="#34D399" stop-opacity="0"/></linearGradient>
+                <linearGradient id="aGap" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8B5CF6" stop-opacity=".1"/><stop offset="1" stop-color="#8B5CF6" stop-opacity=".35"/></linearGradient>
+              </defs>
+              <g id="gridG"></g>
+              <path id="gapArea" fill="url(#aGap)"/>
+              <path id="baseArea" fill="url(#aBase)"/>
+              <path id="fjArea" fill="url(#aFj)"/>
+              <path id="baseLine" class="base-line"/>
+              <path id="fjLine" class="fj-line"/>
+              <g id="beG"></g>
+              <line id="xh" class="xh" y1="16" y2="262" visibility="hidden"/>
+            </svg>
+            <div class="tip" id="tip" hidden></div>
+          </div>
+          <div class="legend"><span><i style="background:#FB7185"></i>Manual process (cumulative cost)</span><span><i style="background:#34D399"></i>With Fjord (plan + remaining work)</span><span><i style="background:#8B5CF6"></i>Money saved</span></div>
+          <p class="fine-print">Assumes Fjord removes 72% of manual reconciliation time and 85% of rework from errors (industry average 0.6% error rate, about $35 to fix each). Illustrative estimate, not financial advice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="start">
+    <div class="wrap">
+      <span class="chip rv"><i></i>14-day trial · no card needed</span>
+      <h2 class="rv" style="margin-top:20px">Close the books<br><span class="grad">by Tuesday.</span></h2>
+      <p class="rv">Plans from $499 a month. Connect a bank account in five minutes and see your first matches before lunch.</p>
+      <div class="row rv"><a class="beam solid" href="../index.html#contact">Start free trial <span aria-hidden="true">→</span></a><a class="beam" href="#roi">Run the numbers again</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="fjordcapital.js" defer></script>
 </body>
 </html>

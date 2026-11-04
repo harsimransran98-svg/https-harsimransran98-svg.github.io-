@@ -3,173 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driftwood Films — Case Study by Bazozo</title>
-<meta name="description" content="Driftwood Films leads with a fullscreen video hero — the reel plays before anything else loads.">
+<title>Driftwood Films — Documentary on 35mm · Built by Bazozo Studio</title>
+<meta name="description" content="Driftwood Films: a documentary studio site with a pinned 35mm filmstrip gallery, a storyboard-to-final-cut toggle and a director's commentary player. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#12100E">
 <link rel="canonical" href="https://bazozo.in/work/driftwoodfilms.html">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Work+Sans:wght@400;500;600&display=swap">
 <link rel="preload" as="image" href="../images/driftwoodfilms.jpg" fetchpriority="high">
-<link rel="stylesheet" href="../work.css">
-<style>:root{ --site-accent:#5c7a9e; --site-hero-image:url('../images/driftwoodfilms.jpg'); }</style>
+<style>
+:root{
+  --bg:#12100E;
+  --bg-2:#1A1714;
+  --base:#0B0A09;
+  --text:#E8DFD1;
+  --dim:rgba(232,223,209,.62);
+  --faint:rgba(232,223,209,.34);
+  --accent:#E09F3E;
+  --red:#B5452E;
+  --line:rgba(232,223,209,.14);
+  --serif:'Fraunces', Georgia, serif;
+  --sans:'Work Sans', system-ui, sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --nav-h:76px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; cursor:pointer; }
+img, canvas{ display:block; max-width:100%; }
+.wrap{ width:100%; max-width:1280px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+::selection{ background:var(--accent); color:var(--bg); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.mono{ font-size:11px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); }
+.mono b{ color:var(--accent); font-weight:600; }
+/* projector flicker + grain on everything */
+.grain{ position:fixed; inset:-50%; z-index:150; pointer-events:none; opacity:.08;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain .8s steps(5) infinite; }
+@keyframes grain{ 0%{ transform:translate(0,0); } 25%{ transform:translate(-3%,2%); } 50%{ transform:translate(2%,-3%); } 75%{ transform:translate(-2%,-1%); } }
+.flicker{ position:fixed; inset:0; z-index:149; pointer-events:none; background:radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.45)); animation:flick 3.2s steps(1) infinite; }
+@keyframes flick{ 0%,100%{ opacity:1; } 7%{ opacity:.82; } 8%{ opacity:1; } 41%{ opacity:.9; } 42%{ opacity:1; } 77%{ opacity:.86; } 78%{ opacity:1; } }
+
+/* ---------- nav ---------- */
+.nav{ position:fixed; inset:0 0 auto; z-index:80; height:var(--nav-h); padding-top:env(safe-area-inset-top,0px); transition:background .4s ease; }
+.nav.scrolled{ background:rgba(18,16,14,.88); backdrop-filter:blur(10px); box-shadow:0 1px 0 var(--line); }
+.nav .wrap{ height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.logo{ font-family:var(--serif); font-size:26px; font-weight:400; letter-spacing:-.01em; line-height:1; }
+.logo i{ color:var(--accent); }
+.nav-r{ display:flex; align-items:center; gap:14px; }
+/* film-sprocket hamburger */
+.sprocket{ position:relative; width:58px; height:46px; border-radius:4px; border:none; background:#2A241E; overflow:hidden; }
+.sprocket::before, .sprocket::after{ content:''; position:absolute; left:0; right:0; height:8px; background:repeating-linear-gradient(90deg, transparent 0 3px, #12100E 3px 9px, transparent 9px 12px); background-size:12px 6px; background-repeat:repeat-x; background-position:0 50%; transition:background-position .6s steps(6); }
+.sprocket::before{ top:2px; } .sprocket::after{ bottom:2px; }
+.sprocket:hover::before, .sprocket:hover::after{ background-position:-36px 50%; }
+.sprocket i{ position:absolute; left:15px; right:15px; height:2px; background:var(--text); transition:transform .45s var(--ease), opacity .2s ease, background .2s ease; }
+.sprocket i:nth-of-type(1){ top:17px; } .sprocket i:nth-of-type(2){ top:22px; } .sprocket i:nth-of-type(3){ top:27px; }
+.sprocket[aria-expanded="true"]{ background:var(--accent); }
+.sprocket[aria-expanded="true"] i{ background:var(--bg); }
+.sprocket[aria-expanded="true"] i:nth-of-type(1){ transform:translateY(5px) rotate(45deg); }
+.sprocket[aria-expanded="true"] i:nth-of-type(2){ opacity:0; }
+.sprocket[aria-expanded="true"] i:nth-of-type(3){ transform:translateY(-5px) rotate(-45deg); }
+.menu{ position:fixed; inset:0; z-index:75; background:var(--base); display:flex; flex-direction:column; justify-content:center; gap:4px; padding:calc(var(--nav-h) + 20px) clamp(18px,4vw,48px) 30px; }
+.menu::before, .menu::after{ content:''; position:absolute; left:0; right:0; height:26px; background:repeating-linear-gradient(90deg, transparent 0 12px, #2A241E 12px 30px, transparent 30px 42px); }
+.menu::before{ top:calc(var(--nav-h) - 10px); } .menu::after{ bottom:14px; }
+.menu a{ font-family:var(--serif); font-size:clamp(44px,9vw,104px); font-weight:300; line-height:1.02; display:flex; align-items:baseline; gap:18px; transition:color .3s ease, padding .4s var(--ease); }
+.menu a small{ font-family:var(--sans); font-size:12px; letter-spacing:.2em; color:var(--accent); }
+.menu a:hover{ color:var(--accent); padding-left:16px; font-style:italic; }
+
+/* vintage cinema ticket buttons */
+.ticket{ --tc:var(--accent); position:relative; display:inline-flex; align-items:stretch; height:58px; border:none; background:none; color:var(--bg); filter:drop-shadow(0 10px 18px rgba(0,0,0,.4)); transition:transform .45s cubic-bezier(.34,1.56,.64,1); }
+.ticket .t-main, .ticket .t-stub{ display:flex; align-items:center; background:var(--tc);
+  -webkit-mask:radial-gradient(circle 7px at 0 50%, #0000 97%, #000) left/51% 100% no-repeat, radial-gradient(circle 7px at 100% 50%, #0000 97%, #000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 7px at 0 50%, #0000 97%, #000) left/51% 100% no-repeat, radial-gradient(circle 7px at 100% 50%, #0000 97%, #000) right/51% 100% no-repeat; }
+.ticket .t-main{ padding:0 22px 0 24px; font-family:var(--serif); font-size:17px; font-weight:600; letter-spacing:.01em; border-radius:4px 0 0 4px; }
+.ticket .t-stub{ padding:0 14px; font-size:9.5px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; writing-mode:vertical-rl; border-left:2px dashed rgba(18,16,14,.45); border-radius:0 4px 4px 0; transition:transform .45s cubic-bezier(.34,1.56,.64,1); }
+.ticket:hover{ transform:rotate(-2deg) translateY(-3px); }
+.ticket:hover .t-stub{ transform:translate(6px, 2px) rotate(5deg); }
+.ticket.cream{ --tc:var(--text); }
+
+/* ---------- hero ---------- */
+.hero{ position:relative; isolation:isolate; min-height:100svh; display:flex; align-items:flex-end; padding:calc(var(--nav-h) + 30px) 0 60px; overflow:hidden; }
+.hero-img{ position:absolute; inset:0; z-index:-1; }
+.hero-img img{ width:100%; height:100%; object-fit:cover; object-position:55% 45%; filter:sepia(.35) saturate(.85) contrast(1.05) brightness(.62); }
+.hero-img::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(18,16,14,.2) 30%, var(--bg) 96%); }
+.hero h1{ font-family:var(--serif); font-weight:300; font-size:clamp(52px,9vw,140px); line-height:.94; letter-spacing:-.025em; max-width:12ch; }
+.hero h1 em{ font-style:italic; color:var(--accent); }
+.hero h1 .ln{ display:block; overflow:hidden; padding-bottom:.06em; }
+.hero h1 .ln > span{ display:block; }
+.hero-row{ margin-top:28px; display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+.hero-row p{ max-width:420px; color:var(--dim); font-size:17px; }
+.slate{ display:grid; grid-template-columns:repeat(3,auto); gap:6px 26px; font-size:12px; color:var(--dim); }
+.slate b{ display:block; font-family:var(--serif); font-size:24px; font-weight:400; color:var(--text); }
+
+/* ---------- filmstrip (pinned horizontal) ---------- */
+.strip-sec{ position:relative; height:100svh; overflow:hidden; background:var(--base); border-block:1px solid var(--line); }
+.strip-head{ position:absolute; z-index:3; top:calc(var(--nav-h) + 10px); left:0; right:0; }
+.strip-head .wrap{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; }
+.strip-head h2{ font-family:var(--serif); font-weight:300; font-size:clamp(34px,4.6vw,64px); line-height:1; letter-spacing:-.02em; }
+.strip-head h2 em{ color:var(--accent); }
+.toggle{ display:inline-flex; padding:4px; border-radius:999px; background:#211D19; border:1px solid var(--line); }
+.toggle button{ border:none; background:none; padding:10px 18px; border-radius:999px; font-size:13px; font-weight:600; color:var(--dim); transition:background .35s var(--ease), color .3s ease; }
+.toggle button[aria-pressed="true"]{ background:var(--accent); color:var(--bg); }
+.track{ position:absolute; left:0; top:50%; display:flex; align-items:center; height:min(48vh, 420px); transform:translateY(-38%); will-change:transform; padding:0 8vw; }
+.film{ position:relative; display:flex; height:100%; padding:34px 0 64px; background:#1C1915; box-shadow:0 30px 60px -30px #000; }
+.film::before, .film::after{ content:''; position:absolute; left:0; right:0; height:16px; background:repeating-linear-gradient(90deg, transparent 0 10px, var(--base) 10px 26px, transparent 26px 36px); }
+.film::before{ top:9px; } .film::after{ bottom:9px; }
+.edge{ position:absolute; left:0; right:0; font-size:9.5px; letter-spacing:.3em; color:var(--accent); opacity:.75; white-space:nowrap; overflow:hidden; pointer-events:none; }
+.edge.t{ top:-1px; } .edge.b{ bottom:-1px; }
+.frame{ position:relative; flex:0 0 auto; height:100%; aspect-ratio:1.85/1; margin:0 14px; perspective:900px; }
+.frame-in{ position:relative; width:100%; height:100%; transform-style:preserve-3d; }
+.frame .face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; border-radius:3px; background:#000; }
+.frame .face img, .frame .face canvas{ width:100%; height:100%; object-fit:cover; }
+.frame .final img{ filter:sepia(.3) saturate(.9) contrast(1.06); }
+.frame .board{ transform:rotateY(180deg); background:#EDE6D8; }
+.frame .board canvas{ mix-blend-mode:multiply; }
+.frame .cap{ position:absolute; left:0; right:0; bottom:-26px; display:flex; justify-content:space-between; font-size:11.5px; color:var(--dim); }
+.frame .cap b{ color:var(--text); font-weight:500; font-family:var(--serif); font-size:14px; }
+.frame .num{ position:absolute; top:8px; left:10px; z-index:2; font-size:10px; letter-spacing:.14em; color:#fff; text-shadow:0 1px 2px #000; }
+.frame .board .num{ color:#4a3f33; text-shadow:none; }
+.frame .board .note{ position:absolute; left:10px; right:10px; bottom:8px; font-family:var(--serif); font-style:italic; font-size:13px; color:#4a3f33; }
+.strip-foot{ position:absolute; left:0; right:0; bottom:22px; z-index:3; }
+.strip-foot .wrap{ display:flex; align-items:center; gap:18px; }
+.prog{ flex:1; height:2px; background:var(--line); position:relative; }
+.prog i{ position:absolute; inset:0; background:var(--accent); transform-origin:left; transform:scaleX(0); }
+
+/* ---------- commentary player ---------- */
+.sec{ padding:clamp(100px,13vw,160px) 0; }
+.sec-h{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
+.sec-h h2{ font-family:var(--serif); font-weight:300; font-size:clamp(40px,5.6vw,80px); line-height:1; letter-spacing:-.02em; max-width:14ch; }
+.sec-h h2 em{ color:var(--accent); }
+.sec-h p{ max-width:400px; color:var(--dim); }
+.player{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:24px; background:var(--bg-2); border:1px solid var(--line); border-radius:6px; padding:clamp(18px,3vw,32px); }
+.reel{ position:relative; aspect-ratio:1/1; max-width:360px; width:100%; margin:0 auto; }
+.reel svg{ width:100%; height:100%; }
+.p-main{ display:flex; flex-direction:column; gap:16px; min-width:0; }
+.p-top{ display:flex; align-items:center; gap:14px; }
+.play{ width:62px; height:62px; flex:none; border-radius:50%; border:none; background:var(--accent); color:var(--bg); display:grid; place-items:center; box-shadow:0 10px 24px -10px var(--accent); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+.play:hover{ transform:scale(1.07); }
+.play svg{ width:24px; height:24px; }
+.p-title b{ display:block; font-family:var(--serif); font-size:22px; font-weight:400; }
+.p-title span{ font-size:13px; color:var(--dim); }
+.wave{ width:100%; height:90px; cursor:pointer; border-radius:4px; background:rgba(0,0,0,.25); touch-action:none; }
+.p-time{ display:flex; justify-content:space-between; font-size:12px; color:var(--dim); font-variant-numeric:tabular-nums; }
+.caption{ min-height:96px; font-family:var(--serif); font-size:clamp(19px,2vw,24px); font-weight:300; line-height:1.35; font-style:italic; }
+.caption .who{ display:block; font-family:var(--sans); font-style:normal; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+.lines{ list-style:none; display:grid; gap:2px; max-height:220px; overflow:auto; border-top:1px solid var(--line); padding-top:10px; }
+.lines li button{ display:grid; grid-template-columns:52px 1fr; gap:10px; width:100%; text-align:left; border:none; background:none; padding:7px 8px; border-radius:4px; font-size:13.5px; color:var(--dim); transition:background .2s ease, color .2s ease; }
+.lines li button:hover{ background:rgba(232,223,209,.05); color:var(--text); }
+.lines li button span{ font-variant-numeric:tabular-nums; color:var(--faint); }
+.lines li.on button{ color:var(--text); background:rgba(224,159,62,.1); }
+.lines li.on button span{ color:var(--accent); }
+.p-note{ font-size:12px; color:var(--faint); }
+
+/* films list */
+.films{ border-top:1px solid var(--line); }
+.film-row{ display:grid; grid-template-columns:90px 1fr 140px 180px; gap:20px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line); transition:padding .4s var(--ease); }
+.film-row:hover{ padding-left:12px; }
+.film-row .y{ font-size:13px; color:var(--faint); }
+.film-row h3{ font-family:var(--serif); font-weight:400; font-size:clamp(24px,2.6vw,34px); line-height:1.1; }
+.film-row h3 small{ display:block; font-family:var(--sans); font-size:13.5px; color:var(--dim); margin-top:4px; }
+.film-row .rt{ font-size:13px; color:var(--dim); }
+.film-row .fest{ font-size:12.5px; color:var(--accent); }
+.cta{ text-align:center; padding:clamp(110px,14vw,180px) 0; border-top:1px solid var(--line); }
+.cta h2{ font-family:var(--serif); font-weight:300; font-size:clamp(52px,9vw,140px); line-height:.95; letter-spacing:-.025em; }
+.cta h2 em{ color:var(--accent); }
+.cta p{ margin:22px auto 34px; max-width:440px; color:var(--dim); }
+.cta .row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.foot{ border-top:1px solid var(--line); padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:var(--dim); }
+.foot .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.foot b{ color:var(--text); font-weight:500; }
+.foot a:hover{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+
+@media(max-width:900px){
+  .player{ grid-template-columns:1fr; }
+  .reel{ max-width:220px; }
+  .film-row{ grid-template-columns:1fr; gap:4px; }
+  .track{ height:min(34vh, 300px); }
+}
+@media(max-width:520px){ .nav-r .ticket{ display:none; } .slate{ grid-template-columns:repeat(3,auto); gap:4px 16px; } .slate b{ font-size:19px; } }
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition-duration:.01ms !important; }
+  .rv{ opacity:1; transform:none; }
+  .strip-sec{ height:auto; overflow-x:auto; padding:140px 0 80px; }
+  .track{ position:relative; top:auto; transform:none; }
+}
+</style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
+<div class="flicker" aria-hidden="true"></div>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../index.html#work">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#craft">Craft</a>
-      <a href="../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">Driftwood <i>Films</i></a>
+    <div class="nav-r">
+      <a class="ticket" href="#commentary"><span class="t-main">Commentary</span><span class="t-stub">Admit one</span></a>
+      <button class="sprocket" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+    </div>
   </div>
 </header>
+<nav class="menu" id="menu" aria-label="Main" hidden>
+  <a href="#reel"><small>R1</small>The filmstrip</a>
+  <a href="#commentary"><small>R2</small>Commentary</a>
+  <a href="#films"><small>R3</small>Films</a>
+  <a href="../index.html#work"><small>←</small>Bazozo</a>
+</nav>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../index.html#work">Work</a>
-  <a href="../index.html#about">About</a>
-  <a href="../index.html#craft">Craft</a>
-  <a href="../index.html#services">Services</a>
-  <a href="../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>Documentary Studio</div>
-    <h1><span class="word"><span class="word-inner">Stories</span></span> <span class="word"><span class="word-inner">told</span></span> <span class="word"><span class="word-inner">at</span></span> <span class="word"><span class="word-inner">their</span></span> <span class="word"><span class="word-inner">own</span></span> <span class="word"><span class="word-inner">pace</span></span></h1>
-    <p>Driftwood Films leads with a fullscreen video hero — the reel plays before anything else loads.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the work</h2>
-    <div class="msite-about reveal">
-      <p>Driftwood Films makes long-form documentary work for independent clients — conservation groups, small museums, family archives. The reel comes first because the work speaks better than a mission statement.</p>
-      <p>Every project page includes the full runtime, festival history if applicable, and a direct inquiry line to the director.</p>
-    </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Fullscreen Reel Hero</h3><p>The showreel autoplays muted, fullscreen, before any other content.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>Full Runtimes Linked</h3><p>Every project links to the full-length film, not just a trailer.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Festival History</h3><p>Awards and festival selections are listed per project, not aggregated generically.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Commission a documentary</h2>
-    <p class="reveal">Driftwood takes on four long-form projects per year.</p>
-    <a class="msite-cta-btn reveal" href="../index.html#contact">Discuss your story</a>
-  </div>
-</section>
-
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+<main id="top">
+  <section class="hero">
+    <div class="hero-img" id="heroImg"><img src="../images/driftwoodfilms.jpg" alt="A film crew on set: director in the foreground, two actors on a sofa under red light, boom microphone overhead" width="1920" height="1280"></div>
+    <div class="wrap">
+      <span class="mono rv-h"><b>●</b> Documentary · Shot on 35mm · Est. 2011</span>
+      <h1 style="margin-top:18px"><span class="ln"><span>Stories worth</span></span><span class="ln"><span>the <em>long take.</em></span></span></h1>
+      <div class="hero-row rv-h">
+        <p>Driftwood Films makes long-form documentaries for conservation groups, small museums and family archives. Here's our latest, frame by frame.</p>
+        <div class="slate"><div><b>84 min</b>runtime</div><div><b>1.85:1</b>aspect</div><div><b>3 yrs</b>in the field</div></div>
       </div>
-      <a class="msite-footer-cta" href="../index.html#contact">Start a project →</a>
     </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — Interactive Architecture &amp; Production Build by Bazozo Studio · Concept project</span>
-      <a href="../index.html#work">← Back to Bazozo</a>
+  </section>
+
+  <section class="strip-sec" id="reel" aria-label="The Long Harvest, frame by frame">
+    <div class="strip-head">
+      <div class="wrap">
+        <div><span class="mono">Reel 1 · <b>The Long Harvest</b></span><h2 style="margin-top:8px">From <em>storyboard</em> to final cut.</h2></div>
+        <div class="toggle" role="group" aria-label="View"><button type="button" data-v="final" aria-pressed="true">Final cut</button><button type="button" data-v="board" aria-pressed="false">Storyboard</button></div>
+      </div>
     </div>
+    <div class="track" id="track"><div class="film" id="film"><span class="edge t" id="edgeT"></span><span class="edge b" id="edgeB"></span></div></div>
+    <div class="strip-foot"><div class="wrap"><span class="mono" id="frameOut">Frame 01 / 08</span><div class="prog"><i id="progBar"></i></div><span class="mono">Scroll →</span></div></div>
+  </section>
+
+  <section class="sec" id="commentary">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">Director's <em>commentary.</em></h2><p class="rv">Mara Lind talks through the shoot. Press play to hear it read aloud, or click any line to jump to it.</p></div>
+      <div class="player rv">
+        <div class="reel" aria-hidden="true">
+          <svg viewBox="0 0 200 200"><g class="spin" id="reelSpin"><circle cx="100" cy="100" r="92" fill="#2A241E" stroke="#3A322A" stroke-width="2"/><circle cx="100" cy="100" r="78" fill="none" stroke="#1C1915" stroke-width="22"/><g fill="#12100E"><circle cx="100" cy="46" r="18"/><circle cx="146.8" cy="73" r="18"/><circle cx="146.8" cy="127" r="18"/><circle cx="100" cy="154" r="18"/><circle cx="53.2" cy="127" r="18"/><circle cx="53.2" cy="73" r="18"/></g><circle cx="100" cy="100" r="12" fill="#E09F3E"/><circle cx="100" cy="100" r="4" fill="#12100E"/></g></svg>
+        </div>
+        <div class="p-main">
+          <div class="p-top">
+            <button class="play" id="playBtn" type="button" aria-label="Play commentary"><svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+            <div class="p-title"><b>The Long Harvest · Commentary</b><span>Mara Lind, director · 6 notes</span></div>
+          </div>
+          <canvas class="wave" id="wave" width="900" height="180" aria-label="Commentary waveform: click to jump"></canvas>
+          <div class="p-time"><span id="tNow">0:00</span><span id="tDur">0:00</span></div>
+          <p class="caption" aria-live="polite"><span class="who" id="capWho">Mara Lind · Frame 01</span><span id="capText">Press play to start the commentary.</span></p>
+          <ol class="lines" id="lines"></ol>
+          <p class="p-note" id="pNote">Read aloud by your browser's built-in voice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="films" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-h"><h2 class="rv">Selected <em>films.</em></h2><p class="rv">Every project lists its full runtime and festival history.</p></div>
+      <div class="films">
+        <div class="film-row rv"><span class="y">2025</span><h3>The Long Harvest<small>A year with the food makers of one valley</small></h3><span class="rt">84 min · 35mm</span><span class="fest">Festival run · 6 screenings</span></div>
+        <div class="film-row rv"><span class="y">2023</span><h3>Wharf Light<small>Restoring seven river warehouses</small></h3><span class="rt">52 min · 16mm</span><span class="fest">Commissioned · City Museum</span></div>
+        <div class="film-row rv"><span class="y">2021</span><h3>What the River Kept<small>A family archive, 1954–1989</small></h3><span class="rt">38 min · archival</span><span class="fest">Private commission</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <span class="mono rv">Taking on two films a year</span>
+      <h2 class="rv" style="margin-top:18px">Tell us the <em>story.</em></h2>
+      <p class="rv">Write to the director directly. We reply to every message, usually within a week.</p>
+      <div class="row rv"><a class="ticket" href="../index.html#contact"><span class="t-main">Write to the director</span><span class="t-stub">Admit one</span></a><a class="ticket cream" href="#reel"><span class="t-main">Watch the reel</span><span class="t-stub">Reel 1</span></a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span>
+    <a href="../index.html#work">← Back to Bazozo</a>
   </div>
 </footer>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* nav scroll state + mobile menu */
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
-
-/* scroll progress bar */
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-/* hero glow parallax */
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-/* hero word-mask reveal */
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-/* simple once-reveal for about/cta blocks */
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-/* staggered batch reveal for feature cards */
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="driftwoodfilms.js" defer></script>
 </body>
 </html>

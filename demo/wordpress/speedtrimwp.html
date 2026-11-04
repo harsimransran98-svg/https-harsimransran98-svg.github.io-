@@ -3,180 +3,369 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpeedTrim WP — Case Study by Bazozo</title>
-<meta name="description" content="Automatic image compression and lazy-load setup.">
+<title>SpeedTrim WP — WooCommerce speed &amp; checkout booster plugin · Built by Bazozo Studio</title>
+<meta name="description" content="SpeedTrim WP: a live wp-admin simulator of a WooCommerce performance plugin. Flip minification, lazy loading, WebP and checkout-field switches and watch the Core Web Vitals score climb from 48 to 99. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#1D2327">
 <link rel="canonical" href="https://bazozo.in/demo/wordpress/speedtrimwp.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#101517;
+  --text:#F0F0F1;
+  --accent:#3858E9;
+  --green:#00A32A;
+  --wp-bg:#F0F0F1;
+  --wp-side:#1D2327;
+  --wp-side-2:#2C3338;
+  --wp-ink:#1D2327;
+  --wp-mut:#50575E;
+  --wp-faint:#8C8F94;
+  --wp-line:#DCDCDE;
+  --red:#D63638;
+  --amber:#DBA617;
+  --dim:#A7AAAD;
+  --line:rgba(255,255,255,.1);
+  --sans:'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* ---------- page chrome ---------- */
+.top{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); padding-top:calc(18px + env(safe-area-inset-top,0px)); }
+.brand{ font-weight:800; font-size:18px; letter-spacing:-.02em; }
+.brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:4px; border:1px solid var(--line); background:#1D2327; font-size:13.5px; font-weight:500; color:var(--dim); transition:all .25s ease; }
+.back:hover{ color:#fff; border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 0 24px -6px var(--accent); }
+.wrap{ max-width:1320px; margin:0 auto; padding:0 clamp(16px,3vw,40px); }
+.intro{ display:grid; grid-template-columns:1fr auto; gap:20px 40px; align-items:end; padding:6px 0 22px; }
+.kick{ font-family:var(--mono); font-size:12px; color:#72AEE6; }
+.intro h1{ margin-top:8px; font-size:clamp(38px,5vw,64px); font-weight:800; letter-spacing:-.045em; line-height:.95; }
+.intro h1 span{ color:#7B90FF; }
+.intro p{ margin-top:12px; color:var(--dim); max-width:580px; font-size:15.5px; }
+.try{ display:flex; flex-wrap:wrap; gap:6px; max-width:560px; justify-content:flex-end; }
+.try-h{ width:100%; text-align:right; font-family:var(--mono); font-size:12px; color:#787C82; }
+.try-h b{ color:#7B90FF; }
+.chipt{ display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 12px; border-radius:4px; border:1px solid var(--line); background:#1D2327; font-size:12.5px; color:var(--dim); transition:all .35s var(--spring); }
+.chipt i{ width:14px; height:14px; border-radius:3px; border:1.5px solid #787C82; position:relative; }
+.chipt.done{ color:#fff; border-color:rgba(0,163,42,.6); box-shadow:0 0 18px -8px var(--green); }
+.chipt.done i{ background:var(--green); border-color:var(--green); }
+.chipt.done i::after{ content:''; position:absolute; left:3.5px; top:1px; width:3.5px; height:7px; border-right:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(45deg); }
+
+/* ---------- wp-admin stage ---------- */
+.stage-wrap{ width:min(100%, 1200px); margin-inline:auto; border-radius:8px; overflow-x:auto; overflow-y:hidden; box-shadow:0 0 0 1px var(--line), 0 50px 100px -40px rgba(0,0,0,.9), 0 0 160px -60px rgba(56,88,233,.6); scrollbar-width:thin; }
+.stage-box{ position:relative; width:calc(1200px * var(--s,1)); height:calc(720px * var(--s,1)); }
+.stage{ position:absolute; top:0; left:0; width:1200px; height:720px; transform:scale(var(--s,1)); transform-origin:0 0; overflow:hidden; font-size:13px; isolation:isolate; background:var(--wp-bg); color:var(--wp-ink); display:grid; grid-template-rows:32px 1fr; grid-template-columns:160px 1fr; }
+.abar{ grid-column:1 / -1; display:flex; align-items:center; gap:2px; padding:0 8px; background:var(--wp-side); color:#F0F0F1; font-size:13px; }
+.abar .it{ display:flex; align-items:center; gap:6px; height:32px; padding:0 9px; color:#C3C4C7; }
+.abar .it:hover{ background:var(--wp-side-2); color:#72AEE6; }
+.abar svg{ width:18px; height:18px; }
+.abar .sp{ flex:1; }
+.abar .av{ width:18px; height:18px; border-radius:2px; background:linear-gradient(135deg,#F97316,#DB2777); }
+.abar .perf{ font-family:var(--mono); font-size:11.5px; padding:0 10px; height:22px; border-radius:11px; display:flex; align-items:center; gap:6px; font-weight:600; transition:background .4s ease; }
+.abar .perf i{ width:8px; height:8px; border-radius:50%; background:currentColor; }
+.menu{ background:var(--wp-side); color:#F0F0F1; overflow-y:auto; scrollbar-width:none; padding-top:8px; }
+.mi{ display:flex; align-items:center; gap:8px; width:100%; height:34px; padding:0 10px; font-size:14px; color:#F0F0F1; text-align:left; transition:background .1s ease, color .1s ease; }
+.mi:hover{ background:var(--wp-side-2); color:#72AEE6; }
+.mi svg{ width:20px; height:20px; opacity:.6; flex:none; }
+.mi .bd{ margin-left:auto; min-width:18px; height:18px; padding:0 5px; border-radius:9px; background:#D63638; color:#fff; font-size:9px; font-weight:600; display:grid; place-items:center; }
+.mi.cur{ background:var(--accent); color:#fff; position:relative; }
+.mi.cur svg{ opacity:1; }
+.mi.cur::after{ content:''; position:absolute; right:0; top:50%; margin-top:-8px; border:8px solid transparent; border-right-color:var(--wp-bg); }
+.sub{ background:var(--wp-side-2); padding:6px 0; }
+.sub button{ display:block; width:100%; text-align:left; padding:5px 12px 5px 38px; font-size:13px; color:rgba(240,246,252,.7); transition:color .1s ease; }
+.sub button:hover{ color:#72AEE6; }
+.sub button[aria-current="page"]{ color:#fff; font-weight:600; }
+.content{ overflow-y:auto; padding:16px 22px 30px; scrollbar-width:thin; position:relative; }
+.ph{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.ph h1{ font-size:23px; font-weight:400; letter-spacing:-.01em; }
+.ph .ver{ font-family:var(--mono); font-size:11px; padding:2px 7px; border-radius:3px; background:#fff; border:1px solid var(--wp-line); color:var(--wp-mut); }
+.ph .sp{ flex:1; }
+.wbtn{ display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 12px; border-radius:3px; border:1px solid var(--accent); background:#F6F7F7; color:var(--accent); font-size:13px; font-weight:500; transition:all .15s ease; }
+.wbtn:hover{ background:#F0F0F1; color:#2145E6; border-color:#2145E6; }
+.wbtn.pri{ background:var(--accent); color:#fff; box-shadow:0 0 0 0 rgba(56,88,233,.5); }
+.wbtn.pri:hover{ background:#2145E6; color:#fff; box-shadow:0 0 0 3px rgba(56,88,233,.25); transform:translateY(-1px); }
+.wbtn:disabled{ opacity:.6; cursor:progress; transform:none; }
+.wbtn svg{ width:15px; height:15px; }
+.notices{ min-height:0; }
+.notice{ display:flex; align-items:center; gap:10px; margin:0 0 12px; padding:8px 12px; background:#fff; border:1px solid #C3C4C7; border-left:4px solid var(--green); box-shadow:0 1px 1px rgba(0,0,0,.04); font-size:13px; }
+.notice.info{ border-left-color:#72AEE6; }
+.notice p{ flex:1; }
+.notice b{ font-weight:600; }
+.notice .dis{ width:20px; height:20px; color:#787C82; border-radius:50%; font-size:15px; }
+.notice .dis:hover{ color:var(--red); }
+.navtabs{ display:flex; gap:6px; border-bottom:1px solid #C3C4C7; margin-bottom:16px; }
+.navtabs button{ position:relative; margin-bottom:-1px; padding:7px 13px; font-size:14px; font-weight:600; color:var(--wp-mut); background:#DCDCDE; border:1px solid #C3C4C7; transition:background .15s ease, color .15s ease; }
+.navtabs button:hover{ background:#fff; color:var(--wp-ink); }
+.navtabs button[aria-selected="true"]{ background:var(--wp-bg); color:#000; border-bottom-color:var(--wp-bg); }
+.box{ background:#fff; border:1px solid #C3C4C7; box-shadow:0 1px 1px rgba(0,0,0,.04); }
+.box-h{ display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:1px solid var(--wp-line); font-size:14px; font-weight:600; }
+.box-h span{ font-size:12px; font-weight:400; color:var(--wp-mut); }
+.ov{ display:grid; grid-template-columns:290px 1fr; gap:16px; }
+.gauge{ display:flex; flex-direction:column; align-items:center; padding:16px 14px 14px; }
+.gauge .g{ position:relative; width:180px; height:180px; }
+.gauge svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.gauge .num{ position:absolute; inset:0; display:grid; place-items:center; text-align:center; }
+.gauge .num b{ display:block; font-size:54px; font-weight:800; letter-spacing:-.05em; line-height:1; }
+.gauge .num span{ font-size:11px; color:var(--wp-mut); font-weight:500; text-transform:uppercase; letter-spacing:.06em; }
+.gauge .lbl{ margin-top:8px; font-size:13px; font-weight:600; padding:3px 10px; border-radius:10px; }
+.gauge .delta{ margin-top:6px; font-size:12px; color:var(--wp-mut); }
+.legend3{ display:flex; gap:10px; margin-top:8px; font-size:11px; color:var(--wp-mut); }
+.legend3 i{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; }
+.cwv{ display:grid; grid-template-columns:repeat(4,1fr); }
+.cw{ padding:14px; border-right:1px solid var(--wp-line); }
+.cw:last-child{ border-right:none; }
+.cw span{ font-size:11.5px; color:var(--wp-mut); font-weight:600; }
+.cw b{ display:block; font-family:var(--mono); font-size:24px; font-weight:600; letter-spacing:-.03em; margin:2px 0 6px; transition:color .4s ease; }
+.cw .bar{ height:5px; border-radius:3px; background:#F0F0F1; overflow:hidden; }
+.cw .bar i{ display:block; height:100%; border-radius:3px; width:0; }
+.cw small{ display:block; margin-top:6px; font-size:11px; color:var(--wp-faint); }
+.film{ display:grid; grid-template-columns:repeat(6,1fr); gap:8px; padding:12px 14px 14px; }
+.fr{ font-size:10.5px; color:var(--wp-mut); font-family:var(--mono); text-align:center; }
+.fr .sc{ height:84px; border:1px solid var(--wp-line); border-radius:3px; background:#fff; padding:5px; display:flex; flex-direction:column; gap:4px; margin-bottom:4px; overflow:hidden; }
+.fr .sc i{ display:block; border-radius:2px; background:#E8E8EA; transition:background .4s ease, opacity .4s ease; }
+.fr .sc .h{ height:8px; } .fr .sc .im{ flex:1; } .fr .sc .t{ height:5px; width:70%; } .fr .sc .t2{ height:5px; width:45%; }
+.fr .sc.lo .h{ background:#1D2327; } .fr .sc.lo .im{ background:linear-gradient(135deg,#C2853B,#6B3E1E); } .fr .sc.lo .t, .fr .sc.lo .t2{ background:#8C8F94; }
+.fr .sc.part .h{ background:#1D2327; } .fr .sc.part .t{ background:#C3C4C7; }
+.fr.lcp{ color:var(--green); font-weight:600; }
+.fr.lcp .sc{ border-color:var(--green); box-shadow:0 0 0 1px var(--green); }
+.opts{ display:flex; flex-direction:column; }
+.opt{ display:grid; grid-template-columns:1fr auto 44px; gap:12px; align-items:center; padding:10px 14px; border-bottom:1px solid #F0F0F1; transition:background .3s ease; }
+.opt:last-child{ border-bottom:none; }
+.opt b{ display:block; font-size:13.5px; font-weight:600; }
+.opt span{ font-size:12px; color:var(--wp-mut); }
+.opt .imp{ font-family:var(--mono); font-size:11.5px; font-weight:600; color:var(--wp-faint); padding:2px 7px; border-radius:3px; background:#F6F7F7; }
+.opt.on .imp{ color:var(--green); background:#EDFAEF; }
+.tg{ position:relative; width:36px; height:18px; border-radius:9px; border:1px solid #1E1E1E; background:#fff; transition:background .2s ease, border-color .2s ease; }
+.tg::after{ content:''; position:absolute; top:2px; left:2px; width:12px; height:12px; border-radius:50%; background:#1E1E1E; transition:transform .35s var(--spring), background .2s ease; }
+.tg[aria-checked="true"]{ background:var(--accent); border-color:var(--accent); }
+.tg[aria-checked="true"]::after{ transform:translateX(18px); background:#fff; }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+.tbl{ width:100%; border-collapse:collapse; font-size:12.5px; }
+.tbl th{ text-align:left; font-weight:600; padding:8px 12px; border-bottom:1px solid #C3C4C7; font-size:12.5px; }
+.tbl td{ padding:8px 12px; border-bottom:1px solid #F0F0F1; }
+.tbl tr:nth-child(even) td{ background:#F6F7F7; }
+.tbl .m{ font-family:var(--mono); font-size:12px; }
+.tbl .sv{ color:var(--green); font-weight:600; }
+.pill{ display:inline-block; padding:1px 7px; border-radius:3px; font-size:11px; font-weight:600; background:#F0F0F1; color:var(--wp-mut); }
+.pill.g{ background:#EDFAEF; color:#007017; } .pill.b{ background:#EEF2FF; color:var(--accent); } .pill.r{ background:#FCF0F1; color:#B32D2E; }
+.weight{ display:flex; align-items:center; gap:14px; padding:12px 14px; border-top:1px solid var(--wp-line); font-size:12.5px; color:var(--wp-mut); }
+.weight b{ font-family:var(--mono); color:var(--wp-ink); font-size:15px; }
+.weight .bar{ flex:1; height:10px; border-radius:5px; background:#F0F0F1; overflow:hidden; }
+.weight .bar i{ display:block; height:100%; background:var(--accent); border-radius:5px; }
+.imgs{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding:14px; }
+.im{ border:1px solid var(--wp-line); border-radius:3px; overflow:hidden; font-size:11px; }
+.im .ph2{ position:relative; height:84px; }
+.im .ph2 .tag{ position:absolute; top:5px; left:5px; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700; background:rgba(0,0,0,.6); color:#fff; }
+.im .ph2 .tag.p{ background:var(--green); }
+.im .ph2.lazy::after{ content:'lazy · loads on scroll'; position:absolute; inset:0; display:grid; place-items:center; background:repeating-linear-gradient(45deg,rgba(255,255,255,.75) 0 6px,rgba(255,255,255,.55) 6px 12px); color:var(--wp-mut); font-weight:600; font-size:10.5px; }
+.im .cap{ display:flex; justify-content:space-between; padding:5px 7px; font-family:var(--mono); }
+.im .cap b{ font-weight:600; }
+.im .cap .s{ color:var(--green); }
+.co{ display:grid; grid-template-columns:1fr 330px; gap:16px; }
+.fields .opt{ grid-template-columns:1fr auto 44px; }
+.prev{ padding:16px; background:#FBFBFB; }
+.prev h4{ font-size:15px; margin-bottom:10px; }
+.f{ margin-bottom:8px; overflow:hidden; }
+.f label{ display:block; font-size:11.5px; font-weight:600; margin-bottom:3px; color:var(--wp-mut); }
+.f i{ display:block; height:30px; border:1px solid #C3C4C7; border-radius:3px; background:#fff; }
+.f.tall i{ height:52px; }
+.paybtn{ margin-top:6px; height:38px; border-radius:3px; background:#7F54B3; color:#fff; font-weight:600; display:grid; place-items:center; font-size:13px; }
+.conv{ margin-top:10px; font-size:12px; color:var(--wp-mut); }
+.conv b{ color:var(--green); font-family:var(--mono); }
+.scan{ position:absolute; inset:0; z-index:5; background:rgba(240,240,241,.75); backdrop-filter:blur(2px); display:grid; place-items:center; }
+.scan .bx{ width:360px; padding:18px; background:#fff; border:1px solid #C3C4C7; box-shadow:0 10px 30px rgba(0,0,0,.12); }
+.scan b{ display:block; font-size:14px; margin-bottom:8px; }
+.scan .pb{ height:6px; border-radius:3px; background:#F0F0F1; overflow:hidden; }
+.scan .pb i{ display:block; height:100%; width:0; background:var(--accent); }
+.scan span{ display:block; margin-top:8px; font-family:var(--mono); font-size:11.5px; color:var(--wp-mut); }
+
+/* below */
+.below{ display:grid; grid-template-columns:1.2fr 1fr; gap:24px; padding:30px 0 70px; }
+.sh{ font-family:var(--mono); font-size:12px; color:#787C82; margin-bottom:10px; }
+.spec{ border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#1D2327; }
+.spec div{ display:grid; grid-template-columns:120px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; }
+.spec div:last-child{ border-bottom:none; }
+.spec dt{ font-family:var(--mono); font-size:12px; color:#787C82; padding-top:1px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.metric{ padding:16px; border-radius:6px; background:#1D2327; border:1px solid var(--line); }
+.metric b{ display:block; font-size:26px; font-weight:800; letter-spacing:-.03em; color:#4ADE80; }
+.metric span{ font-size:12px; color:#787C82; }
+.cta{ display:inline-flex; align-items:center; gap:10px; margin-top:16px; height:46px; padding:0 22px; border-radius:4px; background:var(--accent); color:#fff; font-weight:600; font-size:14.5px; box-shadow:0 12px 30px -12px var(--accent); transition:transform .3s var(--spring), box-shadow .3s ease, background .2s ease; }
+.cta:hover{ transform:translateY(-2px); background:#2145E6; box-shadow:0 0 0 3px rgba(56,88,233,.3), 0 18px 40px -12px var(--accent); }
+.hint{ margin-top:12px; font-size:13px; color:#787C82; }
+.mobile-note{ display:none; font-size:12.5px; color:#787C82; margin-top:10px; }
+.foot{ text-align:center; padding:20px 16px calc(28px + env(safe-area-inset-bottom,0px)); font-size:12.5px; color:#787C82; border-top:1px solid var(--line); }
+.foot b{ color:#fff; font-weight:600; }
+.foot a{ color:#7B90FF; }
+@media(max-width:900px){ .intro, .below{ grid-template-columns:1fr; } .try{ justify-content:flex-start; } .try-h{ text-align:left; } .mobile-note{ display:block; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+</style>
 </head>
-<body data-theme="1">
+<body>
 
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="msite-nav" id="msiteNav">
-  <div class="msite-nav-inner">
-    <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-    <nav class="msite-nav-links">
-      <a href="../../index.html#work">Work</a>
-      <a href="../../index.html#about">About</a>
-      <a href="../../index.html#craft">Craft</a>
-      <a href="../../index.html#services">Services</a>
-    </nav>
-    <a class="msite-nav-cta" href="../../index.html#contact">Start a project</a>
-    <button class="msite-burger" id="msiteBurger" aria-label="Open menu"><span></span><span></span><span></span></button>
-  </div>
+<header class="top">
+  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
+  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
 </header>
 
-<div class="msite-mobile-menu" id="msiteMobileMenu">
-  <button class="msite-close" id="msiteCloseMenu" aria-label="Close menu">×</button>
-  <a href="../../index.html#work">Work</a>
-  <a href="../../index.html#about">About</a>
-  <a href="../../index.html#craft">Craft</a>
-  <a href="../../index.html#services">Services</a>
-  <a href="../../index.html#contact">Contact</a>
-</div>
-
-<section class="msite-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.12"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.08"></div>
-  <div class="msite-hero-scrim"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <div class="msite-kicker"><span class="dot"></span>WordPress Plugins</div>
-    <h1><span class="word"><span class="word-inner">One</span></span> <span class="word"><span class="word-inner">plugin,</span></span> <span class="word"><span class="word-inner">zero</span></span> <span class="word"><span class="word-inner">bloat</span></span></h1>
-    <p>Automatic image compression and lazy-load setup.</p>
-  </div>
-  <div class="msite-scroll-cue"><span>Scroll</span><div class="bar"></div></div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">About</span>
-    <h2 class="msite-section-title reveal">The story behind the build</h2>
-    <div class="msite-about reveal">
-      <p>SpeedTrim WP is a WordPress plugin built around one job: automatic image compression and lazy-load setup. No dashboard nagging, no premium upsell banners, no unrelated features bolted on.</p>
-      <p>It follows WordPress's own conventions closely enough to feel native — the settings screen below is the real thing, not a mockup.</p>
+<main class="wrap">
+  <section class="intro">
+    <div>
+      <span class="kick">WordPress 6.x · WooCommerce · PHP 8.2 · React settings UI</span>
+      <h1>SpeedTrim <span>WP</span></h1>
+      <p>A WooCommerce store went from a red 48 to a green 99 with eight switches. This wp-admin is live: flip the optimisations and watch Core Web Vitals, the load filmstrip and the checkout form change as you go.</p>
     </div>
-  </div>
-</section>
-
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">Try it live</span>
-    <h2 class="msite-section-title reveal">See it in action</h2>
-    <div class="msite-demo-wrap reveal">
-      <div id="demoBody"></div>
+    <div class="try" id="tryList" aria-label="Try it checklist">
+      <div class="try-h">try it · <b id="tryCount">0/5</b></div>
+      <span class="chipt" data-t="tabs"><i></i>Open another settings tab</span>
+      <span class="chipt" data-t="asset"><i></i>Turn on asset minification</span>
+      <span class="chipt" data-t="lazy"><i></i>Turn on lazy loading</span>
+      <span class="chipt" data-t="checkout"><i></i>Remove a checkout field</span>
+      <span class="chipt" data-t="green"><i></i>Get the score into the green</span>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="msite-section">
-  <div class="wrap">
-    <span class="msite-section-kicker">What sets it apart</span>
-    <h2 class="msite-section-title reveal">Built around the details that matter</h2>
-    <div class="msite-features">
-      <div class="msite-feature reveal"><span class="num mono">01</span><h3>Native Admin UI</h3><p>Matches core WordPress design patterns, so there's nothing new to learn.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">02</span><h3>No Bloat</h3><p>Ships with exactly the code it needs and not a single dependency more.</p></div>
-      <div class="msite-feature reveal"><span class="num mono">03</span><h3>Actively Maintained</h3><p>Kept current with the latest WordPress core releases, not abandoned after launch.</p></div>
-    </div>
-  </div>
-</section>
+  <div class="stage-wrap" id="stageWrap">
+    <div class="stage-box">
+      <div class="stage" id="stage">
+        <div class="abar">
+          <span class="it" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-8.7 10c0-1.3.3-2.5.8-3.6l4.1 11.3A8.7 8.7 0 0 1 3.3 12Zm8.7 8.7c-.9 0-1.7-.1-2.5-.4l2.6-7.6 2.7 7.4.1.1c-.9.3-1.9.5-2.9.5Zm1.2-12.8.9-.1c.4 0 .4-.7 0-.6l-2.6.1-2.6-.1c-.4 0-.5.6 0 .6l.8.1 1.2 3.4-1.7 5.2-2.9-8.6.9-.1c.4 0 .4-.7 0-.6l-2.6.1h-.5A8.7 8.7 0 0 1 18 5.6h-.1c-1 0-1.6.8-1.6 1.7 0 .8.4 1.4.9 2.2.4.6.8 1.4.8 2.6 0 .8-.3 1.7-.7 3l-.9 3.1Zm3.2 11.6 2.6-7.6c.5-1.2.7-2.2.7-3l-.1-1a8.7 8.7 0 0 1-3.2 11.6Z"/></svg></span>
+          <span class="it"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3Z"/></svg>Ember &amp; Oak Coffee</span>
+          <span class="it"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v12H8l-4 4Z"/></svg>3</span>
+          <span class="it">+ New</span>
+          <span class="it perf" id="abPerf"><i></i><span id="abScore">48</span> · SpeedTrim</span>
+          <span class="sp"></span>
+          <span class="it">Howdy, Priya <span class="av"></span></span>
+        </div>
+        <nav class="menu" aria-label="Admin menu">
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4a9 9 0 0 0-9 9h2a7 7 0 0 1 14 0h2a9 9 0 0 0-9-9Zm4 4-5 5a1.5 1.5 0 1 0 2 2l5-5Z"/></svg>Dashboard</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m16 3 5 5-11 11H5v-5Z"/></svg>Posts</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5h16v14H4Zm2 11h12l-4-5-3 4-2-2Z"/></svg>Media</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h9l4 4v14H6Z"/></svg>Pages</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v12H8l-4 4Z"/></svg>Comments<span class="bd">3</span></button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v11H9l-4 3v-3H3Z"/></svg>WooCommerce</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7l8-4 8 4v10l-8 4-8-4Z"/></svg>Products</button>
+          <button class="mi cur" type="button" aria-current="page"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></svg>SpeedTrim</button>
+          <div class="sub" id="sub">
+            <button type="button" data-tab="overview" aria-current="page">Overview</button>
+            <button type="button" data-tab="assets">Assets</button>
+            <button type="button" data-tab="images">Images</button>
+            <button type="button" data-tab="checkout">Checkout</button>
+          </div>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 0 18c1 0 1.5-.7 1.5-1.5 0-1-.8-1.3-.8-2.2 0-.8.7-1.3 1.6-1.3H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8Z"/></svg>Appearance</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 3v5H6v4a6 6 0 0 0 5 6v3h2v-3a6 6 0 0 0 5-6V8h-2V3h-2v5h-4V3Z"/></svg>Plugins<span class="bd">2</span></button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0Z"/></svg>Users</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m14 6 4-4 4 4-4 4-1-1-9 9-3 1 1-3 9-9Z"/></svg>Tools</button>
+          <button class="mi" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 5v-2l-2.2-.6-.6-1.5 1.1-2-1.4-1.4-2 1.1-1.5-.6L13 3h-2l-.6 2.2-1.5.6-2-1.1-1.4 1.4 1.1 2-.6 1.5L3 11v2l2.2.6.6 1.5-1.1 2 1.4 1.4 2-1.1 1.5.6L11 21h2l.6-2.2 1.5-.6 2 1.1 1.4-1.4-1.1-2 .6-1.5Z"/></svg>Settings</button>
+        </nav>
 
-<section class="msite-cta">
-  <div class="wrap">
-    <h2 class="reveal">Need a WordPress plugin built?</h2>
-    <p class="reveal">Bazozo builds plugins that respect the platform.</p>
-    <a class="msite-cta-btn reveal" href="../../index.html#contact">Start a project</a>
-  </div>
-</section>
+        <div class="content" id="content">
+          <div class="ph"><h1>SpeedTrim</h1><span class="ver">v2.4.1</span><span class="sp"></span>
+            <button class="wbtn" type="button" id="testBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>Run speed test</button>
+            <button class="wbtn pri" type="button" id="oneClick"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></svg>One-click optimise</button></div>
+          <div class="notices" id="notices"></div>
+          <div class="navtabs" role="tablist" aria-label="SpeedTrim settings">
+            <button type="button" role="tab" data-tab="overview" aria-selected="true">Overview</button>
+            <button type="button" role="tab" data-tab="assets" aria-selected="false">Assets</button>
+            <button type="button" role="tab" data-tab="images" aria-selected="false">Images</button>
+            <button type="button" role="tab" data-tab="checkout" aria-selected="false">Checkout</button>
+          </div>
 
-<footer class="msite-footer">
-  <div class="wrap">
-    <div class="msite-footer-top">
-      <div>
-        <div class="msite-footer-brand">bazozo<span>.</span></div>
-        <p class="msite-footer-note">Like what you see? This case study was designed and built by Bazozo — the same craft is available for your next project.</p>
+          <section data-pane="overview">
+            <div class="ov">
+              <div class="box gauge">
+                <div class="g"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#F0F0F1" stroke-width="10"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="#D63638" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="170"/></svg>
+                  <div class="num"><div><b id="score">48</b><span>Mobile score</span></div></div></div>
+                <div class="lbl" id="scoreLbl">Poor</div>
+                <div class="delta" id="delta">Flip a switch to start trimming.</div>
+                <div class="legend3"><span><i style="background:#D63638"></i>0–49</span><span><i style="background:#DBA617"></i>50–89</span><span><i style="background:#00A32A"></i>90–100</span></div>
+              </div>
+              <div>
+                <div class="box">
+                  <div class="box-h">Core Web Vitals <span>simulated mobile · 4G · Moto G Power</span></div>
+                  <div class="cwv">
+                    <div class="cw"><span>LCP · largest paint</span><b id="mLcp">4.8s</b><div class="bar"><i id="bLcp"></i></div><small>good under 2.5s</small></div>
+                    <div class="cw"><span>INP · responsiveness</span><b id="mInp">380ms</b><div class="bar"><i id="bInp"></i></div><small>good under 200ms</small></div>
+                    <div class="cw"><span>CLS · layout shift</span><b id="mCls">0.24</b><div class="bar"><i id="bCls"></i></div><small>good under 0.1</small></div>
+                    <div class="cw"><span>Page weight</span><b id="mKb">3.8 MB</b><div class="bar"><i id="bKb"></i></div><small id="mReq">71 requests</small></div>
+                  </div>
+                </div>
+                <div class="box" style="margin-top:16px">
+                  <div class="box-h">Load filmstrip <span>shop homepage, every 0.5s</span></div>
+                  <div class="film" id="film"></div>
+                </div>
+              </div>
+            </div>
+            <div class="box" style="margin-top:16px">
+              <div class="box-h">Optimisations <span id="onCount">0 of 8 on</span></div>
+              <div class="opts" id="optsAll"></div>
+            </div>
+          </section>
+
+          <section data-pane="assets" hidden>
+            <div class="box"><div class="box-h">CSS &amp; JavaScript <span>what the shop homepage loads</span></div><div class="opts" id="optsAssets"></div></div>
+            <div class="box" style="margin-top:16px"><table class="tbl"><thead><tr><th>File</th><th>Type</th><th>Original</th><th>Now</th><th>Status</th></tr></thead><tbody id="assetBody"></tbody></table>
+              <div class="weight">CSS + JS <b id="awKb">—</b><div class="bar"><i id="awBar"></i></div><span id="awSave">—</span></div></div>
+          </section>
+
+          <section data-pane="images" hidden>
+            <div class="box"><div class="box-h">Images <span>product grid on the shop homepage</span></div><div class="opts" id="optsImages"></div></div>
+            <div class="box" style="margin-top:16px"><div class="imgs" id="imgs"></div></div>
+          </section>
+
+          <section data-pane="checkout" hidden>
+            <div class="co">
+              <div>
+                <div class="box"><div class="box-h">Checkout booster <span>fewer fields, fewer abandoned carts</span></div><div class="opts" id="optsCheckout"></div></div>
+                <div class="box fields" style="margin-top:16px"><div class="box-h">Checkout fields <span>switch off what you don't need</span></div><div class="opts" id="fieldOpts"></div></div>
+              </div>
+              <div class="box prev"><h4>Checkout preview</h4><div id="coForm"></div><div class="paybtn">Place order · $42.00</div><p class="conv" id="conv">—</p></div>
+            </div>
+          </section>
+
+          <div class="scan" id="scan" hidden><div class="bx"><b>Running speed test…</b><div class="pb"><i id="scanBar"></i></div><span id="scanStep">Loading page</span></div></div>
+        </div>
       </div>
-      <a class="msite-footer-cta" href="../../index.html#contact">Start a project →</a>
-    </div>
-    <div class="msite-footer-bottom">
-      <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-      <a href="../../index.html#work">← Back to Bazozo</a>
     </div>
   </div>
-</footer>
+  <p class="mobile-note">Best on a laptop or desktop. On a phone, scroll sideways inside the dashboard.</p>
 
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  <section class="below">
+    <div>
+      <h2 class="sh">// architecture</h2>
+      <dl class="spec">
+        <div><dt>settings</dt><dd>React admin screen built with @wordpress/components, saved through the REST API</dd></div>
+        <div><dt>assets</dt><dd>Minify and defer at build time, cached as static files with hashed names; one-click rollback</dd></div>
+        <div><dt>images</dt><dd>WebP and AVIF generated in the background with Action Scheduler; native lazy loading plus LCP preload</dd></div>
+        <div><dt>checkout</dt><dd>Hooks into woocommerce_checkout_fields and the Checkout block, with no template overrides</dd></div>
+        <div><dt>testing</dt><dd>PageSpeed Insights API runs on a schedule; score shown in the admin bar</dd></div>
+        <div><dt>safety</dt><dd>Every switch is reversible; capability checks and nonces on every save</dd></div>
+      </dl>
+    </div>
+    <div>
+      <h2 class="sh">// numbers</h2>
+      <div class="metrics"><div class="metric"><b>48 → 99</b><span>mobile score</span></div><div class="metric"><b>-71%</b><span>page weight</span></div><div class="metric"><b>+18%</b><span>checkout completion</span></div></div>
+      <p class="hint">Tip: press "One-click optimise" and watch every switch flip in order.</p>
+      <a class="cta" href="../../index.html#contact">Build a WordPress plugin like this →</a>
+    </div>
+  </section>
+</main>
 
-const msiteNav = document.getElementById('msiteNav');
-window.addEventListener('scroll', () => msiteNav.classList.toggle('scrolled', window.scrollY > 40));
-const msiteBurger = document.getElementById('msiteBurger');
-const msiteMobileMenu = document.getElementById('msiteMobileMenu');
-const msiteCloseMenu = document.getElementById('msiteCloseMenu');
-msiteBurger.addEventListener('click', () => msiteMobileMenu.classList.add('open'));
-msiteCloseMenu.addEventListener('click', () => msiteMobileMenu.classList.remove('open'));
-msiteMobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => msiteMobileMenu.classList.remove('open')));
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
 
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.msite-kicker', '.msite-hero h1 .word-inner', '.msite-hero p', '.msite-scroll-cue'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.msite-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.msite-hero h1 .word-inner', {yPercent:110, duration:0.75, stagger:0.05}, '-=0.3')
-    .from('.msite-hero p', {opacity:0, y:18, duration:0.6}, '-=0.35')
-    .from('.msite-scroll-cue', {opacity:0, duration:0.6}, '-=0.3');
-}
-
-document.querySelectorAll('.msite-about.reveal, .msite-section-title.reveal, .msite-demo-wrap.reveal, .msite-cta .reveal').forEach(el => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:28});
-  ScrollTrigger.create({
-    trigger: el, start:'top 90%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.8, ease:'power3.out'})
-  });
-});
-
-const msiteFeatureCards = document.querySelectorAll('.msite-feature.reveal');
-if(prefersReduced){
-  gsap.set(msiteFeatureCards, {opacity:1, y:0});
-} else if(msiteFeatureCards.length){
-  gsap.set(msiteFeatureCards, {opacity:0, y:26});
-  ScrollTrigger.batch(msiteFeatureCards, {
-    start:'top 92%', once:true,
-    onEnter: batch => gsap.to(batch, {opacity:1, y:0, duration:0.65, ease:'power3.out', stagger:0.1})
-  });
-}
-
-renderLiveDemo(projects[104]);
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="speedtrimwp.js" defer></script>
 </body>
 </html>
