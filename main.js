@@ -253,6 +253,8 @@ services.forEach((s, i) => {
    - video: the film's own stock clip, 3.6 s loop, plays on hover
    ================================================================== */
 function dots(n, cls){ const f = document.createDocumentFragment(); for(let i = 0; i < n; i++) f.append(mk('i', cls)); return f; }
+/* bump when screenshots are re-captured so browsers and the CDN fetch the new images */
+const PREVIEW_VERSION = '20261104b';
 const previewKey = p => p.cat === 'web' ? slugFor(p) : `${p.cat}/${slugFor(p)}`;
 const previewLabel = p => p.url ? p.url.replace(/^https?:\/\//, '').replace(/\/$/, '') : p.cat === 'web' ? `bazozo.in/work/${slugFor(p)}` : `bazozo.in/demo/${p.cat}/${slugFor(p)}`;
 
@@ -271,7 +273,7 @@ function pvShot(p){
     img.alt = `${p.title.replace(/"/g, '')}: ${meta.label.replace(/s$/, '')} preview`;
     img.loading = 'lazy'; img.decoding = 'async'; img.width = 640; img.height = 1000; img.className = 'pv-scroll';
     img.setAttribute('fetchpriority', 'low');
-    img.src = `images/preview/${key}.webp`;
+    img.src = `images/preview/${key}.webp?v=${PREVIEW_VERSION}`;
     shot.append(img, mk('span', 'pv-scrollhint mono', 'Hover to scroll ↓'));
   } else {
     const ph = mk('span', 'pv-missing'); ph.append(icon(CAT_ICON[p.cat] || 'web'), mk('b', null, p.title)); shot.append(ph);

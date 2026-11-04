@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Page not found — Bazozo</title>
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#09090b">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional">
+<link rel="stylesheet" href="/styles.css">
 <style>
 .nf-main{ min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:120px 24px 60px; }
 .nf-code{ font-family:'Unbounded',sans-serif; font-weight:900; font-size:clamp(64px,14vw,160px); line-height:1; color:var(--brass); }
@@ -26,6 +27,7 @@
 .nf-btn.primary{ background:var(--brass); color:var(--bg); font-weight:600; }
 .nf-btn.primary:hover{ transform:translateY(-2px); }
 .nf-btn.ghost{ border:1px solid var(--line-strong); color:var(--ink-dim); }
+.nf-legal a{ display:inline-block; padding:10px 2px; }
 .nf-btn.ghost:hover{ color:var(--ink); border-color:var(--ink-dim); }
 </style>
 </head>
@@ -49,11 +51,10 @@
 
 <footer>
   <div class="wrap" style="width:100%; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-    <span>© <span id="year"></span> bazozo.in. All rights reserved.</span>
-    <span><a href="/">bazozo.in</a></span>
+    <span>© 2026 Bazozo Studio. All rights reserved.</span>
+    <span><nav class="nf-legal" aria-label="Legal"><a href="/privacy-policy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/disclaimer.html">Disclaimer</a> · <a href="/refund-policy.html">Refunds</a></nav></span>
   </div>
 </footer>
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

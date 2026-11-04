@@ -107,3 +107,7 @@ a{ color:inherit; text-decoration:none; }
   .cs-btn, .cs-btn span{ width:100%; justify-content:center; }
 }
 @media(prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+.cs-legal{ display:flex; flex-wrap:wrap; gap:4px 16px; }
+.cs-legal a{ display:inline-block; padding:10px 0; }
+.cs-legal a:hover{ color:var(--accent); }

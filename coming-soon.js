@@ -132,8 +132,9 @@
       .from('.cs-loader', { opacity:0, scale:0.92, rotation:-6, duration:1.1 }, 0.2);
     if(window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
   }
-  if(window.Lenis && !reduced){
-    const lenis = new Lenis({ autoRaf:true, smoothWheel:true });
+  if(window.Lenis && window.gsap && !reduced){
+    const lenis = new Lenis({ smoothWheel:true });
+    if(window.gsap){ gsap.ticker.add(time => lenis.raf(time * 1000)); gsap.ticker.lagSmoothing(0); }
     svg.addEventListener('pointerenter', () => lenis.stop());
     svg.addEventListener('pointerleave', () => lenis.start());
   }
