@@ -2,7 +2,7 @@
 const categories = [
   {key:'all', label:'All Work', color:'#e7b85c'},
   {key:'web', label:'Websites', mono:'WB', color:'#e7b85c'},
-  {key:'video', label:'Video Editing', mono:'VE', color:'#ff6b57'},
+  {key:'video', label:'Graphics/ Video Editing', mono:'VE', color:'#ff6b57'},
   {key:'chrome', label:'Chrome Extensions', mono:'CE', color:'#4285f4'},
   {key:'firefox', label:'Firefox Add-ons', mono:'FE', color:'#ff7a3d'},
   {key:'safari', label:'Safari App Extensions', mono:'SE', color:'#5c7cfa'},
@@ -261,7 +261,7 @@ const pillars = [
    tags:[{label:"iOS", cats:["ios"]},{label:"Android", cats:["android"]},{label:"macOS", cats:["mac"]},{label:"Windows", cats:["windows"]},{label:"Mobile Games", cats:["androidgames","iosgames"]}]},
   {num:"04", title:"Brand Film & Motion", color:"#ff6b57",
    blurb:"Brand films and social edits, plus the scroll-driven and WebGL motion that makes a site feel alive.",
-   tags:[{label:"Video Editing", cats:["video"]},{label:"Interactive Scroll / WebGL"}]},
+   tags:[{label:"Graphics/ Video Editing", cats:["video"]},{label:"Interactive Scroll / WebGL"}]},
 ];
 
 const services = [
