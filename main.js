@@ -545,29 +545,6 @@ const heroSwap = document.getElementById('heroSwap');
 const dialCurrent = document.getElementById('dialCurrent');
 const dialProgress = document.getElementById('dialProgress');
 const CIRC = 276;
-function reserveDialWidths(){
-  if(!heroSwap || !dialCurrent) return;
-  const swapProbe = heroSwap.cloneNode(false);
-  swapProbe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; display:inline-block; min-width:0;';
-  heroSwap.parentNode.insertBefore(swapProbe, heroSwap.nextSibling);
-  const curProbe = dialCurrent.cloneNode(false);
-  curProbe.style.cssText = 'position:absolute; visibility:hidden; white-space:nowrap; min-width:0;';
-  dialCurrent.parentNode.insertBefore(curProbe, dialCurrent.nextSibling);
-  let maxSwapW = 0, maxCurW = 0;
-  dialCats.forEach(c => {
-    swapProbe.textContent = c.label.toLowerCase();
-    maxSwapW = Math.max(maxSwapW, swapProbe.getBoundingClientRect().width);
-    curProbe.textContent = c.label;
-    maxCurW = Math.max(maxCurW, curProbe.getBoundingClientRect().width);
-  });
-  swapProbe.remove(); curProbe.remove();
-  const wide = window.matchMedia('(min-width: 700px)').matches;
-  heroSwap.style.display = wide ? 'inline-block' : 'inline';
-  heroSwap.style.minWidth = wide ? Math.min(Math.ceil(maxSwapW), heroSwap.parentNode.clientWidth) + 'px' : '';
-  dialCurrent.style.minWidth = Math.ceil(maxCurW) + 'px';
-}
-reserveDialWidths();
-window.addEventListener('resize', reserveDialWidths);
 function setDial(i){
   const c = dialCats[i];
   document.documentElement.style.setProperty('--live-accent', c.color);
@@ -784,7 +761,8 @@ mm.add({
 
   /* hero: brief pin-and-dissolve (created first so later triggers measure the pin spacer) */
   ScrollTrigger.create({ trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1, refreshPriority:10 });
-  gsap.to(['.hero-content', '.hero-bottom'], { opacity:0, y:-40, scale:0.94, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 } });
+  gsap.to('.hero-content', { opacity:0.15, y:-40, scale:0.94, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 } });
+  gsap.to('.hero-bottom', { y:-40, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 } });   // dial + scroll cue stay fully visible
 
   /* drivetrain: chain travel + opposing marquees, scrub:1 */
   if(drivetrain){
