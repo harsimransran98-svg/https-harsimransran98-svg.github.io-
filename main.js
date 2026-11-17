@@ -929,6 +929,7 @@ function startHeroIntro(){
       .from('.eyebrow', { opacity:0, y:16, duration:0.6 })
       .from('.hero h1 .line-inner', { yPercent:110, duration:0.85, stagger:0.1 }, '-=0.35')
       .from('.hero-sub', { opacity:0, y:18, duration:0.6 }, '-=0.4')
+      .from('.hero-ctas > a', { opacity:0, y:18, duration:0.55, stagger:0.08 }, '-=0.4')
       .from('.hero-bottom .dial-wrap', { opacity:0, y:18, duration:0.6 }, '-=0.35')
       .from('.hero-bottom .scroll-cue', { opacity:0, y:18, duration:0.6 }, '-=0.5')
       .from('.nav-pill', { opacity:0, y:-24, duration:0.7 }, 0.1);

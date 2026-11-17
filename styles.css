@@ -1097,3 +1097,32 @@ footer.site-foot{ display:block; padding:64px 0 0; border-top:1px solid var(--li
 .foot-base{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:18px; padding-bottom:28px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint); }
 @media(max-width:900px){ .foot-grid{ grid-template-columns:1fr 1fr; } }
 @media(max-width:520px){ .foot-grid{ grid-template-columns:1fr; gap:24px; } }
+
+/* ---------- hero CTAs + ghost button ---------- */
+.hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
+.ghost-btn{
+  display:inline-flex; align-items:center; gap:10px; padding:12px 21px; border-radius:999px;
+  border:1px solid var(--line-strong); color:var(--ink); white-space:nowrap;
+  font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+  transition:border-color .3s ease, background .3s ease, box-shadow .3s ease;
+}
+.ghost-btn i{ font-style:normal; display:inline-block; transition:transform .45s cubic-bezier(.34,1.56,.64,1); }
+.ghost-btn:hover{ border-color:var(--brass); background:color-mix(in srgb, var(--brass) 8%, transparent); box-shadow:0 10px 30px -14px var(--brass); }
+.ghost-btn:hover i{ transform:translateX(4px); }
+.ghost-btn:focus-visible{ outline:2px solid var(--brass); outline-offset:4px; }
+
+/* ---------- why bazozo + ways to work ---------- */
+.why-grid, .ways-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+.why-card, .way-card{ background:var(--bg); padding:34px 28px; transition:background .3s ease; }
+.why-card:hover, .way-card:hover{ background:var(--surface-2); }
+.why-n, .way-k{ font-size:12px; color:var(--brass); letter-spacing:.12em; text-transform:uppercase; }
+.why-card h3, .way-card h3{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:20px; margin:18px 0 10px; }
+.why-card p, .way-card p{ color:var(--ink-dim); font-size:15px; line-height:1.6; }
+.ways-head{ margin:110px 0 48px; }
+.way-card{ display:flex; flex-direction:column; }
+.way-card ul{ list-style:none; margin:20px 0 28px; padding:0; display:grid; gap:9px; font-size:14px; color:var(--ink-dim); }
+.way-card li::before{ content:'\2726'; color:var(--brass); margin-right:10px; font-size:11px; }
+.way-card > a{ margin-top:auto; align-self:flex-start; }
+.way-card.is-featured{ background:color-mix(in srgb, var(--brass) 7%, var(--bg)); box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--brass) 45%, transparent); }
+.ways-note{ margin-top:22px; font-size:12px; color:var(--ink-faint); letter-spacing:.04em; }
+@media(max-width:900px){ .why-grid, .ways-grid{ grid-template-columns:1fr; } .ways-head{ margin-top:80px; } }
