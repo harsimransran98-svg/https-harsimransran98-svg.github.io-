@@ -4,13 +4,13 @@
   --surface:#141519;
   --surface-2:#1a1c21;
   --ink:#f4f2ec;
-  --ink-dim:#a9a7a0;
-  --ink-faint:#6f6e6a;
+  --ink-dim:#cdcac2;
+  --ink-faint:#a3a199;
   --brass:#e7b85c;
   --brass-dim:#a9863f;
   --teal:#3fbfad;
-  --line:rgba(244,242,236,0.10);
-  --line-strong:rgba(244,242,236,0.18);
+  --line:rgba(244,242,236,0.14);
+  --line-strong:rgba(244,242,236,0.28);
   --live-accent:#e7b85c;
   --radius:14px;
   --nav-h:76px;
@@ -1142,3 +1142,183 @@ footer.site-foot{ display:block; padding:64px 0 0; border-top:1px solid var(--li
 .contact-item a.ci-link:hover .ci-go{ transform:translateX(4px); }
 .contact-item a.ci-link:focus-visible{ outline:2px solid var(--brass); outline-offset:3px; }
 @media(max-width:640px){ .contact-item a.ci-link{ font-size:14px; } }
+
+/* ---------- phone polish: compact services, readable labels, clean hero dial ---------- */
+@media(max-width:640px){
+  /* services: two compact columns instead of twenty stacked cards */
+  .service-grid.craft-grid{ grid-template-columns:repeat(2,1fr); gap:14px; }
+  .service-grid .craft-card{ min-height:0; padding:16px 14px; gap:10px; }
+  .service-grid .craft-name{ font-size:14px; line-height:1.25; }
+  .service-grid .craft-sub{ font-size:12px; line-height:1.45; }
+  .has-up > .svc-up{ top:-14px; height:14px; }
+  .has-left > .svc-left{ left:-14px; width:14px; }
+  /* tiny mono labels up to a readable size */
+  .disc-live, .disc-go, .pillar-tag-n{ font-size:12px; }
+  /* hero dial sits on a soft panel so the gears behind it don't clutter it */
+  .hero-bottom .dial-wrap{ padding:10px 18px 10px 10px; border-radius:999px; border:1px solid var(--line);
+    background:color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+  .hero-bottom .dial{ width:64px; height:64px; }
+  .hero-bottom .scroll-cue{ display:none; }
+}
+
+/* ==================================================================
+   SALES RESTRUCTURE — one card language, one heading rhythm
+   Every card on the page uses the project-card look: 18px radius,
+   surface gradient, hairline border, tomato lift on hover.
+   ================================================================== */
+:root{ --card-r:18px; --card-gap:16px; }
+.pillar, .service-grid .craft-card, .why-card, .way-card{
+  border-radius:var(--card-r); border:1px solid var(--line);
+  background:linear-gradient(180deg, var(--surface) 0%, var(--bg-soft) 100%);
+  transition:border-color .35s ease, box-shadow .45s ease, translate .35s cubic-bezier(.2,.7,.2,1);
+}
+.pillar:hover, .service-grid .craft-card:hover, .why-card:hover, .way-card:hover{
+  border-color:color-mix(in srgb, var(--brass) 42%, var(--line));
+  box-shadow:0 30px 56px -36px color-mix(in srgb, var(--brass) 70%, transparent);
+  transform:none; translate:0 -3px; background:linear-gradient(180deg, var(--surface) 0%, var(--bg-soft) 100%);
+}
+.pillar-grid, .why-grid, .ways-grid, .service-grid.craft-grid{ gap:var(--card-gap); background:none; border:0; align-items:stretch; }
+
+/* section heads: same spacing and size everywhere */
+.section-head{ margin-bottom:48px; max-width:820px; }
+.section-title, .section-title.small{ font-size:clamp(30px,4vw,50px); line-height:1.05; }
+.sub-head{ margin:64px 0 24px; display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; }
+.sub-head h3{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:clamp(18px,2vw,24px); }
+.sub-head p{ color:var(--ink-dim); font-size:15px; }
+
+/* pillars: content flows from the top, so titles line up across cards */
+.pillar{ min-height:0; padding:32px; gap:12px; }
+.pillar-head{ margin-bottom:0; }
+.pillar-num{ font-size:clamp(44px,5vw,64px); }
+.pillar-title{ margin-top:8px; font-size:clamp(18px,1.8vw,22px); }
+.pillar-tags{ margin-top:auto; padding-top:8px; }
+
+/* web services: compact, equal cards, title always in the same place */
+.svc-up, .svc-left, .has-up > .svc-up, .has-left > .svc-left{ display:none !important; }
+.service-grid.craft-grid{ grid-template-columns:repeat(4,1fr); }
+.service-grid .craft-card{ min-height:0; padding:20px 20px 22px; justify-content:flex-start; gap:12px; }
+.service-grid .craft-name{ margin-top:0; font-size:15px; line-height:1.3; }
+.service-grid .craft-sub{ font-size:13px; line-height:1.5; color:var(--ink-dim); }
+.service-grid .craft-card::before, .service-grid .craft-card::after{ display:none; }
+@media(max-width:1100px){ .service-grid.craft-grid{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:900px){ .service-grid.craft-grid{ grid-template-columns:repeat(2,1fr); } }
+
+/* why + ways */
+.why-card, .way-card{ padding:30px 28px; }
+.way-card.is-featured{ border-color:color-mix(in srgb, var(--brass) 55%, var(--line)); box-shadow:0 30px 60px -40px var(--brass);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--brass) 12%, var(--surface)) 0%, var(--bg-soft) 100%); }
+.ways-head{ margin:72px 0 24px; }
+
+/* ---------- hero: offer on the left, real work on the right ---------- */
+.hero{ justify-content:flex-start; padding-top:calc(var(--nav-h) + 64px); min-height:0; }
+.hero-bottom{ justify-content:flex-start; margin-top:44px; padding-bottom:64px; }
+.hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.08fr .92fr; gap:56px; align-items:center; }
+.hero h1{ font-size:clamp(40px,5.4vw,86px); line-height:.98; }
+.hero h1 .u{ color:var(--brass); }
+.hero-sub{ max-width:540px; }
+.hero-proof{ list-style:none; padding:22px 0 0; margin:34px 0 0; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(4,auto); gap:18px 28px; justify-content:start; }
+.hero-proof li{ display:flex; flex-direction:column; gap:4px; max-width:150px; }
+.hero-proof b{ font-family:'Unbounded',sans-serif; font-size:22px; font-weight:800; color:var(--ink); }
+.hero-proof span{ font-size:12.5px; line-height:1.35; color:var(--ink-dim); }
+.hero-stack{ position:relative; height:min(560px, 62vh); }
+.hs-card{ position:absolute; margin:0; width:58%; aspect-ratio:4 / 5; border-radius:16px; overflow:hidden;
+  border:1px solid var(--line-strong); background:var(--surface);
+  box-shadow:0 40px 70px -40px rgba(23,36,55,.55), 0 2px 6px rgba(23,36,55,.08); }
+.hs-card img{ display:block; width:100%; height:calc(100% - 30px); object-fit:cover; object-position:top; transition:object-position 3.5s ease; }
+.hs-card:hover img{ object-position:bottom; }
+.hs-bar{ display:flex; align-items:center; gap:5px; height:30px; padding:0 12px; background:var(--bg-soft); border-bottom:1px solid var(--line); }
+.hs-bar i{ width:8px; height:8px; border-radius:50%; background:var(--line-strong); }
+.hs-bar i:first-child{ background:#ff5f57; } .hs-bar i:nth-child(2){ background:#febc2e; } .hs-bar i:nth-child(3){ background:#28c840; }
+.hs-bar em{ font-style:normal; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink-faint); margin-left:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hs-1{ left:0; top:12%; rotate:-5deg; z-index:1; }
+.hs-2{ right:0; top:0; rotate:4deg; z-index:2; }
+.hs-3{ left:22%; top:30%; rotate:-1deg; z-index:3; }
+.hero-stack{ pointer-events:auto; }
+@media(max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; gap:0; }
+  .hero-stack{ display:none; }
+  .hero-proof{ grid-template-columns:repeat(2,1fr); }
+}
+
+/* ---------- contact: offer left, the three ways to reach us right ---------- */
+@media(min-width:901px){
+  .contact-wrap{ display:grid; grid-template-columns:1.15fr .85fr; column-gap:64px; align-items:start; }
+  .contact-wrap > .kicker, .contact-wrap > .contact-title, .contact-wrap > .scope-wrap{ grid-column:1; }
+  .contact-wrap > .contact-row{ grid-column:2; grid-row:1 / span 3; align-self:center; margin-top:0;
+    flex-direction:column; align-items:stretch; gap:18px; padding:30px; border:1px solid var(--line); border-radius:var(--card-r);
+    background:linear-gradient(180deg, var(--surface) 0%, var(--bg-soft) 100%); }
+  .contact-wrap > .contact-row .ci-link{ width:100%; justify-content:flex-start; }
+  .contact-wrap > .contact-row .ci-go{ margin-left:auto; }
+  .contact-title{ font-size:clamp(36px,5vw,72px); }
+}
+
+/* "currently building" badge pinned to the hero project stack */
+.hero-stack .hero-bottom{ position:absolute; left:-4%; bottom:4%; z-index:5; margin:0; padding:0; display:block; }
+.hero-bottom .dial-wrap{ padding:10px 22px 10px 10px; border-radius:999px; border:1px solid var(--line-strong);
+  background:color-mix(in srgb, var(--bg) 88%, transparent); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  box-shadow:0 24px 44px -26px rgba(23,36,55,.5); }
+.hero-bottom .dial{ width:56px; height:56px; }
+@media(max-width:900px){
+  .hero-stack{ display:block; height:auto; margin-top:36px; }
+  .hs-card{ display:none; }
+  .hero-stack .hero-bottom{ position:static; }
+}
+.hero-grid > *{ min-width:0; }
+@media(max-width:640px){ .hero{ padding-top:calc(var(--nav-h) + 36px); } .hero-proof b{ font-size:20px; } }
+
+/* ---------- readability: small labels bigger, dark-mode gear strip stronger ---------- */
+.brand-tag{ font-size:11px; }
+nav.links a{ font-size:13px; color:var(--ink); }
+.proj-count, .ways-note, .scope-note{ font-size:13px; color:var(--ink-dim); }
+.fact-list div span.k, .scope-k, .foot-col p{ font-size:12px; color:var(--ink-dim); }
+.fact-list div span.v{ font-size:15px; }
+.foot-base{ font-size:13px; color:var(--ink-dim); }
+.foot-base a{ color:var(--ink-dim); }
+.gd-readout{ font-size:13px; color:var(--ink-dim); }
+.gd-m2 .gd-track{ font-size:13px; color:var(--ink-dim); }
+.gd-label{ font-size:13px; fill:var(--ink-dim); }
+:root:not([data-theme="light"]) .gd-m1 .gd-track{ -webkit-text-stroke:1.4px color-mix(in srgb, var(--ink) 55%, transparent); }
+:root:not([data-theme="light"]) .gd-gear{ fill:#1f2127; stroke:rgba(244,242,236,.45); }
+:root:not([data-theme="light"]) .gd-sprocket{ fill:#262830; stroke-opacity:1; }
+:root:not([data-theme="light"]) .gd-c-outer{ stroke:#4a4d57; }
+:root:not([data-theme="light"]) .gd-c-inner{ stroke:#5c606b; }
+:root:not([data-theme="light"]) .gd-pitch, :root:not([data-theme="light"]) .gd-axis{ stroke:rgba(244,242,236,.22); }
+
+/* ---------- web-service cards: icon, benefit text, outcome tag ---------- */
+.service-grid .svc-card{ padding:22px 22px 20px; gap:14px; overflow:hidden; }
+.svc-card .craft-top{ align-items:center; }
+.svc-card .craft-mono{ font-size:12px; color:var(--ink-faint); }
+.svc-ic{ display:grid; place-items:center; width:42px; height:42px; border-radius:12px;
+  color:var(--brass); background:color-mix(in srgb, var(--brass) 13%, transparent);
+  border:1px solid color-mix(in srgb, var(--brass) 28%, transparent);
+  transition:background .35s ease, color .35s ease, transform .45s cubic-bezier(.34,1.56,.64,1); }
+.svc-ic .ico{ width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.svc-body{ display:flex; flex-direction:column; gap:7px; }
+.service-grid .svc-card .craft-name{ font-size:16px; color:var(--ink); }
+.service-grid .svc-card .craft-sub{ font-size:14px; line-height:1.55; color:var(--ink-dim); }
+.svc-tag{ margin-top:auto; padding-top:14px; border-top:1px dashed var(--line-strong);
+  font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--brass); display:flex; align-items:center; gap:8px; }
+.svc-tag::before{ content:'\2726'; font-size:10px; }
+.svc-card::after{ content:''; position:absolute; left:0; right:0; top:0; height:3px; display:block !important;
+  background:var(--brass); transform:scaleX(0); transform-origin:left; transition:transform .45s cubic-bezier(.2,.7,.2,1); opacity:1 !important; }
+.service-grid .svc-card:hover::after{ transform:scaleX(1); }
+.service-grid .svc-card:hover .svc-ic{ background:var(--brass); color:var(--bg); transform:rotate(-6deg) scale(1.06); }
+@media(max-width:640px){
+  .service-grid .svc-card{ padding:16px 14px; gap:10px; }
+  .svc-ic{ width:36px; height:36px; border-radius:10px; }
+  .service-grid .svc-card .craft-name{ font-size:14px; }
+  .service-grid .svc-card .craft-sub{ font-size:12.5px; }
+  .svc-tag{ font-size:10.5px; padding-top:10px; }
+}
+
+/* service cards: two clearly different voices — wide display face for titles, readable text face for copy */
+.service-grid .svc-card .craft-name{ font-family:'Unbounded',sans-serif; font-weight:600; font-size:15px; line-height:1.3; letter-spacing:-.005em; }
+.service-grid .svc-card .craft-sub{ font-family:'Inter',sans-serif; font-weight:400; font-size:15px; line-height:1.6; }
+@media(max-width:640px){
+  .service-grid .svc-card .craft-name{ font-size:13.5px; }
+  .service-grid .svc-card .craft-sub{ font-size:13.5px; line-height:1.5; }
+}
+
+/* rotating category words use the contrast-checked text colour (set in main.js) */
+.hero-sub .swap{ color:var(--live-text, var(--live-accent)); border-bottom-color:var(--live-text, var(--live-accent)); }
+.dial-current{ color:var(--live-text, var(--live-accent)); }

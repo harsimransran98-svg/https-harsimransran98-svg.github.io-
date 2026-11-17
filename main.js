@@ -42,7 +42,25 @@ const ICONS = {
   windows:'M4 4h7v7H4Z M13 4h7v7h-7Z M4 13h7v7H4Z M13 13h7v7h-7Z',
   laptop:'M5 5h14v10H5Z M2.5 19h19l-2-4h-15Z',
   pad:'M7 8h10a4 4 0 0 1 4 4v1.2a2.8 2.8 0 0 1-5.1 1.6L14.6 13H9.4l-1.3 1.8A2.8 2.8 0 0 1 3 13.2V12a4 4 0 0 1 4-4Z M7.5 9.8v3.2 M5.9 11.4h3.2 M15.6 11h.01 M17.6 12.6h.01',
-  lock:'M7 11V8a5 5 0 0 1 10 0v3 M5.5 11h13v9.5h-13Z'
+  lock:'M7 11V8a5 5 0 0 1 10 0v3 M5.5 11h13v9.5h-13Z',
+  search:'M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13Z M15.5 15.5L20 20',
+  move:'M4 8h13 M14 5l3 3-3 3 M20 16H7 M10 13l-3 3 3 3',
+  layout:'M4 4h16v16H4Z M4 9h16 M9 9v11',
+  bolt:'M13 3L5 13.5h6L10 21l8-10.5h-6Z',
+  cart:'M3 4h2.5l2.2 10.5h10.6L20.5 7H7 M9 19.5h.01 M17 19.5h.01',
+  edit:'M4 20h4L19 9l-4-4L4 16Z M13.5 6.5l4 4',
+  target:'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18Z M12 7.5a4.5 4.5 0 1 0 0 9a4.5 4.5 0 1 0 0-9Z M12 12h.01',
+  diamond:'M12 3l7 9-7 9-7-9Z M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6Z',
+  dash:'M4 4h7v9H4Z M13 4h7v5h-7Z M13 11h7v9h-7Z M4 15h7v5H4Z',
+  link:'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1 M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+  access:'M12 4.5h.01 M5 8.5l7 1.5 7-1.5 M12 10v4.5 M8.5 20l3.5-5.5 3.5 5.5',
+  shield:'M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6Z M9 12l2 2 4-4',
+  chart:'M4 4v16h16 M8 16v-4 M12 16V8 M16 16v-6',
+  trend:'M3 17l6-6 4 4 8-8 M15 7h6v6',
+  server:'M4 4h16v6H4Z M4 14h16v6H4Z M7.5 7h.01 M7.5 17h.01',
+  wrench:'M15 4a5 5 0 0 0-4.6 6.9L4 17.3 6.7 20l6.4-6.4A5 5 0 0 0 20 9l-3 3-3-1-1-3Z',
+  refresh:'M20 12a8 8 0 1 1-2.3-5.7 M20 4v4.5h-4.5',
+  clip:'M8 4h8v3H8Z M6 5.5H5v15h14v-15h-1 M8.5 13l2 2 4.5-4.5'
 };
 const CAT_ICON = { web:'web', video:'video', chrome:'puzzle', firefox:'puzzle', safari:'compass', wordpress:'plug', android:'phone', ios:'phone', windows:'windows', mac:'laptop', androidgames:'pad', iosgames:'pad' };
 function icon(name, cls){
@@ -211,7 +229,7 @@ pillars.forEach(p => {
 
 /* ---------------- render: twelve disciplines (#craftGrid) ---------------- */
 const craftGrid = document.getElementById('craftGrid');
-dialCats.forEach((c, i) => {
+if(craftGrid) dialCats.forEach((c, i) => {
   const total = countFor([c.key]);
   const live = projects.filter(p => p.cat === c.key && p.live).length;
   const card = mk('button', 'disc-card');
@@ -235,13 +253,15 @@ dialCats.forEach((c, i) => {
 const serviceGrid = document.getElementById('serviceGrid');
 serviceGrid.replaceChildren();
 services.forEach((s, i) => {
-  const card = mk('div', 'craft-card');
+  const card = mk('div', 'craft-card svc-card');
   card.append(mk('span', 'svc-up'), mk('span', 'svc-left'));
   const top = mk('div', 'craft-top');
-  top.append(mk('span', 'craft-mono mono', pad(i + 1)), mk('span', 'craft-dot'));
-  const body = mk('div');
+  const ic = mk('span', 'svc-ic'); ic.append(icon(s.icon || 'web'));
+  top.append(ic, mk('span', 'craft-mono mono', pad(i + 1)));
+  const body = mk('div', 'svc-body');
   body.append(mk('div', 'craft-name', s.title), mk('div', 'craft-sub', s.desc));
   card.append(top, body);
+  if(s.tag) card.append(mk('span', 'svc-tag mono', s.tag));
   serviceGrid.append(card);
 });
 
@@ -545,16 +565,32 @@ const heroSwap = document.getElementById('heroSwap');
 const dialCurrent = document.getElementById('dialCurrent');
 const dialProgress = document.getElementById('dialProgress');
 const CIRC = 276;
+/* readable text version of a category colour: keep its hue, but nudge it toward navy (light theme)
+   or white (dark theme) only as far as needed for 4.5:1 contrast against the page background */
+const hexRgb = h => [1, 3, 5].map(k => parseInt(h.slice(k, k + 2), 16));
+const lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; };
+const contrast = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+function readableColor(hex){
+  const light = document.documentElement.getAttribute('data-theme') === 'light';
+  const bg = hexRgb(light ? '#ECE1CE' : '#09090b'), to = hexRgb(light ? '#172437' : '#ffffff'), c = hexRgb(hex);
+  for(let t = 0; t <= 1; t += .05){
+    const m = c.map((v, k) => Math.round(v + (to[k] - v) * t));
+    if(contrast(m, bg) >= 4.5) return `rgb(${m.join(',')})`;
+  }
+  return light ? '#172437' : '#ffffff';
+}
 function setDial(i){
   const c = dialCats[i];
   document.documentElement.style.setProperty('--live-accent', c.color);
+  document.documentElement.style.setProperty('--live-text', readableColor(c.color));
   heroSwap.textContent = c.label.toLowerCase();
   dialCurrent.textContent = c.label;
-  dialCurrent.style.color = c.color;
   dialProgress.style.strokeDashoffset = CIRC - (CIRC / dialCats.length) * (i + 1);
   if(heroScene) heroScene.setTint(c.color);
 }
 setDial(0);
+/* re-check text contrast when the visitor switches theme */
+new MutationObserver(() => setDial(dialIdx)).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
 if(!prefersReduced) setInterval(() => { dialIdx = (dialIdx + 1) % dialCats.length; setDial(dialIdx); }, 2400);
 
 /* ==================================================================
@@ -935,7 +971,8 @@ function startHeroIntro(){
       .from('.hero-sub', { opacity:0, y:18, duration:0.6 }, '-=0.4')
       .from('.hero-ctas > a', { opacity:0, y:18, duration:0.55, stagger:0.08 }, '-=0.4')
       .from('.hero-bottom .dial-wrap', { opacity:0, y:18, duration:0.6 }, '-=0.35')
-      .from('.hero-bottom .scroll-cue', { opacity:0, y:18, duration:0.6 }, '-=0.5')
+      .from('.hero-proof li', { opacity:0, y:14, duration:0.5, stagger:0.06 }, '-=0.45')
+      .from('.hs-card', { opacity:0, y:60, duration:1, stagger:0.12, ease:'power3.out' }, 0.35)
       .from('.nav-pill', { opacity:0, y:-24, duration:0.7 }, 0.1);
   }
   ScrollTrigger.refresh();
