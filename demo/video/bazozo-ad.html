@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' https://videos.pexels.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Bazozo Studio Ad — 18-second, 161 BPM graphics &amp; services commercial</title>
+<meta name="description" content="The Bazozo Studio commercial: an 18-second, beat-synced ad built entirely in the browser with GSAP and Web Audio. Graphic design, web, apps, extensions and motion, in 9:16 and 16:9.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#06070c">
+<link rel="canonical" href="https://bazozo.in/demo/video/bazozo-ad.html">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<meta property="og:type" content="video.other">
+<meta property="og:site_name" content="Bazozo">
+<meta property="og:title" content="Bazozo Studio Ad — 161 BPM graphics &amp; services commercial">
+<meta property="og:description" content="An 18-second, beat-synced studio commercial built in the browser. Watch it in 9:16 or 16:9.">
+<meta property="og:url" content="https://bazozo.in/demo/video/bazozo-ad.html">
+<meta property="og:image" content="https://bazozo.in/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://videos.pexels.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Plus+Jakarta+Sans:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="bazozo-ad.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="top-brand" href="../../index.html" aria-label="Bazozo home">bazozo<span>.</span></a>
+  <span class="top-tag mono">Studio ad · 18 s · 161 BPM</span>
+  <div class="seg" role="group" aria-label="Aspect ratio">
+    <button type="button" class="seg-b" data-aspect="v" aria-pressed="false"><i class="ic-v" aria-hidden="true"></i>9:16 Reel</button>
+    <button type="button" class="seg-b" data-aspect="h" aria-pressed="true"><i class="ic-h" aria-hidden="true"></i>16:9 Wide</button>
+  </div>
+  <button class="slash" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+</header>
+<nav class="menu" id="menu" aria-hidden="true" inert>
+  <a href="../../index.html" style="--i:0"><span class="mono">01</span>Bazozo home</a>
+  <a href="../../index.html?cat=video#work" style="--i:1"><span class="mono">02</span>All brand films</a>
+  <a href="../../index.html?cat=web#work" style="--i:2"><span class="mono">03</span>Websites</a>
+  <a href="../../index.html#contact" style="--i:3"><span class="mono">04</span>Start a project</a>
+</nav>
+
+<main>
+  <section class="shell" id="shell" aria-label="Bazozo studio commercial">
+    <div class="fit" id="fit">
+      <div class="rig" id="camera-rig" data-vibe="pop">
+        <div class="shaker" id="shaker"><div class="cam" id="camera-stage"></div></div>
+        <i class="invert" id="invert"></i>
+        <div class="over" id="overlay"></div>
+        <div class="hud" aria-hidden="true">
+          <div class="hud-bpm mono"><i id="bpmDot"></i><b id="bpmLabel">161 BPM</b><span class="hud-dots" id="beatDots"><i></i><i></i><i></i><i></i></span></div>
+          <div class="hud-tc mono"><span id="hudScene">01 LAPTOP</span><b id="hudTc">00:00:00</b><span id="hudBeat">BEAT 01/48</span></div>
+          <div class="hud-spec" id="spec"></div>
+        </div>
+        <button class="sound" id="soundPill" type="button">🔇 Tap for the beat</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="director" aria-label="Director controls">
+    <div class="dir-row">
+      <div class="dir-group">
+        <button type="button" class="nb primary" id="playBtn" aria-label="Pause">❚❚ Pause</button>
+        <button type="button" class="nb" id="restartBtn">↺ Restart</button>
+        <button type="button" class="nb" id="loopBtn" aria-pressed="false">∞ Loop: off</button>
+        <button type="button" class="nb" id="audioBtn" aria-pressed="false">🔇 Unmute beat</button>
+      </div>
+      <div class="dir-group" role="group" aria-label="Colour vibe">
+        <span class="dir-k mono">Vibe</span>
+        <button type="button" class="vb" data-vibe="pop" aria-pressed="true"><i></i>Electric Pop</button>
+        <button type="button" class="vb" data-vibe="solar" aria-pressed="false"><i></i>Solar Hyper</button>
+        <button type="button" class="vb" data-vibe="cyber" aria-pressed="false"><i></i>Cyber Neon</button>
+      </div>
+    </div>
+    <div class="dir-row">
+      <div class="dir-group" role="group" aria-label="Playback speed">
+        <span class="dir-k mono">Speed</span>
+        <button type="button" class="sp" data-rate="0.5" aria-pressed="false">0.5×</button>
+        <button type="button" class="sp" data-rate="0.75" aria-pressed="false">0.75×</button>
+        <button type="button" class="sp" data-rate="1" aria-pressed="true">1×</button>
+        <button type="button" class="sp" data-rate="1.25" aria-pressed="false">1.25×</button>
+        <button type="button" class="sp" data-rate="1.5" aria-pressed="false">1.5×</button>
+        <button type="button" class="sp" data-rate="2" aria-pressed="false">2×</button>
+      </div>
+      <div class="dir-group" role="group" aria-label="Jump to scene" id="jumps">
+        <span class="dir-k mono">Scenes</span>
+      </div>
+    </div>
+    <div class="seq" id="seq" aria-label="Timeline sequencer">
+      <div class="seq-ruler mono" id="seqRuler"></div>
+      <div class="seq-tracks" id="seqTracks"></div>
+      <div class="seq-head" id="seqHead"></div>
+    </div>
+    <p class="dir-note mono">Built live in the browser: DOM + SVG + GSAP master timeline, Web Audio beat synth, royalty-free Pexels footage. <a href="../../index.html#contact">Want one for your brand?</a></p>
+  </section>
+</main>
+
+<!-- scene markup is cloned fresh on every (re)build, so aspect switches never inherit stale animation styles -->
+<template id="tplScenes">
+  <!-- 01 · laptop open -> screen dive -->
+  <section class="sc s1" data-sc="1">
+    <div class="fb fb-laptop"><i class="pt"></i></div>
+    <div class="aurora a1"><i></i><i></i><i></i></div>
+    <video class="clip" data-role="laptop" muted playsinline preload="auto" aria-hidden="true" data-src="7316358/7316358-hd_720_1280_50fps.mp4" data-a="0.5625" data-px="0.5" data-py="0.26"></video>
+    <video class="clip clip-side" data-role="side" muted playsinline preload="auto" aria-hidden="true" data-src="14470912/14470912-hd_1280_720_30fps.mp4" data-a="1.7778" data-px="0.8" data-py="0.6"></video>
+    <div class="grade g1"></div>
+    <div class="credit mono">Footage · Pexels</div>
+    <div class="cap1"><b>EVERY BRAND</b><b>STARTS WITH ONE CLICK.</b></div>
+    <div class="pill-launch pt"><span>Launch Bazozo Studio</span><b>↗</b></div>
+  </section>
+
+  <!-- 02 · eye iris portal -->
+  <section class="sc s2" data-sc="2">
+    <div class="fb fb-eye"><i class="pt"></i></div>
+    <video class="clip" muted playsinline preload="auto" aria-hidden="true" data-role="eye" data-src="18622568/18622568-hd_1280_720_60fps.mp4" data-a="1.7778" data-px="0.62" data-py="0.5"></video>
+    <div class="grade g2"></div>
+    <div class="iris pt">
+      <i class="iris-wheel"></i><i class="iris-ring r1"></i><i class="iris-ring r2"></i>
+      <svg viewBox="0 0 200 200"><path d="M100 4v26M100 170v26M4 100h26M170 100h26"/><circle cx="100" cy="100" r="62"/><path d="M58 58l12 12M142 58l-12 12M58 142l12-12M142 142l-12-12"/></svg>
+    </div>
+    <div class="slams"><b class="slam" data-w="1">VISION</b><b class="slam" data-w="2">MEETS</b><b class="slam" data-w="3">EXECUTION.</b></div>
+  </section>
+
+  <!-- 03 · graphic design showcase -->
+  <section class="sc s3" data-sc="3">
+    <div class="aurora"><i></i><i></i><i></i></div>
+    <div class="s3-title mono"><b>✦</b> Bazozo · Graphic design &amp; brand lab</div>
+    <div class="s3-work">
+      <div class="artboard glass">
+        <div class="ab-bar mono"><i></i><i></i><i></i><span>logo-mark.svg</span><em>P · Pen</em></div>
+        <svg class="ab-svg" viewBox="0 0 400 400">
+          <g class="ab-grid"><path d="M0 100H400M0 200H400M0 300H400M100 0V400M200 0V400M300 0V400"/></g>
+          <circle class="gold" cx="210" cy="250" r="113"/><circle class="gold" cx="210" cy="250" r="70"/><circle class="gold" cx="210" cy="250" r="43"/><circle class="gold" cx="140" cy="110" r="70"/>
+          <path class="mark" id="markPath" pathLength="1" d="M140 78V320M140 250A70 70 0 1 1 280 250A70 70 0 1 1 140 250"/>
+          <circle class="mark-dot" cx="296" cy="112" r="20"/>
+          <g class="pen"><path d="M0 0l7 22 5-8 9-3z"/><circle r="4"/></g>
+          <g class="anchors"><rect x="134" y="72" width="12" height="12"/><rect x="134" y="314" width="12" height="12"/><rect x="274" y="244" width="12" height="12"/><rect x="204" y="174" width="12" height="12"/></g>
+        </svg>
+        <div class="ab-foot mono"><span>φ 1 : 1.618</span><span>bazozo — mark v3</span></div>
+      </div>
+      <div class="folder">
+        <div class="f-back"></div>
+        <div class="f-cards" id="fCards"></div>
+        <div class="f-front glass"><b>Brand Identity</b><span class="mono">5 deliverables</span></div>
+      </div>
+    </div>
+    <div class="dock glass">
+      <span class="dk dk-on" id="dkDesign"><b>✦</b> Graphic Design</span><span class="dk">UI/UX Systems</span><span class="dk">Motion &amp; 3D</span><span class="dk">Full-Stack &amp; Apps</span>
+    </div>
+    <div class="s3-slam">
+      <div class="veil"></div>
+      <b class="sl" data-s="1">Looks good?</b><b class="sl big" data-s="2">NO.</b><b class="sl" data-s="3">GREAT DESIGN</b><b class="sl hot" data-s="4">PRINTS REVENUE.</b>
+      <span class="deploy" id="deployBtn">⚡ Deploy Brand</span>
+    </div>
+  </section>
+
+  <!-- 04 · rapid-fire bento -->
+  <section class="sc s4" data-sc="4">
+    <div class="aurora a4"><i></i><i></i><i></i></div>
+    <div class="s4-big" id="s4Big">01</div>
+    <div class="s4-col">
+      <div class="s4-head"><span class="mono" id="s4Idx">01 / 06</span><div class="s4-titles" id="s4Titles"></div></div>
+      <div class="tick tick-a mono"><div class="tick-in" id="tickA"></div></div>
+      <div class="s4-panels" id="s4Panels"></div>
+      <div class="tick tick-b mono"><div class="tick-in" id="tickB"></div></div>
+    </div>
+  </section>
+
+  <!-- 05 · finale CTA -->
+  <section class="sc s5" data-sc="5">
+    <div class="grid3d"><i class="gfloor"></i><i class="gceil"></i></div>
+    <div class="aurora a5"><i></i><i></i><i></i></div>
+    <div class="cta glass">
+      <div class="cta-logo">bazozo<span>.</span>in</div>
+      <p class="cta-sub">12 Disciplines · 209 Live Builds · One Studio</p>
+      <div class="cta-btns">
+        <a class="cb" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%20saw%20your%20studio%20ad%20and%20need%20graphic%20design%20%2F%20branding." target="_blank" rel="noopener noreferrer">Graphic Design</a>
+        <a class="cb" href="../../index.html?cat=web#work">Web &amp; Apps</a>
+        <a class="cb" href="../../index.html?cat=video#work">Motion Video</a>
+      </div>
+      <div class="cta-go">
+        <a class="cb go" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%20saw%20your%20studio%20ad%20and%20want%20to%20start%20a%20project." target="_blank" rel="noopener noreferrer">Start a Project → WhatsApp</a>
+        <a class="cb mail" href="mailto:hello@bazozo.in?subject=Project%20enquiry%20from%20the%20studio%20ad">Email</a>
+      </div>
+      <p class="cta-foot mono">hello@bazozo.in · +91 73475 00770 · India · worldwide</p>
+    </div>
+  </section>
+</template>
+<template id="tplOver">
+  <i class="flash f-w"></i><i class="flash f-1"></i><i class="flash f-2"></i>
+  <i class="ca ca-m"></i><i class="ca ca-c"></i>
+  <div class="rings pt" id="rings"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <i class="ripple"></i>
+  <div class="trail"><i></i><i></i><i></i><i></i><i></i></div>
+  <svg class="cur" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 3l7 24 4.6-9.4L26 13z"/></svg>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js" integrity="sha512-4a56NRIrhn/ePBdSSNfwsmL+eZt/uCXEb7s+3B8tg/tDiywDMKb5u2QCdhsYQtEkUMPGE5GUVbZYqgKeRzJ7yQ==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="bazozo-ad.js" defer></script>
+</body>
+</html>
