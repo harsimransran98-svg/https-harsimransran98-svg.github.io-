@@ -609,12 +609,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const id = a.getAttribute('href');
     if(id.length < 2) return;
-    const target = document.querySelector(id);
+    let target = document.querySelector(id);
     if(!target) return;
     e.preventDefault();
     if(menuOpen) setMenu(false);
-    if(lenis) lenis.scrollTo(target, { offset:-80 });
-    else target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block:'start' });
+    /* "#contact" buttons land on the email / phone / WhatsApp row itself, centred on screen */
+    const info = id === '#contact' && document.querySelector('#contact .contact-row');
+    const offset = info ? -Math.max(80, (innerHeight - info.offsetHeight) / 2) : -80;
+    if(info) target = info;
+    if(lenis) lenis.scrollTo(target, { offset });
+    else window.scrollTo({ top: target.getBoundingClientRect().top + scrollY + offset, behavior: prefersReduced ? 'auto' : 'smooth' });
   });
 });
 
