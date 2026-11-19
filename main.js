@@ -764,6 +764,7 @@ mm.add({
   };
 
   if(reduced){
+    document.querySelector('.hero').style.marginBottom = '0px';   // no pin with reduced motion
     gsap.set('.reveal', { opacity:1, y:0 });
     sizeSpine(); spineFill.setAttribute('stroke-dashoffset', 0); gsap.set(tlHead, { opacity:0 });
     document.querySelectorAll('.tl-item').forEach(i => i.classList.add('is-lit'));
@@ -775,7 +776,10 @@ mm.add({
     gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.85, ease:'power3.out', scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
   });
 
-  /* hero: brief pin-and-dissolve (created first so later triggers measure the pin spacer) */
+  /* hero: brief pin-and-dissolve (created first so later triggers measure the pin spacer).
+     CSS reserves the pin's 60% scroll space from the first paint; hand it over to the pin
+     spacer in the same frame so nothing below the hero jumps (was a layout shift). */
+  document.querySelector('.hero').style.marginBottom = '0px';
   ScrollTrigger.create({ trigger:'.hero', start:'top top', end:'+=60%', pin:true, pinSpacing:true, scrub:1, refreshPriority:10 });
   gsap.to('.hero-content', { opacity:0.15, y:-40, scale:0.94, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 } });
   gsap.to('.hero-bottom', { y:-40, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'+=60%', scrub:1 } });   // dial + scroll cue stay fully visible
@@ -1012,8 +1016,10 @@ function initHeroGL(){
   window.addEventListener('resize', resize); resize();
   let camX = 0, camY = 0, heroVisible = true;
   ScrollTrigger.create({ trigger:heroEl, start:'top bottom', end:'bottom top', onToggle: self => { heroVisible = self.isActive; } });
+  const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
   function animate(){
-    if(heroVisible){
+    /* the canvas is hidden in light mode — don't render frames nobody sees */
+    if(heroVisible && !isLight()){
       const nx = (mx / innerWidth) - 0.5, ny = (my / innerHeight) - 0.5;
       camX += (nx * 6 - camX) * 0.04; camY += (-ny * 4 - camY) * 0.04;
       camera.position.x = camX; camera.position.y = camY; camera.lookAt(0, 0, 0);
@@ -1028,6 +1034,12 @@ function initHeroGL(){
 function loadHeroGL(){
   const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ''));
   if(prefersReduced || window.THREE || isTouch || saveData || window.innerWidth < 900) return;
+  /* the particle field only shows in dark mode: skip the ~600 KB library in light mode (the default) */
+  if(document.documentElement.getAttribute('data-theme') === 'light'){
+    new MutationObserver((m, obs) => { if(document.documentElement.getAttribute('data-theme') !== 'light'){ obs.disconnect(); loadHeroGL(); } })
+      .observe(document.documentElement, { attributes:true, attributeFilter:['data-theme'] });
+    return;
+  }
   const s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
   s.integrity = 'sha512-334uBDwY0iZ2TklV1OtDtBW9vp7jjP7SWRzT7Ehu1fdtPIjTpCwTSFb8HI/YBau9L1/kRBEOALrS229Kry4yFQ==';
