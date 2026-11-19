@@ -227,34 +227,11 @@ pillars.forEach(p => {
   pillarGrid.append(card);
 });
 
-/* ---------------- render: twelve disciplines (#craftGrid) ---------------- */
-const craftGrid = document.getElementById('craftGrid');
-if(craftGrid) dialCats.forEach((c, i) => {
-  const total = countFor([c.key]);
-  const live = projects.filter(p => p.cat === c.key && p.live).length;
-  const card = mk('button', 'disc-card');
-  card.type = 'button';
-  card.style.setProperty('--c', c.color);
-  card.dataset.cursorLabel = 'Filter';
-  card.setAttribute('aria-label', `${c.label}: ${total} projects, ${live} live interactive builds. Show them in Selected Work`);
-  const inner = mk('span', 'disc-in');
-  const top = mk('span', 'disc-top');
-  top.append(mk('span', 'disc-n mono', pad(i + 1)), mk('span', 'disc-live mono', `${live}/${total} live`));
-  const ic = mk('span', 'disc-icon'); ic.append(icon(CAT_ICON[c.key]));
-  const meter = mk('span', 'disc-meter'); const fill = mk('i'); fill.style.setProperty('--p', (live / total).toFixed(3)); meter.append(fill);
-  const go = mk('span', 'disc-go mono', `View ${total} builds`); go.append(mk('i', null, '→'));
-  inner.append(top, ic, mk('span', 'disc-name', c.label), mk('span', 'disc-blurb', disciplineBlurbs[c.key] || ''), meter, go, mk('span', 'disc-spot'));
-  card.append(inner);
-  card.addEventListener('click', () => showWork(c.key));
-  craftGrid.append(card);
-});
-
 /* ---------------- render: services grid ---------------- */
 const serviceGrid = document.getElementById('serviceGrid');
 serviceGrid.replaceChildren();
 services.forEach((s, i) => {
   const card = mk('div', 'craft-card svc-card');
-  card.append(mk('span', 'svc-up'), mk('span', 'svc-left'));
   const top = mk('div', 'craft-top');
   const ic = mk('span', 'svc-ic'); ic.append(icon(s.icon || 'web'));
   top.append(ic, mk('span', 'craft-mono mono', pad(i + 1)));
@@ -547,7 +524,6 @@ function hoverCard(inner){
 bindTilt(projGrid, '.proj-card', '.proj-inner', isTouch ? 0 : 7, inner => { if(!isTouch) hoverCard(inner); });
 projGrid.addEventListener('focusin', e => { const i = e.target.closest('.proj-inner'); if(i) hoverCard(i); });
 projGrid.addEventListener('focusout', () => hoverCard(null));
-bindTilt(craftGrid, '.disc-card', '.disc-in', isTouch ? 0 : 9);
 bindTilt(serviceGrid, '.craft-card', null, 0);
 bindTilt(pillarGrid, '.pillar', null, 0);
 gsap.ticker.add(() => {
@@ -876,12 +852,6 @@ mm.add({
   gsap.from('.pillar', { opacity:0, y:80, rotationX:desktop ? -22 : 0, transformPerspective:1000, transformOrigin:'50% 100%', duration:1, ease:'power3.out', stagger:0.12,
     scrollTrigger:{ trigger:'#pillarGrid', start:'top 85%', once:true } });
 
-  /* twelve disciplines: staggered 3D flip-in from the grid's top-left */
-  gsap.from('.disc-card', { opacity:0, y:desktop ? 90 : 40, z:desktop ? -160 : 0, rotationX:desktop ? -70 : 0, transformPerspective:1200, transformOrigin:'50% 0%',
-    duration:1.05, ease:'power3.out', stagger:{ each:0.06, grid:'auto', from:'start' },
-    scrollTrigger:{ trigger:'#craftGrid', start:'top 88%', once:true } });
-
-
   /* contact: giant outline marquee scrubbed sideways */
   gsap.fromTo('#contactMarquee', { xPercent:0 }, { xPercent:-30, ease:'none', scrollTrigger:{ trigger:'#contact', start:'top bottom', end:'bottom top', scrub:1 } });
   gsap.from('.contact-item', { opacity:0, y:30, duration:0.7, ease:'power3.out', stagger:0.08, scrollTrigger:{ trigger:'.contact-row', start:'top 92%', once:true } });
@@ -890,62 +860,92 @@ mm.add({
 });
 
 /* ==================================================================
-   services: rows rise and wire themselves into the row above.
-   Reversible (scrub), so scrolling back up disconnects them again.
+   services: each row of cards rises into place as it scrolls in.
    Rebuilt per column count, because rows change with the grid.
    ================================================================== */
 function serviceRows(){
   const rows = []; let lastTop = null;
   [...serviceGrid.children].forEach(c => {
-    c.classList.remove('has-up', 'has-left');
     if(c.offsetTop !== lastTop){ rows.push([]); lastTop = c.offsetTop; }
     rows[rows.length - 1].push(c);
   });
-  rows.forEach((row, ri) => row.forEach((c, ci) => { if(ri) c.classList.add('has-up'); if(ci) c.classList.add('has-left'); }));
   return rows;
 }
 gsap.matchMedia().add({
   wide:'(min-width: 901px)', mid:'(min-width: 481px) and (max-width: 900px)', narrow:'(max-width: 480px)',
   reduced:'(prefers-reduced-motion: reduce)'
 }, ctx => {
-  const rows = serviceRows();
-  if(ctx.conditions.reduced){ gsap.set('#serviceGrid .svc-up', { scaleY:1 }); gsap.set('#serviceGrid .svc-left', { scaleX:1 }); return; }
-  rows.forEach(row => {
-    const ups = row.map(c => c.querySelector('.svc-up')), lefts = row.map(c => c.querySelector('.svc-left'));
-    gsap.timeline({ scrollTrigger:{ trigger:row[0], start:'top 98%', end:'top 62%', scrub:0.6 } })
-      .fromTo(row, { y:65, opacity:0, scale:0.94 }, { y:0, opacity:1, scale:1, duration:1, ease:'power2.out', stagger:0.08 })
-      .fromTo(lefts, { scaleX:0 }, { scaleX:1, duration:0.5, ease:'none', stagger:0.08 }, '-=0.45')
-      .fromTo(ups, { scaleY:0 }, { scaleY:1, duration:0.6, ease:'none', stagger:0.08 }, '<');
+  if(ctx.conditions.reduced) return;
+  serviceRows().forEach(row => {
+    gsap.fromTo(row, { y:65, opacity:0, scale:0.94 }, { y:0, opacity:1, scale:1, duration:1, ease:'power2.out', stagger:0.08,
+      scrollTrigger:{ trigger:row[0], start:'top 98%', end:'top 62%', scrub:0.6 } });
   });
 });
 
 /* ==================================================================
-   contact scope selector: pre-fills the email + WhatsApp briefs
+   contact brief builder: what → when → budget. The client names their
+   own budget range (no public price list); email + WhatsApp open with
+   the whole brief filled in.
    ================================================================== */
-const scopePills = document.getElementById('scopePills');
 const contactMail = document.getElementById('contactMail');
 const contactWa = document.getElementById('contactWa');
 const scopeNote = document.getElementById('scopeNote');
-if(scopePills && contactMail && contactWa){
-  const pills = contactScopes.map((sc, i) => {
-    const b = mk('button', 'scope-pill', sc.label);
+const brief = { what:null, when:null, budget:null };
+/* one accessible radio-pill group (arrow keys move, click selects, click again clears) */
+function pillGroup(host, labels, key){
+  if(!host) return;
+  const pills = labels.map((label, i) => {
+    const b = mk('button', 'scope-pill', label);
     b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false'); b.tabIndex = i === 0 ? 0 : -1;
-    b.addEventListener('click', () => setScope(i));
+    b.addEventListener('click', () => pick(brief[key] === i ? null : i));
     b.addEventListener('keydown', e => {
       const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
-      if(!d) return; e.preventDefault(); const n = (i + d + pills.length) % pills.length; setScope(n); pills[n].focus();
+      if(!d) return; e.preventDefault(); const n = (i + d + pills.length) % pills.length; pick(n); pills[n].focus();
     });
-    scopePills.append(b); return b;
+    host.append(b); return b;
   });
-  function setScope(i){
-    const sc = contactScopes[i];
-    pills.forEach((b, k) => { b.setAttribute('aria-checked', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
-    const msg = `Hi Bazozo, I'd like to talk about ${sc.line}.`;
-    contactMail.href = `mailto:hello@bazozo.in?subject=${encodeURIComponent('Project enquiry: ' + sc.label)}&body=${encodeURIComponent(msg + '\n\nWhat it should do:\nTimeline:\nBudget range:\n')}`;
-    contactWa.href = `https://wa.me/917347500770?text=${encodeURIComponent(msg)}`;
-    scopeNote.textContent = `Scope set to ${sc.label}. Email and WhatsApp now open with this brief pre-filled.`;
-    if(!prefersReduced) gsap.fromTo([contactMail, contactWa], { color:'#e7b85c' }, { color:'#f4f2ec', duration:1.2, ease:'power2.out', clearProps:'color' });
+  function pick(i){
+    brief[key] = i;
+    pills.forEach((b, k) => { b.setAttribute('aria-checked', String(k === i)); b.tabIndex = (i == null ? k === 0 : k === i) ? 0 : -1; });
+    writeBrief();
   }
+}
+function writeBrief(){
+  if(!contactMail || !contactWa) return;
+  const sc = brief.what != null ? contactScopes[brief.what] : null;
+  const when = brief.when != null ? contactTimelines[brief.when] : '';
+  const money = brief.budget != null ? contactBudgets[brief.budget] : '';
+  const lines = [`Hi Bazozo, I'd like to talk about ${sc ? sc.line : 'a project'}.`, when && `Timeline: ${when}`, money && `Budget range: ${money}`].filter(Boolean);
+  const wa = lines.join('\n');
+  contactWa.href = `https://wa.me/917347500770?text=${encodeURIComponent(wa)}`;
+  contactMail.href = `mailto:hello@bazozo.in?subject=${encodeURIComponent('Project enquiry' + (sc ? ': ' + sc.label : ''))}&body=${encodeURIComponent(wa + '\n\nWhat it should do:\n' + (when ? '' : 'Timeline:\n') + (money ? '' : 'Budget range:\n'))}`;
+  const picked = [sc && sc.label, when, money].filter(Boolean);
+  scopeNote.textContent = picked.length ? `Your brief: ${picked.join(' · ')}. Email and WhatsApp below now open with it filled in.` : 'Pick what fits — the email and WhatsApp buttons fill in your brief. Every project gets a written quote before any work starts.';
+  if(picked.length && !prefersReduced) gsap.fromTo([contactMail, contactWa], { scale:1.04 }, { scale:1, duration:0.6, ease:'elastic.out(1, 0.5)', clearProps:'transform' });
+}
+pillGroup(document.getElementById('scopePills'), contactScopes.map(s => s.label), 'what');
+pillGroup(document.getElementById('timePills'), contactTimelines, 'when');
+pillGroup(document.getElementById('budgetPills'), contactBudgets, 'budget');
+
+/* free website teardown: visitor's URL → WhatsApp request (nothing is sent anywhere else) */
+const teardown = document.getElementById('teardown');
+if(teardown){
+  teardown.addEventListener('submit', e => {
+    e.preventDefault();
+    const input = document.getElementById('tdUrl'), msg = document.getElementById('tdMsg');
+    let raw = input.value.trim();
+    if(raw && !/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
+    let url;
+    try { url = new URL(raw); } catch { url = null; }
+    if(!url || !/^https?:$/.test(url.protocol) || !/\.[a-z]{2,}$/i.test(url.hostname)){
+      msg.textContent = 'Please enter a website address, like yourbusiness.com';
+      input.setAttribute('aria-invalid', 'true'); input.focus(); return;
+    }
+    input.removeAttribute('aria-invalid');
+    const text = `Hi Bazozo, I'd like the free website teardown for ${url.hostname}${url.pathname !== '/' ? url.pathname : ''}.`;
+    window.open(`https://wa.me/917347500770?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    msg.textContent = `Opening WhatsApp with your request for ${url.hostname} — just press send.`;
+  });
 }
 
 /* ---- shrink any hero headline word that would overflow its mask ---- */

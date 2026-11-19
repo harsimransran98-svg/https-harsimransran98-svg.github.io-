@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Why WooCommerce Stores Are Slow on Mobile (and How to Fix It) — Bazozo</title>
+<meta name="description" content="The usual reasons WooCommerce stores load slowly on phones — plugins, page builders, images, cart fragments, hosting — and how to fix them for better Core Web Vitals.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="theme-color" content="#ECE1CE">
+<link rel="canonical" href="https://bazozo.in/insights/woocommerce-slow-on-mobile.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bazozo">
+<meta property="og:title" content="Why WooCommerce Stores Are Slow on Mobile (and How to Fix It) — Bazozo">
+<meta property="og:description" content="The usual reasons WooCommerce stores load slowly on phones — plugins, page builders, images, cart fragments, hosting — and how to fix them for better Core Web Vitals.">
+<meta property="og:url" content="https://bazozo.in/insights/woocommerce-slow-on-mobile.html">
+<meta property="og:image" content="https://bazozo.in/og-image-v2.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../service.css">
+<script src="../theme.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://bazozo.in/insights/woocommerce-slow-on-mobile.html#article",
+   "headline": "Why WooCommerce Stores Are Slow on Mobile (and How to Fix It)",
+   "description": "The usual reasons WooCommerce stores load slowly on phones — plugins, page builders, images, cart fragments, hosting — and how to fix them for better Core Web Vitals.",
+   "url": "https://bazozo.in/insights/woocommerce-slow-on-mobile.html",
+   "mainEntityOfPage": "https://bazozo.in/insights/woocommerce-slow-on-mobile.html",
+   "inLanguage": "en",
+   "datePublished": "2026-11-19",
+   "dateModified": "2026-11-19",
+   "author": {
+    "@type": "Organization",
+    "name": "Bazozo Studio",
+    "url": "https://bazozo.in/"
+   },
+   "publisher": {
+    "@id": "https://bazozo.in/#business"
+   },
+   "image": "https://bazozo.in/og-image-v2.jpg",
+   "isPartOf": {
+    "@id": "https://bazozo.in/#website"
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://bazozo.in/insights/woocommerce-slow-on-mobile.html#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Will a caching plugin alone fix a slow WooCommerce store?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It helps logged-out pages, but it can't fix heavy themes, oversized images or scripts loading everywhere — and cart and checkout pages can't be fully cached."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "How do I know what is slowing my store down?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Run the key pages (home, a category, a product, cart) through PageSpeed Insights, then check which scripts, images and requests are largest. The Core Web Vitals report in Search Console shows what real visitors experience."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can speed improvements increase sales?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Faster pages generally keep more visitors browsing and reduce checkout drop-off, especially on mobile — the exact effect depends on the store, so measure before and after."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Bazozo",
+     "item": "https://bazozo.in/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Insights",
+     "item": "https://bazozo.in/insights/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "Why WooCommerce Stores Are Slow on Mobile (and How to Fix It)",
+     "item": "https://bazozo.in/insights/woocommerce-slow-on-mobile.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<header class="svc-nav">
+  <a class="brand" href="../index.html" aria-label="Bazozo home">bazozo<span>.</span></a>
+  <nav aria-label="Primary"><a href="../index.html#work">Work</a><a href="../index.html#services">Services</a><a href="index.html">Insights</a></nav>
+  <a class="cta" href="../index.html#contact">Start a project <i aria-hidden="true">&rarr;</i></a>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark mode"><span aria-hidden="true">◐</span></button>
+</header>
+
+<main class="article">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Bazozo</a> <span aria-hidden="true">/</span> <a href="index.html">Insights</a></nav>
+  <article>
+    <header class="hero">
+      <p class="kicker">Insights · Updated November 2026</p>
+      <h1>Why WooCommerce Stores Are Slow on Mobile (and How to Fix It)</h1>
+      <div class="answer-box"><b>Short answer</b><p>WooCommerce stores are usually slow on mobile because too many plugins load their scripts on every page, heavy themes and page builders bloat the HTML, product images are oversized, cart-fragment requests run on every page view, and hosting has no page or object caching. Fixing those five things typically does more for Core Web Vitals than any single “speed plugin”.</p></div>
+    </header>
+    <section><h2>What “fast” means: Core Web Vitals</h2>
+      <p>Google measures real-user speed with Core Web Vitals. A page passes when, for most visitors, <b>Largest Contentful Paint</b> (main content visible) is under 2.5 seconds, <b>Interaction to Next Paint</b> (response to taps) is under 200 milliseconds, and <b>Cumulative Layout Shift</b> (things jumping around) is under 0.1. Check your store in PageSpeed Insights and the Core Web Vitals report in Google Search Console.</p>
+    </section>
+    <section><h2>1. Plugins loading everywhere</h2>
+      <p>Many plugins add their CSS and JavaScript to every page, even where they do nothing — a slider script on the checkout, a form library on product pages. Remove plugins you don't use, and load the rest only on the pages that need them.</p>
+    </section>
+    <section><h2>2. Heavy themes and page builders</h2>
+      <p>Multipurpose themes and page builders often produce thousands of nested elements and several large stylesheets. A lighter theme, or rebuilding key templates (home, category, product) leanly, reduces both download size and the work the phone has to do.</p>
+    </section>
+    <section><h2>3. Images</h2>
+      <p>Serve product images in modern formats (WebP or AVIF), at the size they are displayed, with <code>width</code> and <code>height</code> set to prevent layout shift. Lazy-load images below the fold — but never the main product image, which is usually the Largest Contentful Paint.</p>
+    </section>
+    <section><h2>4. Cart fragments and AJAX</h2>
+      <p>WooCommerce's cart-fragments request (<code>wc-ajax=get_refreshed_fragments</code>) can run on every page view to keep the mini-cart up to date. On many stores it is only needed after something is added to the cart; limiting it removes an uncached request from every page.</p>
+    </section>
+    <section><h2>5. Hosting and caching</h2>
+      <p>Use a current PHP version, full-page caching for logged-out visitors, and an object cache (such as Redis) for the database-heavy cart and checkout. Cheap shared hosting is often the single biggest bottleneck once the front end is clean.</p>
+    </section>
+    <section><h2>6. Third-party scripts</h2>
+      <p>Chat widgets, heatmaps, review badges and several tracking pixels add up. Keep the ones that earn their place, load them after the page is interactive, and remove duplicates.</p>
+    </section>
+    <section class="faq"><h2>Questions</h2>
+      <details><summary>Will a caching plugin alone fix a slow WooCommerce store?</summary><p>It helps logged-out pages, but it can't fix heavy themes, oversized images or scripts loading everywhere — and cart and checkout pages can't be fully cached.</p></details>
+      <details><summary>How do I know what is slowing my store down?</summary><p>Run the key pages (home, a category, a product, cart) through PageSpeed Insights, then check which scripts, images and requests are largest. The Core Web Vitals report in Search Console shows what real visitors experience.</p></details>
+      <details><summary>Can speed improvements increase sales?</summary><p>Faster pages generally keep more visitors browsing and reduce checkout drop-off, especially on mobile — the exact effect depends on the store, so measure before and after.</p></details>
+    </section>
+    <aside class="article-cta">
+      <b>Need this done for you?</b>
+      <p>Bazozo Studio handles wordpress & woocommerce development end to end — with a written quote before any work starts.</p>
+      <div class="ctas"><a class="btn primary" href="../wordpress-plugin-development.html">WordPress & WooCommerce development →</a><a class="btn" href="../index.html#contact">Start a project</a></div>
+    </aside>
+  </article>
+</main>
+<footer class="svc-foot">
+  <div class="more"><b>Services:</b> <a href="../chrome-extension-development.html">Chrome extensions</a><a href="../mobile-app-development.html">Mobile apps</a><a href="../wordpress-plugin-development.html">WordPress plugins</a><a href="../launch-video-production.html">Launch videos</a></div>
+  <div class="base"><span>&copy; 2026 Bazozo Studio</span><span><a href="../privacy-policy.html">Privacy</a> · <a href="../terms.html">Terms</a> · <a href="../index.html">Home</a></span></div>
+</footer>
+<a class="wa-float" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener noreferrer" aria-label="Message Bazozo on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.45 15.05L2.5 21.5l4.57-1.07A9.9 9.9 0 1 0 12.04 2zm4.5 11.96c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.7 2.7 0 0 0-.85 2.02 4.7 4.7 0 0 0 .99 2.5 10.8 10.8 0 0 0 4.14 3.66c1.54.66 2.14.72 2.91.6.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg><span>WhatsApp</span></a>
+</body>
+</html>

@@ -14,6 +14,17 @@ SEO & technical SEO, website migration, website redesign, performance optimizati
 ## Disciplines
 Websites, Graphics/ Video Editing, Chrome extensions, Firefox Add-ons, Safari App Extensions, WordPress Plugins, Android apps, iOS apps, Windows Applications, macOS Applications, Android games, iOS games.
 
+## Service pages
+- [Chrome extension development (Manifest V3, Firefox, Safari)](https://bazozo.in/chrome-extension-development.html): custom browser extensions, web app → extension, MV2 → MV3 migration; 48 live demos
+- [iOS & Android app development](https://bazozo.in/mobile-app-development.html): mobile apps and casual games; 64 live demos
+- [Custom WordPress plugin development](https://bazozo.in/wordpress-plugin-development.html): WordPress and WooCommerce plugins, updating outdated plugins; 16 live demos
+- [Product launch videos & motion design](https://bazozo.in/launch-video-production.html): launch films, motion graphics, social cuts; 17 live examples
+
+## Insights (answer-first guides)
+- [How to migrate a Chrome extension from Manifest V2 to V3](https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html)
+- [How to port a Chrome extension to Firefox and Safari](https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html)
+- [Why WooCommerce stores are slow on mobile (and how to fix it)](https://bazozo.in/insights/woocommerce-slow-on-mobile.html)
+
 ## Portfolio
 - [Full portfolio — 209 projects, each with a live site or interactive demo](https://bazozo.in/#work)
 - [Baaz Records — live client site for an independent Punjabi music label](https://baazrecords.in/)
@@ -23,7 +34,7 @@ Websites, Graphics/ Video Editing, Chrome extensions, Firefox Add-ons, Safari Ap
 ## Frequently asked questions
 - What does Bazozo build? Custom websites and e-commerce, browser extensions (Chrome, Firefox, Safari, Manifest V3), WordPress plugins, iOS and Android apps, Windows and macOS utilities, mobile games, and brand films / motion graphics.
 - Where is Bazozo based? India. The studio works remotely with clients worldwide, in English, Hindi and Punjabi.
-- How is a project priced? A written quote with scope, milestones and timeline before work starts; an advance plus milestone payments; out-of-scope work is quoted first.
+- How is a project priced? Every project is quoted individually: tell us your scope, timeline and budget range and you get a written quote with scope, milestones and timeline before work starts; an advance plus milestone payments; out-of-scope work is quoted first.
 - Are the portfolio projects real? Baaz Records (baazrecords.in) is a live client site. Most other portfolio pieces are working, interactive concept builds made by Bazozo Studio to demonstrate each discipline; brands inside them are fictional.
 - Who owns the code? The client, once the project is paid in full.
 - [All questions and answers](https://bazozo.in/#faq)

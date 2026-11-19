@@ -295,22 +295,6 @@ projects.forEach((p,i) => { p.live = i < FINISHED_COUNT; });
    key = slug for websites, <category>/<slug> for demos */
 const previewShots = new Set(['aetherlabs','afterglow','android/coinkeeper','android/commutesense','android/focusjar','android/gardenlog','android/habitgrid','android/ledgerly','android/notebeam','android/pantryping','android/pulsecheck','android/quietalarm','android/recipebox','android/ridelog','android/scanstack','android/shiftboard','android/trailmarker','android/weightwatch','androidgames/blockcascade','androidgames/colonytap','androidgames/farmsteadfrenzy','androidgames/gravitymaze','androidgames/memoryvault','androidgames/neondrift','androidgames/orbitsmash','androidgames/pixelraiders','androidgames/puzzleforge','androidgames/reflexrings','androidgames/rushhourriot','androidgames/shadowrunner','androidgames/skyboundracers','androidgames/taplegends','androidgames/tinykingdoms','androidgames/worddrift','baazrecords','basaltskincare','blackletterpress','castironcoffee','chrome/clipqueue','chrome/colorsnap','chrome/focusframe','chrome/fontfinder','chrome/formfillpro','chrome/gridsnap','chrome/linkvault','chrome/metapeek','chrome/nightpane','chrome/priceecho','chrome/quotecatcher','chrome/readrail','chrome/screenslice','chrome/tabtether','chrome/tabtimer','chrome/wordcountr','cinderco','driftwoodfilms','firefox/archivenow','firefox/bookmarkbloom','firefox/citeright','firefox/containerflow','firefox/feedstream','firefox/glyphgrab','firefox/historymap','firefox/inknote','firefox/pixelruler','firefox/privacylatch','firefox/quiettabs','firefox/readertone','firefox/sessionkeeper','firefox/speedtrim','firefox/tabharbor','firefox/typospot','fjordcapital','foundrybikeco','glasshouseventur','halcyonhealth','hollowpoint','ios/driftlist','ios/focusdial','ios/fuelog','ios/homesort','ios/inkwell','ios/nightframe','ios/notekeep','ios/petframe','ios/pocketledger','ios/pulseform','ios/quiettimer','ios/readloop','ios/skyframe','ios/steadyroute','ios/storyboardlite','ios/tidewatch','iosgames/cascadeblocks','iosgames/chromasnap','iosgames/driftline','iosgames/glyphmatch','iosgames/idleaquarium','iosgames/lumenmaze','iosgames/memorypeaks','iosgames/nightfalldash','iosgames/orbitrunner','iosgames/petaldrift','iosgames/puzzleloop','iosgames/skylinejumpers','iosgames/starforgeidle','iosgames/tapduel','iosgames/vaultbreaker','iosgames/wavelength','ironcladfitness','kettleash','lumenoptics','mac/batterybar','mac/clipboardstack','mac/disksweep','mac/focusbar','mac/fontbar','mac/handoffnotes','mac/mailtriage','mac/menubarledger','mac/netgauge','mac/notefloat','mac/quietdock','mac/renameforge','mac/screentimebar','mac/sleepguard','mac/wallpaperly','mac/windowsnap','marlowfinch','marrowstudio','nomadsupplyco','nordlysarchitect','northlinerobotic','paperplaneagency','sablestone','safari/cliptonotes','safari/colorlift','safari/focusveil','safari/gesturebar','safari/handofftabs','safari/linklatch','safari/nightshelf','safari/pasteplain','safari/quicktranslate','safari/quietscroll','safari/readpane','safari/screentime','safari/tabcompass','safari/tabfolders','safari/trackoff','safari/zoomkeeper','saltcedar','solsticeenergy','staticmotion','stonebridgelaw','terranovafarms','thequietroom','vantagepointreal','veranostudio','waxtypefoundry','windows/applock','windows/backuploop','windows/batterywatch','windows/clipvault','windows/filesentry','windows/hotkeyforge','windows/netpulse','windows/notedock','windows/printqueue','windows/quickrename','windows/screentimedesk','windows/startuptrim','windows/taskdock','windows/wincast','windows/windim','windows/wintidy','wordpress/backupvault','wordpress/bookingdesk','wordpress/cacherunner','wordpress/commentguard','wordpress/galleryloom','wordpress/mailbridge','wordpress/membershipgate','wordpress/multilangbridge','wordpress/popupcraft','wordpress/redirectmap','wordpress/reviewstack','wordpress/seopilot','wordpress/shopsync','wordpress/speedtrimwp','wordpress/swiftformbuilder','wordpress/tableforge']);
 
-/* one-line pitch per discipline, shown on the twelve discipline cards */
-const disciplineBlurbs = {
-  web:'Brand-first marketing sites, storefronts and web apps.',
-  video:'Brand films and motion pieces cut on a live GSAP engine.',
-  chrome:'Toolbar tools that live where people already work.',
-  firefox:'Privacy-minded add-ons built on WebExtensions.',
-  safari:'Native Safari app extensions for macOS and iOS.',
-  wordpress:'Dashboard plugins with real admin UX, not settings dumps.',
-  android:'Material-native utilities for Android phones.',
-  ios:'Polished, gesture-first apps tuned for iPhone.',
-  windows:'Fluent desktop utilities for Windows 11.',
-  mac:'Menu-bar and window apps that feel at home on macOS.',
-  androidgames:'Arcade and casual games built for Android.',
-  iosgames:'Tactile, haptic-feel casual games for iPhone.',
-};
-
 /* 3–4 s homepage preview loops: the lightweight SD rendition of the first stock clip each film uses */
 const videoPreviews = {
   founders:'20563164/20563164-sd_640_360_30fps.mp4', signal:'5028622/5028622-sd_640_360_25fps.mp4',
@@ -332,3 +316,6 @@ const contactScopes = [
   {label:'WordPress Plugin', line:'a WordPress plugin'},
   {label:'Motion / Video', line:'a brand film or motion piece'},
 ];
+/* the client names their own timeline and budget range — no public price list */
+const contactTimelines = ['As soon as possible', 'Within a month', 'In 1–3 months', 'Flexible / exploring'];
+const contactBudgets = ['Under $1,000', '$1,000 – $3,000', '$3,000 – $10,000', '$10,000+', 'Not sure yet'];

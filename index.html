@@ -20,7 +20,7 @@
 <meta property="og:title" content="Bazozo — Web Design, App &amp; Browser Extension Development Studio in India">
 <meta property="og:description" content="Bazozo is a product &amp; engineering studio in India building custom websites, e-commerce, browser extensions, WordPress plugins, mobile and desktop apps, and brand video. See 209 live builds.">
 <meta property="og:url" content="https://bazozo.in/">
-<meta property="og:image" content="https://bazozo.in/og-image-v2.png">
+<meta property="og:image" content="https://bazozo.in/og-image-v2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Bazozo, product and engineering studio: websites, apps, browser extensions and brand film">
@@ -28,15 +28,15 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bazozo — Web Design, App &amp; Browser Extension Development Studio in India">
 <meta name="twitter:description" content="Bazozo is a product &amp; engineering studio in India building custom websites, e-commerce, browser extensions, WordPress plugins, mobile and desktop apps, and brand video. See 209 live builds.">
-<meta name="twitter:image" content="https://bazozo.in/og-image-v2.png">
+<meta name="twitter:image" content="https://bazozo.in/og-image-v2.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261117j">
-<script src="theme.js?v=20261117j"></script>
+<link rel="stylesheet" href="styles.css?v=20261119a">
+<script src="theme.js?v=20261119a"></script>
 
 <script type="application/ld+json">
 {
@@ -48,12 +48,12 @@
    "name": "Bazozo",
    "alternateName": "Bazozo Studio",
    "url": "https://bazozo.in/",
-   "image": "https://bazozo.in/og-image-v2.png",
+   "image": "https://bazozo.in/og-image-v2.jpg",
    "logo": "https://bazozo.in/favicon.svg",
    "description": "Bazozo is a product & engineering studio in India building custom websites, e-commerce, browser extensions, WordPress plugins, mobile and desktop apps, and brand video. See 209 live builds.",
    "email": "hello@bazozo.in",
    "telephone": "+91-73475-00770",
-   "areaServed": "Worldwide",
+   "areaServed": ["United States", "United Kingdom", "United Arab Emirates", "Saudi Arabia", "Qatar", "Australia", "Canada", "Ireland", "New Zealand", "Singapore", "Worldwide"],
    "address": {
     "@type": "PostalAddress",
     "addressCountry": "IN"
@@ -2749,6 +2749,12 @@
         <span class="kicker">02 — Services</span>
         <h2 class="section-title">What we build for you</h2>
         <p class="section-lede">Four areas, one team. Tap any tag to see real builds in that discipline.</p>
+        <nav class="svc-links" aria-label="Specialist services">
+          <a href="chrome-extension-development.html">Chrome extension development <i aria-hidden="true">&rarr;</i></a>
+          <a href="mobile-app-development.html">iOS &amp; Android apps <i aria-hidden="true">&rarr;</i></a>
+          <a href="wordpress-plugin-development.html">WordPress plugins <i aria-hidden="true">&rarr;</i></a>
+          <a href="launch-video-production.html">Launch videos &amp; motion <i aria-hidden="true">&rarr;</i></a>
+        </nav>
       </div>
       <div class="pillar-grid" id="pillarGrid">
       <article class="pillar" style="--pillar:#e7b85c"><div class="pillar-head"><span class="pillar-num">01</span><span class="pillar-count mono">30 pieces</span></div><h3 class="pillar-title">Web &amp; E-Commerce</h3><p class="pillar-blurb">Marketing sites, storefronts and web apps, designed from the brand up and engineered to load fast and rank.</p><ul class="pillar-tags"><li><a class="pillar-tag is-link" href="#work">Custom Web<span class="pillar-tag-n mono">30</span></a></li><li><a class="pillar-tag is-link" href="#work">WordPress<span class="pillar-tag-n mono">16</span></a></li><li><a class="pillar-tag is-link is-soon" href="coming-soon.html?topic=Shopify+%2F+Headless">Shopify / Headless<span class="pillar-tag-n mono">soon</span></a></li><li><a class="pillar-tag is-link" href="#services">Speed &amp; SEO</a></li></ul></article>
@@ -2912,10 +2918,24 @@
       <span class="kicker reveal">07 — Contact</span>
       <h2 class="contact-title reveal">Have something worth<br>building<span class="u">?</span></h2>
       <div class="scope-wrap reveal">
-        <p class="scope-k mono" id="scopeLabel">What are we building?</p>
+        <p class="scope-k mono" id="scopeLabel"><b>1</b> What are we building?</p>
         <div class="scope-pills" id="scopePills" role="radiogroup" aria-labelledby="scopeLabel"></div>
-        <p class="scope-note mono" id="scopeNote">Pick a scope and the email + WhatsApp links below pre-fill your brief.</p>
+        <p class="scope-k mono" id="timeLabel"><b>2</b> When do you need it?</p>
+        <div class="scope-pills" id="timePills" role="radiogroup" aria-labelledby="timeLabel"></div>
+        <p class="scope-k mono" id="budgetLabel"><b>3</b> Your budget range</p>
+        <div class="scope-pills" id="budgetPills" role="radiogroup" aria-labelledby="budgetLabel"></div>
+        <p class="scope-note mono" id="scopeNote">Pick what fits — the email and WhatsApp buttons fill in your brief. Every project gets a written quote before any work starts.</p>
       </div>
+      <form class="teardown reveal" id="teardown" novalidate>
+        <p class="scope-k mono"><b>Free</b> website teardown</p>
+        <p class="td-copy">Send us your site and we'll reply with a short, honest list of what's slowing it down and costing you enquiries — free, no obligation.</p>
+        <div class="td-row">
+          <label class="sr-only" for="tdUrl">Your website address</label>
+          <input id="tdUrl" name="url" type="text" inputmode="url" autocomplete="url" placeholder="yourwebsite.com" maxlength="200">
+          <button type="submit" class="td-btn">Get my free teardown <i aria-hidden="true">&rarr;</i></button>
+        </div>
+        <p class="td-msg mono" id="tdMsg" role="status" aria-live="polite"></p>
+      </form>
       <div class="contact-row reveal">
         <div class="contact-item"><span class="k">Email</span><a href="mailto:hello@bazozo.in" id="contactMail" class="ci-link"><svg class="ci-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>hello@bazozo.in</span><i class="ci-go" aria-hidden="true">&rarr;</i></a></div>
         <div class="contact-item"><span class="k">Phone</span><a href="tel:+917347500770" class="ci-link"><svg class="ci-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg><span>+91 73475 00770</span><i class="ci-go" aria-hidden="true">&rarr;</i></a></div>
@@ -2937,7 +2957,11 @@
       <p class="mono">Studio</p>
       <a href="#work">Selected work</a>
       <a href="#services">What we build</a>
-      <a href="#services">Web services</a>
+      <a href="chrome-extension-development.html">Chrome extensions</a>
+      <a href="mobile-app-development.html">Mobile apps</a>
+      <a href="wordpress-plugin-development.html">WordPress plugins</a>
+      <a href="launch-video-production.html">Launch videos</a>
+      <a href="insights/index.html">Insights &amp; guides</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Start a project</a>
     </nav>
@@ -2966,7 +2990,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js" integrity="sha512-omCJ8S/xl+DUjxNTqvhVSptHwIEi0IDp52n63HEj8ThJgSK/8Lcpi9btnTdE8db+Y4cDKZrZ7NQZBX4PKN4i4g==" crossorigin="anonymous" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
-<script src="data.js?v=20261117j" defer></script>
-<script src="main.js?v=20261117j" defer></script>
+<script src="data.js?v=20261119a" defer></script>
+<script src="main.js?v=20261119a" defer></script>
+<a class="wa-float" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener noreferrer" aria-label="Message Bazozo on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.45 15.05L2.5 21.5l4.57-1.07A9.9 9.9 0 1 0 12.04 2zm4.5 11.96c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.7 2.7 0 0 0-.85 2.02 4.7 4.7 0 0 0 .99 2.5 10.8 10.8 0 0 0 4.14 3.66c1.54.66 2.14.72 2.91.6.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg><span>WhatsApp</span></a>
 </body>
 </html>

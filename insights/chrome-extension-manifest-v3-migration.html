@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>How to Migrate a Chrome Extension from Manifest V2 to V3 — Bazozo</title>
+<meta name="description" content="A practical Manifest V2 → V3 migration checklist: service workers, declarativeNetRequest, chrome.scripting, host permissions and the remote-code ban.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="theme-color" content="#ECE1CE">
+<link rel="canonical" href="https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bazozo">
+<meta property="og:title" content="How to Migrate a Chrome Extension from Manifest V2 to V3 — Bazozo">
+<meta property="og:description" content="A practical Manifest V2 → V3 migration checklist: service workers, declarativeNetRequest, chrome.scripting, host permissions and the remote-code ban.">
+<meta property="og:url" content="https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html">
+<meta property="og:image" content="https://bazozo.in/og-image-v2.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../service.css">
+<script src="../theme.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html#article",
+   "headline": "How to Migrate a Chrome Extension from Manifest V2 to V3",
+   "description": "A practical Manifest V2 → V3 migration checklist: service workers, declarativeNetRequest, chrome.scripting, host permissions and the remote-code ban.",
+   "url": "https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html",
+   "mainEntityOfPage": "https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html",
+   "inLanguage": "en",
+   "datePublished": "2026-11-19",
+   "dateModified": "2026-11-19",
+   "author": {
+    "@type": "Organization",
+    "name": "Bazozo Studio",
+    "url": "https://bazozo.in/"
+   },
+   "publisher": {
+    "@id": "https://bazozo.in/#business"
+   },
+   "image": "https://bazozo.in/og-image-v2.jpg",
+   "isPartOf": {
+    "@id": "https://bazozo.in/#website"
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "How long does a Manifest V3 migration take?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Small extensions can be migrated in a few days; extensions with heavy background logic or request blocking take longer because that code has to be redesigned around events and declarativeNetRequest."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Will my extension keep its users after migrating?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Publishing the MV3 version as an update to the same store listing keeps your users, ratings and extension ID."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does Manifest V3 work on Firefox and Safari?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, both support Manifest V3, with some differences in background scripts and API support — so plan the migration with all target browsers in mind."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Bazozo",
+     "item": "https://bazozo.in/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Insights",
+     "item": "https://bazozo.in/insights/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How to Migrate a Chrome Extension from Manifest V2 to V3",
+     "item": "https://bazozo.in/insights/chrome-extension-manifest-v3-migration.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<header class="svc-nav">
+  <a class="brand" href="../index.html" aria-label="Bazozo home">bazozo<span>.</span></a>
+  <nav aria-label="Primary"><a href="../index.html#work">Work</a><a href="../index.html#services">Services</a><a href="index.html">Insights</a></nav>
+  <a class="cta" href="../index.html#contact">Start a project <i aria-hidden="true">&rarr;</i></a>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark mode"><span aria-hidden="true">◐</span></button>
+</header>
+
+<main class="article">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Bazozo</a> <span aria-hidden="true">/</span> <a href="index.html">Insights</a></nav>
+  <article>
+    <header class="hero">
+      <p class="kicker">Insights · Updated November 2026</p>
+      <h1>How to Migrate a Chrome Extension from Manifest V2 to V3</h1>
+      <div class="answer-box"><b>Short answer</b><p>To migrate a Chrome extension to Manifest V3, set <code>"manifest_version": 3</code>, move the background page into a service worker, replace blocking <code>webRequest</code> with <code>declarativeNetRequest</code>, switch <code>tabs.executeScript</code> to <code>chrome.scripting</code>, and move host access into <code>host_permissions</code>. The biggest change is that background code no longer stays alive — anything that relied on in-memory state or timers has to be rewritten around events and <code>chrome.storage</code>.</p></div>
+    </header>
+    <section><h2>Why migrate now</h2>
+      <p>Chrome has phased out Manifest V2: MV2 extensions are switched off for everyday Chrome users and can no longer be published to the Chrome Web Store. Edge follows Chrome, and Firefox and Safari both support Manifest V3 as well, so one MV3 codebase is now the sensible base for every browser.</p>
+    </section>
+    <section><h2>1. Update the manifest</h2>
+      <ul><li>Set <code>"manifest_version": 3</code>.</li><li>Rename <code>browser_action</code> / <code>page_action</code> to a single <code>action</code>.</li><li>Move site access (for example <code>"https://*.example.com/*"</code>) out of <code>permissions</code> into <code>host_permissions</code>.</li><li><code>web_accessible_resources</code> becomes a list of objects with <code>resources</code> and <code>matches</code>.</li><li><code>content_security_policy</code> becomes an object (<code>extension_pages</code>, <code>sandbox</code>).</li></ul>
+    </section>
+    <section><h2>2. Turn the background page into a service worker</h2>
+      <p>Replace <code>"background": {"scripts": [...]}</code> with <code>"background": {"service_worker": "background.js"}</code>. The worker starts when an event fires and is stopped when idle, so:</p><ul><li>Register all listeners at the top level of the script, synchronously.</li><li>Keep state in <code>chrome.storage</code> (or <code>storage.session</code> for temporary data), not in global variables.</li><li>Use <code>chrome.alarms</code> instead of long <code>setTimeout</code> / <code>setInterval</code> timers.</li><li>There is no DOM in a service worker — use an offscreen document (<code>chrome.offscreen</code>) for things like clipboard access, audio or DOM parsing.</li></ul>
+    </section>
+    <section><h2>3. Replace blocking webRequest</h2>
+      <p>Extensions that block or modify requests move to <code>declarativeNetRequest</code>: you declare rules (static rule sets in the manifest, or dynamic and session rules added at runtime) and the browser applies them. Observing requests with non-blocking <code>webRequest</code> still works.</p>
+    </section>
+    <section><h2>4. Update script injection</h2>
+      <p><code>chrome.tabs.executeScript</code> and <code>insertCSS</code> are replaced by <code>chrome.scripting.executeScript</code> and <code>chrome.scripting.insertCSS</code>, which need the <code>"scripting"</code> permission. You inject a file or a function — not a string of code.</p>
+    </section>
+    <section><h2>5. Remove remotely hosted code</h2>
+      <p>Manifest V3 does not allow loading and running code from a server or using <code>eval</code>-style execution. Bundle every script inside the extension; fetch data (JSON, config) from your API instead of code.</p>
+    </section>
+    <section><h2>6. Test, then submit</h2>
+      <p>Load the unpacked extension, watch the service worker in <code>chrome://extensions</code>, and test what happens after the worker has been stopped and restarted — that is where most migration bugs hide. Then update the store listing, including permission justifications, and submit.</p>
+    </section>
+    <section class="faq"><h2>Questions</h2>
+      <details><summary>How long does a Manifest V3 migration take?</summary><p>Small extensions can be migrated in a few days; extensions with heavy background logic or request blocking take longer because that code has to be redesigned around events and declarativeNetRequest.</p></details>
+      <details><summary>Will my extension keep its users after migrating?</summary><p>Yes. Publishing the MV3 version as an update to the same store listing keeps your users, ratings and extension ID.</p></details>
+      <details><summary>Does Manifest V3 work on Firefox and Safari?</summary><p>Yes, both support Manifest V3, with some differences in background scripts and API support — so plan the migration with all target browsers in mind.</p></details>
+    </section>
+    <aside class="article-cta">
+      <b>Need this done for you?</b>
+      <p>Bazozo Studio handles chrome extension development end to end — with a written quote before any work starts.</p>
+      <div class="ctas"><a class="btn primary" href="../chrome-extension-development.html">Chrome extension development →</a><a class="btn" href="../index.html#contact">Start a project</a></div>
+    </aside>
+  </article>
+</main>
+<footer class="svc-foot">
+  <div class="more"><b>Services:</b> <a href="../chrome-extension-development.html">Chrome extensions</a><a href="../mobile-app-development.html">Mobile apps</a><a href="../wordpress-plugin-development.html">WordPress plugins</a><a href="../launch-video-production.html">Launch videos</a></div>
+  <div class="base"><span>&copy; 2026 Bazozo Studio</span><span><a href="../privacy-policy.html">Privacy</a> · <a href="../terms.html">Terms</a> · <a href="../index.html">Home</a></span></div>
+</footer>
+<a class="wa-float" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener noreferrer" aria-label="Message Bazozo on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.45 15.05L2.5 21.5l4.57-1.07A9.9 9.9 0 1 0 12.04 2zm4.5 11.96c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.7 2.7 0 0 0-.85 2.02 4.7 4.7 0 0 0 .99 2.5 10.8 10.8 0 0 0 4.14 3.66c1.54.66 2.14.72 2.91.6.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg><span>WhatsApp</span></a>
+</body>
+</html>

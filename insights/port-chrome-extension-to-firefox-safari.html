@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>How to Port a Chrome Extension to Firefox and Safari — Bazozo</title>
+<meta name="description" content="Port a Chrome extension to Firefox and Safari without a rewrite: shared code, per-browser manifests, the browser.* API, Safari&#x27;s Xcode wrapper and store review.">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="theme-color" content="#ECE1CE">
+<link rel="canonical" href="https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Bazozo">
+<meta property="og:title" content="How to Port a Chrome Extension to Firefox and Safari — Bazozo">
+<meta property="og:description" content="Port a Chrome extension to Firefox and Safari without a rewrite: shared code, per-browser manifests, the browser.* API, Safari&#x27;s Xcode wrapper and store review.">
+<meta property="og:url" content="https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html">
+<meta property="og:image" content="https://bazozo.in/og-image-v2.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../service.css">
+<script src="../theme.js"></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Article",
+   "@id": "https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html#article",
+   "headline": "How to Port a Chrome Extension to Firefox and Safari",
+   "description": "Port a Chrome extension to Firefox and Safari without a rewrite: shared code, per-browser manifests, the browser.* API, Safari's Xcode wrapper and store review.",
+   "url": "https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html",
+   "mainEntityOfPage": "https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html",
+   "inLanguage": "en",
+   "datePublished": "2026-11-19",
+   "dateModified": "2026-11-19",
+   "author": {
+    "@type": "Organization",
+    "name": "Bazozo Studio",
+    "url": "https://bazozo.in/"
+   },
+   "publisher": {
+    "@id": "https://bazozo.in/#business"
+   },
+   "image": "https://bazozo.in/og-image-v2.jpg",
+   "isPartOf": {
+    "@id": "https://bazozo.in/#website"
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Do I need to rewrite my extension for Safari?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Usually not. The converter wraps your existing web extension in an app; the work is adapting unsupported APIs and testing on Safari."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can one person maintain extensions for three browsers?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, if the code is shared and each browser build comes from the same source — maintenance then means one change, three builds."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Which store is hardest to get approved?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Each has different rules: Chrome focuses on permissions and data use, Firefox may review source code, and Apple reviews the whole app. Clear permission justifications help with all three."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Bazozo",
+     "item": "https://bazozo.in/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Insights",
+     "item": "https://bazozo.in/insights/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How to Port a Chrome Extension to Firefox and Safari",
+     "item": "https://bazozo.in/insights/port-chrome-extension-to-firefox-safari.html"
+    }
+   ]
+  }
+ ]
+}
+</script>
+</head>
+<body>
+<header class="svc-nav">
+  <a class="brand" href="../index.html" aria-label="Bazozo home">bazozo<span>.</span></a>
+  <nav aria-label="Primary"><a href="../index.html#work">Work</a><a href="../index.html#services">Services</a><a href="index.html">Insights</a></nav>
+  <a class="cta" href="../index.html#contact">Start a project <i aria-hidden="true">&rarr;</i></a>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch light / dark mode"><span aria-hidden="true">◐</span></button>
+</header>
+
+<main class="article">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Bazozo</a> <span aria-hidden="true">/</span> <a href="index.html">Insights</a></nav>
+  <article>
+    <header class="hero">
+      <p class="kicker">Insights · Updated November 2026</p>
+      <h1>How to Port a Chrome Extension to Firefox and Safari</h1>
+      <div class="answer-box"><b>Short answer</b><p>You can usually port a Chrome extension to Firefox and Safari without rewriting it: keep one shared codebase, generate a slightly different manifest for each browser at build time, use the promise-based <code>browser.*</code> API (or a polyfill), and wrap the Safari version in a small Xcode app with Apple's converter. The work is mostly in background-script differences, unsupported APIs and each store's review rules.</p></div>
+    </header>
+    <section><h2>Start from one shared codebase</h2>
+      <p>Keep popup, options page, content scripts and business logic shared. Put browser differences behind a thin wrapper, and produce one build per browser from the same source. Most extensions end up 90% or more shared.</p>
+    </section>
+    <section><h2>Firefox</h2>
+      <ul><li>Add <code>browser_specific_settings.gecko.id</code> to the manifest — Firefox Add-ons needs a stable extension ID.</li><li>Firefox runs Manifest V3 background code as an event page (<code>"background": {"scripts": [...]}</code>) rather than a service worker, so generate a Firefox-specific background entry.</li><li>Firefox supports the promise-based <code>browser.*</code> namespace; Mozilla's <code>webextension-polyfill</code> lets the same code run on Chrome.</li><li>Submit to addons.mozilla.org; source code may be requested for review if you use a bundler or minifier.</li></ul>
+    </section>
+    <section><h2>Safari</h2>
+      <ul><li>Safari Web Extensions are distributed inside a macOS / iOS app. Apple's <code>xcrun safari-web-extension-converter</code> turns your extension folder into an Xcode project.</li><li>You need an Apple Developer account, and the app goes through App Store review.</li><li>Check each API you use against Safari's support — most common ones (storage, tabs, scripting, declarativeNetRequest) work, but some Chrome-only APIs do not.</li><li>Test on both macOS Safari and iOS Safari if you ship to iPhone and iPad.</li></ul>
+    </section>
+    <section><h2>Edge and other Chromium browsers</h2>
+      <p>Edge, Brave, Opera and Arc run Chrome extensions directly. Edge has its own Add-ons store, which accepts the Chrome build with minor listing changes.</p>
+    </section>
+    <section><h2>A build setup that scales</h2>
+      <p>Use one build step that outputs <code>dist/chrome</code>, <code>dist/firefox</code> and <code>dist/safari</code>, each with its own manifest. Run the same automated checks on all three so a fix in shared code reaches every browser at once.</p>
+    </section>
+    <section class="faq"><h2>Questions</h2>
+      <details><summary>Do I need to rewrite my extension for Safari?</summary><p>Usually not. The converter wraps your existing web extension in an app; the work is adapting unsupported APIs and testing on Safari.</p></details>
+      <details><summary>Can one person maintain extensions for three browsers?</summary><p>Yes, if the code is shared and each browser build comes from the same source — maintenance then means one change, three builds.</p></details>
+      <details><summary>Which store is hardest to get approved?</summary><p>Each has different rules: Chrome focuses on permissions and data use, Firefox may review source code, and Apple reviews the whole app. Clear permission justifications help with all three.</p></details>
+    </section>
+    <aside class="article-cta">
+      <b>Need this done for you?</b>
+      <p>Bazozo Studio handles chrome extension development end to end — with a written quote before any work starts.</p>
+      <div class="ctas"><a class="btn primary" href="../chrome-extension-development.html">Chrome extension development →</a><a class="btn" href="../index.html#contact">Start a project</a></div>
+    </aside>
+  </article>
+</main>
+<footer class="svc-foot">
+  <div class="more"><b>Services:</b> <a href="../chrome-extension-development.html">Chrome extensions</a><a href="../mobile-app-development.html">Mobile apps</a><a href="../wordpress-plugin-development.html">WordPress plugins</a><a href="../launch-video-production.html">Launch videos</a></div>
+  <div class="base"><span>&copy; 2026 Bazozo Studio</span><span><a href="../privacy-policy.html">Privacy</a> · <a href="../terms.html">Terms</a> · <a href="../index.html">Home</a></span></div>
+</footer>
+<a class="wa-float" href="https://wa.me/917347500770?text=Hi%20Bazozo%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener noreferrer" aria-label="Message Bazozo on WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.45 15.05L2.5 21.5l4.57-1.07A9.9 9.9 0 1 0 12.04 2zm4.5 11.96c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.55.12-.16.25-.63.8-.78.97-.14.16-.29.18-.53.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.43-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.7 2.7 0 0 0-.85 2.02 4.7 4.7 0 0 0 .99 2.5 10.8 10.8 0 0 0 4.14 3.66c1.54.66 2.14.72 2.91.6.47-.07 1.46-.6 1.66-1.17.2-.58.2-1.07.14-1.17-.06-.1-.22-.16-.47-.28z"/></svg><span>WhatsApp</span></a>
+</body>
+</html>
