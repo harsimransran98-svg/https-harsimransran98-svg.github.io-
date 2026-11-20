@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Developments · The Skyline</title>
+<meta name="description" content="A cinematic, scroll-driven film for property developers, contractors, real estate agencies and interior designers in Dubai and Sharjah.">
+<link rel="canonical" href="https://bazozo.in/work/theskyline.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#07080B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="theskyline/seq/dusk/f001.webp" fetchpriority="high">
+<link rel="preconnect" href="https://videos.pexels.com">
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="theskyline.css">
+</head>
+<body>
+<a class="skip" href="#credits">Skip the film</a>
+
+<header class="bar" aria-label="Site">
+  <a class="mark" href="#" aria-label="Your Developments, back to the start">YOUR<span>DEVELOPMENTS</span></a>
+  <div class="bar-r">
+    <a class="cta mag" href="#credits" data-jump="credits"><span>Book a private viewing</span></a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="reel" aria-label="Open scene list"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<nav class="reel" id="reel" aria-label="Scenes" hidden>
+  <ol>
+    <li><button type="button" data-jump="open"><b>01</b>Opening titles</button></li>
+    <li><button type="button" data-jump="city"><b>02</b>Over the city</button></li>
+    <li><button type="button" data-jump="build"><b>03</b>The build</button></li>
+    <li><button type="button" data-jump="flats"><b>04</b>The residences</button></li>
+    <li><button type="button" data-jump="inside"><b>05</b>The interior</button></li>
+    <li><button type="button" data-jump="plan"><b>06</b>The plan</button></li>
+    <li><button type="button" data-jump="credits"><b>07</b>End credits</button></li>
+  </ol>
+</nav>
+
+<main class="stage" id="stage" aria-live="off">
+  <!-- 01-02 real footage, scrubbed by scroll (frame sequences) -->
+  <div class="layer l-seq" id="lSeq"><canvas id="seq" aria-label="Dubai skyline, from day into night, then a drone flight over the coast"></canvas><div class="tint" id="seqTint"></div></div>
+  <div class="layer l-photo" id="lMarina"><img id="imgMarina" alt="Aerial view of Dubai Marina towers and yachts"></div>
+  <!-- 03 the build -->
+  <div class="layer l-photo" id="lCons"><img id="imgCons" alt="A residential tower under construction, cranes on top"><i class="cons-done" id="consDone"></i><i class="cons-line" id="consLine"></i><div class="build-hud" id="buildHud" aria-hidden="true"></div></div>
+  <!-- 04 the residences: real tower, floor by floor -->
+  <div class="layer l-tower" id="lTower"><img class="tw-bg" id="twBg" alt=""><figure class="tw" id="tw"><img id="twImg" alt="Residential tower with balconies above a pool deck"><i class="band" id="band"></i></figure><svg class="callout-lines" id="lines" aria-hidden="true"></svg><div class="callouts" id="callouts"></div></div>
+  <!-- 04b amenities -->
+  <div class="layer l-amen" id="lAmen"><figure class="am a1"><img id="am1" alt="Rooftop pool with a city view"><figcaption><small>Level 49</small>Infinity pool</figcaption></figure><figure class="am a2"><img id="am2" alt="Infinity pool on a skyscraper terrace"><figcaption><small>Podium</small>Residents’ lido</figcaption></figure><ul class="am-list" id="amList"></ul></div>
+  <div class="flash" id="flash" aria-hidden="true"></div>
+  <!-- 05 interior: before / after -->
+  <div class="layer l-int" id="lInt">
+    <div class="ba"><img class="before" id="imgBefore" alt="An empty, unfurnished apartment room with white walls"><img class="after" id="imgAfter" alt="The same kind of room finished as a warm, modern living space"><i class="sweep" id="sweep"></i></div>
+    <svg class="pins-lines" id="pinLines" aria-hidden="true"></svg>
+    <div class="pins" id="pins"></div>
+    <div class="palette" id="palette" aria-label="Material palette"></div>
+  </div>
+  <!-- 06 floor plan -->
+  <div class="layer l-plan" id="lPlan"><svg id="plan" viewBox="0 0 800 520" role="img" aria-label="Floor plan of a three bedroom residence"></svg><div class="plan-card" id="planCard"></div></div>
+  <!-- 06b zoom-through rooms -->
+  <div class="layer l-tunnel" id="lTunnel"><div class="tunnel" id="tunnel"></div></div>
+  <!-- 07 finale -->
+  <div class="layer l-video" id="lFinale"><video id="vFinale" muted loop playsinline preload="metadata" aria-hidden="true"></video><div class="tint deep"></div></div>
+
+  <!-- titles, subtitles, credits -->
+  <div class="titles" id="titles"></div>
+  <p class="sub" id="sub" aria-live="polite"></p>
+  <div class="credits" id="credits" tabindex="-1">
+    <p class="cr-k">A Your Developments production</p>
+    <h2>Your next project<br><em>deserves a premiere.</em></h2>
+    <p class="cr-l">Off-plan launches, ready homes, fit-outs and full turnkey interiors across Dubai and Sharjah.</p>
+    <div class="cr-cta">
+      <a class="cta mag big" href="https://wa.me/971500000000?text=I%20would%20like%20a%20private%20viewing" rel="noopener" target="_blank"><span>WhatsApp the sales team</span></a>
+      <a class="ghost mag" href="mailto:sales@example.com"><span>Request the brochure</span></a>
+    </div>
+    <div class="roll" id="roll" aria-hidden="true"></div>
+  </div>
+
+  <!-- cinema chrome -->
+  <i class="lb top" aria-hidden="true"></i><i class="lb bot" aria-hidden="true"></i>
+  <i class="vignette" aria-hidden="true"></i><i class="grain" aria-hidden="true"></i>
+  <div class="hud" aria-hidden="true"><span id="tc">00:00:00:00</span><span id="scn">SC 01 · OPENING</span></div>
+  <div class="hint" id="hint" aria-hidden="true"><i></i>Scroll to roll the film</div>
+</main>
+
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+
+<noscript><div class="nojs"><h1>Your Developments</h1><p>This film needs JavaScript. Call or WhatsApp +971 50 000 0000 for a private viewing.</p></div></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="theskyline.js" defer></script>
+</body>
+</html>

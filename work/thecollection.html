@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Motors · The Collection</title>
+<meta name="description" content="A cinematic, scroll-driven showroom film for luxury car dealers and performance garages in Dubai and Sharjah.">
+<link rel="canonical" href="https://bazozo.in/work/thecollection.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#050505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Saira:wght@300;400;500;600&family=Chivo+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://videos.pexels.com">
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="thecollection.css">
+</head>
+<body>
+<a class="skip" href="#finale">Skip the film</a>
+
+<header class="bar" aria-label="Site">
+  <a class="mark" href="#" aria-label="Your Motors, back to the start"><i aria-hidden="true"></i>YOUR MOTORS</a>
+  <nav class="bar-r" aria-label="Quick actions">
+    <a class="btn-line mag" href="#finale" data-jump="stock"><span>View stock</span></a>
+    <a class="btn-hot mag" href="#finale" data-jump="finale"><span>Book a test drive</span></a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="laps" aria-label="Open scene list"><i></i><i></i></button>
+  </nav>
+</header>
+
+<nav class="laps" id="laps" aria-label="Scenes" hidden>
+  <ol>
+    <li><button type="button" data-jump="lights"><span>01</span>Lights on</button></li>
+    <li><button type="button" data-jump="arrive"><span>02</span>The arrival</button></li>
+    <li><button type="button" data-jump="doors"><span>03</span>Doors up</button></li>
+    <li><button type="button" data-jump="spin"><span>04</span>Walkaround</button></li>
+    <li><button type="button" data-jump="stock"><span>05</span>In stock</button></li>
+    <li><button type="button" data-jump="garage"><span>06</span>The garage</button></li>
+    <li><button type="button" data-jump="finale"><span>07</span>Test drive</button></li>
+  </ol>
+</nav>
+
+<main class="stage" id="stage">
+  <!-- 01-02 real footage scrubbed by scroll: ignition, lights on, arrival -->
+  <div class="layer l-seq" id="lSeq"><canvas id="seq" aria-label="A car's headlights switch on in a dark garage, then a sports car arrives at night"></canvas><div class="strips" id="strips" aria-hidden="true"></div></div>
+  <!-- 03 doors up: real cars -->
+  <div class="layer l-doors" id="lDoors"><img class="dr d1" id="d1" alt="Black supercar with its scissor doors raised in a dark garage"><img class="dr d2" id="d2" alt="Red supercar with dihedral doors open on a showroom turntable"><svg class="lines" id="lines" aria-hidden="true"></svg><div class="tags" id="tags"></div></div>
+  <!-- 04 walkaround: real dealership footage + spec -->
+  <div class="layer l-walk" id="lWalk"><canvas class="wk-bg" id="wkBg" aria-hidden="true"></canvas><figure class="wk" id="wk"><canvas id="wkCv" aria-label="Walkaround of a silver sports car in a dealership"></canvas></figure><aside class="spec" id="spec" aria-label="Flagship specification"></aside></div>
+  <div class="layer l-stock" id="lStock"></div>
+  <div class="layer l-garage" id="lGarage">
+    <video id="vGarage" muted loop playsinline preload="metadata" aria-hidden="true"></video><i class="shade"></i>
+    <ol class="svc" id="svc" aria-label="Garage services"></ol>
+  </div>
+  <div class="layer l-paint" id="lPaint"><img class="p-before" id="pBefore" alt="Supercar paint before correction: dull and swirled"><img class="p-after" id="pAfter" alt="The same paint after correction and ceramic coating: deep gloss"><i class="swirl" id="swirl"></i><i class="blade" id="blade"></i><p class="p-lab l"><b>Before</b>Swirls · oxidation · 62 GU</p><p class="p-lab r"><b>After</b>Corrected + ceramic · 94 GU</p></div>
+  <div class="layer l-video" id="lFinale"><video id="vFinale" muted loop playsinline preload="metadata" aria-hidden="true"></video><i class="shade deep"></i></div>
+  <div class="flash" id="flash" aria-hidden="true"></div>
+  <div class="dark" id="dark" aria-hidden="true"></div>
+
+  <div class="titles" id="titles"></div>
+  <p class="sub" id="sub" aria-live="polite"></p>
+  <section class="finale" id="finale" tabindex="-1" aria-label="Contact">
+    <p class="f-k">Your Motors · Dubai · Sharjah</p>
+    <h2>Sit in it.<br><em>Then decide.</em></h2>
+    <p class="f-l">Test drives on your schedule, part-exchange in an afternoon, and a garage that keeps it like the day you bought it.</p>
+    <div class="f-cta">
+      <a class="btn-hot mag big" href="https://wa.me/971500000000?text=I%27d%20like%20to%20book%20a%20test%20drive" target="_blank" rel="noopener"><span>Book a test drive</span></a>
+      <a class="btn-line mag big" href="https://wa.me/971500000000?text=I%27d%20like%20to%20book%20a%20service" target="_blank" rel="noopener"><span>Book a service</span></a>
+    </div>
+    <div class="f-roll" id="roll" aria-hidden="true"></div>
+  </section>
+
+  <i class="lb top" aria-hidden="true"></i><i class="lb bot" aria-hidden="true"></i><i class="vig" aria-hidden="true"></i><i class="grain" aria-hidden="true"></i>
+  <div class="tacho" aria-hidden="true"><svg viewBox="0 0 120 70"><path class="tb" d="M12 62 A50 50 0 0 1 108 62"/><path class="tf" id="tf" d="M12 62 A50 50 0 0 1 108 62"/></svg><b id="gear">N</b><span id="lap">LIGHTS</span></div>
+  <div class="hint" id="hint" aria-hidden="true">Scroll to turn on the lights<i></i></div>
+</main>
+<div class="spacer" id="spacer" aria-hidden="true"></div>
+<noscript><div class="nojs"><h1>Your Motors</h1><p>This showroom film needs JavaScript. WhatsApp +971 50 000 0000 to book a test drive.</p></div></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="thecollection.js" defer></script>
+</body>
+</html>

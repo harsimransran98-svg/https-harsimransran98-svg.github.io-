@@ -26,7 +26,7 @@ Websites, Graphics/ Video Editing, Chrome extensions, Firefox Add-ons, Safari Ap
 - [Why WooCommerce stores are slow on mobile (and how to fix it)](https://bazozo.in/insights/woocommerce-slow-on-mobile.html)
 
 ## Portfolio
-- [Full portfolio — 209 projects, each with a live site or interactive demo](https://bazozo.in/#work)
+- [Full portfolio — 211 projects, each with a live site or interactive demo](https://bazozo.in/#work)
 - [Baaz Records — live client site for an independent Punjabi music label](https://baazrecords.in/)
 - [About Bazozo](https://bazozo.in/#about)
 - [Craft & process](https://bazozo.in/#craft)
