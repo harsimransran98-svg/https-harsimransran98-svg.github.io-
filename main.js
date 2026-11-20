@@ -251,7 +251,7 @@ services.forEach((s, i) => {
    ================================================================== */
 function dots(n, cls){ const f = document.createDocumentFragment(); for(let i = 0; i < n; i++) f.append(mk('i', cls)); return f; }
 /* bump when screenshots are re-captured so browsers and the CDN fetch the new images */
-const PREVIEW_VERSION = '20261104b';
+const PREVIEW_VERSION = '20261120';
 const previewKey = p => p.cat === 'web' ? slugFor(p) : `${p.cat}/${slugFor(p)}`;
 const previewLabel = p => p.url ? p.url.replace(/^https?:\/\//, '').replace(/\/$/, '') : p.cat === 'web' ? `bazozo.in/work/${slugFor(p)}` : `bazozo.in/demo/${p.cat}/${slugFor(p)}`;
 

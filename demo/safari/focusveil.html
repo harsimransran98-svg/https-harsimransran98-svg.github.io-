@@ -3,59 +3,298 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FocusVeil — Case Study by Bazozo</title>
-<meta name="description" content="Dims everything on the page but the active reading column.">
+<title>FocusVeil — only the words you are reading stay lit · Safari extension by Bazozo Studio</title>
+<meta name="description" content="FocusVeil: switch on a veil that dims ads, sidebars and tickers so only the article column, the current paragraph or a reading ruler stays lit, and freeze anything that moves. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F1F0EC">
 <link rel="canonical" href="https://bazozo.in/demo/safari/focusveil.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=Albert+Sans:wght@400;500;600;700&family=Red+Hat+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F1F0EC;
+  --text:#191A1C;
+  --accent:#5B4BDB;
+  --accent-2:#F59E0B;
+  --panel:#FFFFFF;
+  --line:rgba(25,26,28,.11);
+  --dim:color-mix(in srgb, var(--text) 64%, transparent);
+  --menu-bg:#191A1C;
+  --menu-text:#F1F0EC;
+  --display:'Literata', Georgia, serif;
+  --dw:600;
+  --body:'Albert Sans', system-ui, sans-serif;
+  --mono:'Red Hat Mono', ui-monospace, monospace;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.6; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; }
+button, input, select, textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 clamp(18px,4vw,48px); }
+.mono{ font-family:var(--mono); }
+.prog{ position:fixed; z-index:70; top:0; left:0; right:0; height:3px; background:var(--accent); transform:scaleX(0); transform-origin:0 50%; }
+.nav{ position:fixed; z-index:65; top:0; left:0; right:0; display:flex; align-items:center; gap:18px; padding:16px clamp(18px,4vw,48px); transition:background .4s ease, box-shadow .4s ease; }
+.nav.scrolled{ background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:var(--dw); font-size:20px; }
+.logo i{ width:30px; height:30px; border-radius:9px; background:var(--accent); display:grid; place-items:center; font-style:normal; font-family:var(--body); font-weight:800; font-size:14px; color:var(--bg); }
+.nav .sp{ flex:1; }
+.nav .back{ font-size:13px; font-weight:600; opacity:.75; transition:opacity .2s ease; } .nav .back:hover{ opacity:1; }
+.burger{ position:relative; z-index:80; width:48px; height:48px; border-radius:50%; background:var(--accent); display:grid; place-items:center; box-shadow:0 10px 26px -12px var(--accent); transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-radius .4s ease; }
+.burger:hover{ transform:scale(1.08) rotate(-6deg); }
+.burger[aria-expanded="true"]{ border-radius:50%; }
+.burger span{ position:absolute; left:14px; right:14px; height:2px; border-radius:2px; background:var(--bg); transition:transform .6s cubic-bezier(.68,-.6,.32,1.6), opacity .3s ease, right .4s ease; }
+.burger:hover span{ transform:rotate(0); }
+.burger span:nth-child(1){ transform:translateY(-6px); } .burger span:nth-child(3){ transform:translateY(6px); right:22px; }
+.burger:hover span:nth-child(1){ transform:translateY(-6px) ; } .burger:hover span:nth-child(3){ transform:translateY(6px) ; right:14px; }
+.burger[aria-expanded="true"] span:nth-child(1){ transform:rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2){ opacity:0; transform:translateX(12px); }
+.burger[aria-expanded="true"] span:nth-child(3){ transform:rotate(-45deg); right:14px; }
+.menu{ position:fixed; z-index:60; inset:0; background:var(--menu-bg); color:var(--menu-text); display:flex; flex-direction:column; justify-content:center; padding:90px clamp(24px,6vw,80px) 40px; }
+.menu nav{ position:relative; display:flex; flex-direction:column; gap:4px; }
+.menu nav a{ font-family:var(--display); font-weight:var(--dw); font-size:clamp(36px,6.5vw,72px); line-height:1.1; display:flex; align-items:baseline; gap:18px; transition:color .3s ease, transform .4s cubic-bezier(.34,1.56,.64,1); }
+.menu nav a small{ font-family:var(--mono); font-size:13px; opacity:.5; }
+.menu nav a:hover{ color:var(--accent); transform:translateX(14px); }
+.menu .mnote{ position:relative; margin-top:36px; font-size:14px; opacity:.6; max-width:420px; }
+.menu{ left:auto; width:min(440px,100%); box-shadow:-30px 0 80px rgba(0,0,0,.35); } .menu-back{ position:fixed; inset:0; z-index:59; background:rgba(0,0,0,.4); backdrop-filter:blur(4px); }
+.btn{ display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 26px; border-radius:999px; font-weight:600; font-size:15px; background:var(--accent); color:#fff; }
+.btn.ghost{ background:transparent; color:var(--text); box-shadow:inset 0 0 0 1.5px var(--line); }
+.btn{ position:relative; overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; } .btn::after{ content:''; position:absolute; top:0; bottom:0; left:-80%; width:50%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent); transform:skewX(-20deg); transition:left .7s ease; } .btn:hover{ transform:scale(1.05) rotate(-1deg); box-shadow:0 14px 34px -12px var(--accent); } .btn:hover::after{ left:130%; }
+.hero{ position:relative; padding:150px 0 90px; overflow:hidden; }
+.orb{ position:absolute; border-radius:50%; filter:blur(70px); opacity:.55; pointer-events:none; }
+.orb.o1{ width:520px; height:520px; right:-120px; top:-80px; background:var(--accent); opacity:0.22; }
+.orb.o2{ width:380px; height:380px; left:-140px; bottom:-120px; background:var(--accent-2); opacity:0.25; }
+.hero .wrap{ position:relative; }
+.kick{ display:inline-flex; align-items:center; gap:10px; padding:7px 14px; border-radius:999px; border:1px solid var(--line); background:var(--panel); font-size:12.5px; font-weight:600; }
+.kick i{ width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+.hero h1{ margin-top:22px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(44px,7.4vw,104px); line-height:.98; letter-spacing:-.025em; max-width:14ch; }
+.hero h1 .w{ display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; }
+.hero h1 .w > span{ display:inline-block; }
+.hero .lead{ margin-top:22px; max-width:600px; font-size:18.5px; color:var(--dim); }
+.acts{ display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+.stats{ display:flex; flex-wrap:wrap; gap:36px; margin-top:48px; padding-top:28px; border-top:1px solid var(--line); }
+.stats b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:30px; color:var(--accent); }
+.stats span{ font-size:13px; color:var(--dim); }
+section.s{ padding:clamp(70px,10vw,130px) 0; }
+.lbl{ display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.lbl::before{ content:''; width:22px; height:1.5px; background:currentColor; }
+.sh{ margin-top:12px; font-family:var(--display); font-weight:var(--dw); font-size:clamp(32px,4.6vw,58px); line-height:1.04; letter-spacing:-.015em; }
+.demo-h{ display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:end; margin-bottom:30px; }
+.demo-h p{ color:var(--dim); font-size:17px; }
+/* the Firefox window */
+.cx{ --cx-bg:#F0F0F4; --cx-bar:#F9F9FB; --cx-tab:#FFFFFF; --cx-omni:#F0F0F4; --cx-ink:#15141A; --fx-blue:#0061E0;
+  position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:0 50px 100px -50px rgba(0,0,0,.6); background:var(--cx-bg); color:var(--cx-ink); font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; }
+.cx-tabs{ display:flex; align-items:center; gap:4px; height:44px; padding:0 6px 0 8px; }
+.fx-view{ flex:none; width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.85; }
+.fx-view svg{ width:16px; height:16px; }
+.cx-tab{ position:relative; display:flex; align-items:center; gap:8px; width:230px; height:36px; padding:0 10px; border-radius:4px; font-size:12px; opacity:.85; transition:background .2s ease; }
+.cx-tab:hover{ background:rgba(21,20,26,.08); }
+.cx-tab.on{ background:var(--cx-tab); opacity:1; box-shadow:0 0 4px rgba(0,0,0,.18); }
+.cx-tab span{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .cx-tab b{ font-weight:400; opacity:.6; }
+.cx-tab .fav{ width:14px; height:14px; border-radius:4px; background:var(--accent); flex:none; } .cx-tab .fav.f2{ background:conic-gradient(from 200deg, #FF9500, #FF2E63, #9059FF, #FF9500); border-radius:50%; }
+.cx-plus{ flex:none; width:28px; height:28px; display:grid; place-items:center; border-radius:4px; font-size:18px; opacity:.75; }
+.fx-list{ flex:none; margin-left:auto; width:28px; height:28px; display:grid; place-items:center; opacity:.7; font-size:13px; }
+.fx-win{ flex:none; display:flex; gap:2px; margin-left:4px; } .fx-win i{ width:30px; height:28px; display:grid; place-items:center; font-style:normal; font-size:12px; opacity:.7; }
+.cx-bar{ display:flex; align-items:center; gap:4px; height:42px; padding:0 8px; background:var(--cx-bar); border-bottom:1px solid #E0E0E6; }
+.cx-nb{ width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.8; font-size:15px; }
+.cx-omni{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; height:32px; margin:0 4px; padding:0 10px; border-radius:4px; background:var(--cx-omni); font-size:13.5px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.04); }
+.fx-shield{ flex:none; color:#5B5B66; } .cx-omni .fx-lock{ flex:none; opacity:.75; }
+.cx-omni #cxUrl{ flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cx-star{ opacity:.6; }
+.cx-puz, .fx-dl, .fx-menu{ width:32px; height:32px; display:grid; place-items:center; border-radius:4px; opacity:.75; }
+.fx-menu{ font-size:17px; }
+.cx-ext{ position:relative; width:32px; height:32px; border-radius:4px; display:grid; place-items:center; transition:background .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.cx-ext i{ width:20px; height:20px; border-radius:6px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:12px; color:#fff; background:var(--accent); box-shadow:0 0 0 0 var(--accent); animation:cxGlow 2.4s ease-in-out infinite; }
+.cx-ext:hover{ background:rgba(21,20,26,.1); transform:scale(1.08); }
+.cx-ext[aria-expanded="true"]{ background:rgba(21,20,26,.14); } .cx-ext[aria-expanded="true"] i{ animation:none; box-shadow:0 0 14px var(--accent); }
+@keyframes cxGlow{ 0%,100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent), 0 0 10px var(--accent); } 50%{ box-shadow:0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent), 0 0 18px var(--accent); } }
+.cx-badge{ position:absolute; right:-3px; bottom:-1px; min-width:16px; height:15px; padding:0 4px; border-radius:8px; background:var(--accent-2); color:#111; font-size:9.5px; font-weight:800; display:grid; place-items:center; box-shadow:0 0 0 2px var(--cx-bar); }
+.cx-av{ display:none; }
+.cx-view{ position:relative; height:600px; background:#fff; }
+.cx-page{ position:absolute; inset:0; overflow-y:auto; overflow-x:hidden; color:#1F2328; font-family:-apple-system, 'Segoe UI', system-ui, sans-serif; scrollbar-width:thin; }
+.cx-pop{ position:absolute; z-index:20; top:8px; right:44px; width:min(var(--pw), calc(100% - 24px)); max-height:calc(100% - 20px); display:flex; flex-direction:column; border-radius:8px; overflow:hidden; background:var(--panel); color:var(--text); font-family:var(--body); box-shadow:0 12px 36px rgba(0,0,0,.35), 0 0 0 1px var(--line); transform-origin:calc(100% - 22px) 0; }
+.cx-pop::before{ content:''; position:absolute; top:-6px; right:20px; width:12px; height:12px; background:var(--panel); transform:rotate(45deg); }
+.cx-pop-h{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--line); }
+.cx-pop-h i{ width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-style:normal; font-weight:800; font-size:13px; color:#fff; background:var(--accent); }
+.cx-pop-h b{ font-family:var(--display); font-weight:var(--dw); font-size:16px; }
+.cx-pop-s{ font-size:11.5px; color:var(--dim); }
+.cx-px{ margin-left:auto; width:28px; height:28px; border-radius:4px; font-size:18px; color:var(--dim); } .cx-px:hover{ background:var(--line); color:var(--text); }
+.cx-pop-b{ padding:14px; overflow-y:auto; scrollbar-width:thin; }
+@media(max-width:900px){ .cx-tab:not(.on), .fx-view, .cx-nb:nth-child(2), .cx-star, .cx-puz, .fx-dl, .fx-list, .fx-win{ display:none; } .cx-tab{ width:auto; flex:1; min-width:0; } .cx-view{ height:560px; } .cx-pop{ right:12px; } }
+#demo{ position:relative; }
+.feats{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+.feat{ position:relative; padding:28px; border-radius:20px; background:var(--panel); border:1px solid var(--line); overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), border-color .3s ease; }
+.feat:hover{ transform:translateY(-6px) rotate(-.5deg); border-color:var(--accent); }
+.feat .n{ font-family:var(--mono); font-size:13px; color:var(--accent); }
+.feat h3{ margin-top:14px; font-family:var(--display); font-weight:var(--dw); font-size:24px; line-height:1.15; }
+.feat p{ margin-top:8px; color:var(--dim); }
+.cta{ text-align:center; }
+.cta .sh{ max-width:16ch; margin:12px auto 0; }
+.cta p{ margin:14px auto 30px; color:var(--dim); }
+.foot{ padding:30px 0 calc(34px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); font-size:13px; color:var(--dim); }
+.foot .wrap{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; }
+.foot b{ color:var(--text); font-weight:600; }
+.foot a{ color:var(--accent); }
+.rv{ opacity:0; transform:translateY(30px); }
+.toast{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--bg); font-size:14px; font-weight:600; box-shadow:0 20px 40px rgba(0,0,0,.3); max-width:calc(100% - 32px); }
+@media(max-width:900px){ .demo-h, .feats{ grid-template-columns:1fr; } .wpa-body{ grid-template-columns:1fr; } .wpa-menu{ display:none; } .nav .back{ display:none; } .wpa-main{ padding:16px 14px 20px; } }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } .rv{ opacity:1; transform:none; } }
+
+/* ---------- Safari window ---------- */
+.cx.sf{ --cx-bg:#F6F5F4; border-radius:12px; background:#F6F5F4; color:#1D1D1F; font-family:-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif; }
+.sf .cx-bar{ order:-1; height:52px; gap:6px; padding:0 12px; background:#F6F5F4; border-bottom:none; }
+.sf-lights{ display:flex; gap:8px; margin-right:10px; } .sf-lights i{ width:12px; height:12px; border-radius:50%; background:#FF5F57; box-shadow:inset 0 0 0 .5px rgba(0,0,0,.18); } .sf-lights i:nth-child(2){ background:#FEBC2E; } .sf-lights i:nth-child(3){ background:#28C840; }
+.sf-side{ width:30px; height:28px; display:grid; place-items:center; border-radius:6px; color:#6E6E73; } .sf-side svg{ width:17px; height:17px; }
+.sf .cx-nb{ width:28px; height:28px; border-radius:6px; font-size:17px; color:#6E6E73; opacity:1; }
+.sf .cx-omni{ flex:0 1 520px; margin:0 auto; height:34px; justify-content:center; gap:7px; border-radius:9px; background:#E9E8E6; box-shadow:none; font-size:13.5px; color:#1D1D1F; position:relative; }
+.sf .cx-omni #cxUrl{ flex:0 1 auto; } .sf-aa{ position:absolute; left:10px; font-size:13px; font-weight:600; color:#6E6E73; letter-spacing:-.02em; } .sf-rl{ position:absolute; right:6px; width:24px; height:24px; display:grid; place-items:center; border-radius:5px; color:#6E6E73; font-size:14px; }
+.sf .cx-omni .fx-lock{ opacity:.6; }
+.sf-tool{ width:30px; height:28px; display:grid; place-items:center; border-radius:6px; color:#6E6E73; } .sf-tool svg{ width:17px; height:17px; }
+.sf .cx-ext{ border-radius:7px; } .sf .cx-ext:hover{ background:rgba(0,0,0,.07); }
+.sf .cx-tabs{ height:32px; gap:0; padding:0; background:#E7E6E4; border-top:1px solid #D9D8D6; border-bottom:1px solid #D2D1CF; }
+.sf .cx-tab{ flex:1 1 0; width:auto; min-width:0; height:31px; justify-content:center; padding:0 26px; border-radius:0; font-size:12px; opacity:1; color:#4A4A4F; box-shadow:inset -1px 0 0 #D2D1CF; background:transparent; }
+.sf .cx-tab:hover{ background:rgba(0,0,0,.04); } .sf .cx-tab.on{ background:#F6F5F4; color:#1D1D1F; box-shadow:inset -1px 0 0 #D2D1CF, inset 1px 0 0 #D2D1CF; }
+.sf .cx-tab span{ flex:0 1 auto; } .sf .cx-tab b{ position:absolute; left:8px; }
+.sf .cx-plus{ flex:none; width:32px; height:31px; border-radius:0; display:grid; place-items:center; color:#6E6E73; font-size:17px; }
+.sf .cx-view{ border-top:none; }
+.sf .cx-pop{ top:6px; border-radius:12px; box-shadow:0 24px 60px -18px rgba(0,0,0,.45), 0 0 0 .5px rgba(0,0,0,.18); }
+@media(max-width:900px){ .sf-side, .sf-tool:not(.keep), .sf .cx-nb:nth-of-type(2){ display:none; } .sf-lights{ margin-right:4px; } .sf-lights i{ width:10px; height:10px; } .sf .cx-tab:not(.on){ display:none; } .sf .cx-tab{ padding:0 12px; } }
+
+/* ---------- layout: editorial ---------- */
+.ly-ed.hero{ padding:130px 0 40px; text-align:center; } .ed-dl{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-top:2px solid var(--text); border-bottom:1px solid var(--line); font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; }
+.ed-dl .kick{ border:0; background:none; padding:0; font-family:var(--mono); }
+.ly-ed h1{ margin:34px auto 0 !important; max-width:16ch !important; font-size:clamp(46px,7.8vw,118px) !important; line-height:.95 !important; }
+.ed-rule{ width:90px; height:3px; margin:30px auto; background:var(--accent); }
+.ed-lead{ max-width:820px !important; margin:0 auto !important; text-align:left; columns:2; column-gap:40px; font-size:17px !important; }
+.ed-lead::first-letter{ float:left; font-family:var(--display); font-weight:var(--dw); font-size:4.2em; line-height:.82; margin:.06em .1em 0 0; color:var(--accent); }
+.ly-ed .acts{ justify-content:center; margin-top:34px; }
+.ed-facts{ display:flex; justify-content:center; flex-wrap:wrap; gap:8px 26px; margin-top:34px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:14px; color:var(--dim); } .ed-facts b{ color:var(--text); font-family:var(--display); font-weight:var(--dw); margin-right:6px; }
+.ed-fig{ margin:0; } .ed-fig figcaption{ display:grid; grid-template-columns:auto 1fr; gap:14px; margin-top:16px; padding-top:12px; border-top:1px solid var(--line); font-size:14.5px; color:var(--dim); } .ed-fig figcaption b{ font-family:var(--mono); font-size:12px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; padding-top:3px; } .ed-fig figcaption strong{ color:var(--text); font-family:var(--display); font-weight:var(--dw); }
+.ed-center{ text-align:center; margin:0 auto; max-width:18ch; }
+.ed-cols{ display:grid; grid-template-columns:repeat(3,1fr); margin-top:44px; border-top:1px solid var(--text); }
+.ed-col{ padding:24px 26px 0; border-left:1px solid var(--line); } .ed-col:first-child{ border-left:0; padding-left:0; } .ed-col .n{ font-family:var(--display); font-weight:var(--dw); font-size:40px; color:var(--accent); } .ed-col h3{ margin:10px 0 8px; font-family:var(--display); font-weight:var(--dw); font-size:22px; } .ed-col p{ color:var(--dim); }
+.ed-cta{ text-align:center; } .ed-q{ max-width:20ch; margin:0 auto; font-family:var(--display); font-weight:var(--dw); font-style:italic; font-size:clamp(34px,5vw,64px); line-height:1.05; } .ed-q::before{ content:'“'; display:block; font-size:2em; line-height:.5; color:var(--accent); }
+.ed-cta cite{ display:block; margin:18px 0 26px; font-style:normal; font-family:var(--mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
+@media(max-width:900px){ .ed-lead{ columns:1; } .ed-cols{ grid-template-columns:1fr; } .ed-col{ border-left:0; padding:22px 0 0; border-top:1px solid var(--line); } .ed-dl span:last-child{ display:none; } }
+/* ---------- FocusVeil simulator ---------- */
+
+.cx-view{ height:640px; }
+.fv-site{ position:relative; min-height:100%; background:#fff; color:#18191B; font-family:'Albert Sans', system-ui, sans-serif; }
+.fv-top{ display:flex; align-items:center; gap:18px; height:52px; padding:0 22px; background:#D7263D; color:#fff; font:800 20px 'Albert Sans', sans-serif; letter-spacing:-.02em; } .fv-top span{ font-size:12.5px; font-weight:600; opacity:.85; } .fv-top span:first-of-type{ margin-left:auto; }
+.fv-tick{ overflow:hidden; height:30px; background:#18191B; color:#FFD23F; font:700 12px var(--mono); white-space:nowrap; display:flex; align-items:center; } .fv-tick div{ display:inline-block; padding-left:100%; animation:fvTick 18s linear infinite; } @keyframes fvTick{ to{ transform:translateX(-100%); } }
+.fv-grid{ display:grid; grid-template-columns:170px minmax(0,1fr) 170px; gap:24px; max-width:1000px; margin:0 auto; padding:22px 22px 80px; }
+.fv-trend h4, .fv-ads h4{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#D7263D; margin-bottom:10px; }
+.fv-trend ol{ list-style:none; counter-reset:t; display:grid; gap:12px; } .fv-trend li{ counter-increment:t; display:grid; grid-template-columns:22px 1fr; font-size:13px; font-weight:600; line-height:1.35; } .fv-trend li::before{ content:counter(t); font:800 18px 'Albert Sans'; color:#D0D0D6; }
+.fv-ad{ position:relative; height:200px; border-radius:10px; overflow:hidden; display:grid; place-items:center; text-align:center; color:#fff; font-weight:800; margin-bottom:12px; background:linear-gradient(135deg, #FF3D7F, #FF9F1C); }
+.fv-ad b{ display:block; font-size:34px; line-height:1; animation:fvPulse 1s ease-in-out infinite; } .fv-ad small{ font-size:12px; opacity:.9; } @keyframes fvPulse{ 50%{ transform:scale(1.12) rotate(-3deg); } }
+.fv-ad.b{ height:140px; background:linear-gradient(135deg, #2EC4B6, #3A86FF); } .fv-ad.b::after{ content:''; position:absolute; inset:0; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); animation:fvShine 1.8s linear infinite; } @keyframes fvShine{ from{ transform:translateX(-100%); } to{ transform:translateX(100%); } }
+.fv-main{ position:relative; } .fv-kick{ font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#D7263D; }
+.fv-main h1{ margin:8px 0 10px; font:600 32px/1.12 'Literata', Georgia, serif; letter-spacing:-.01em; } .fv-dek{ font-size:16.5px; color:#55565C; margin-bottom:18px; }
+.fv-main p.fv-p{ margin:0 0 18px; font:16.5px/1.75 'Literata', Georgia, serif; }
+.fv-news{ margin:22px 0; padding:16px; border-radius:12px; background:#FFF4D6; display:flex; gap:12px; align-items:center; font-size:13.5px; font-weight:600; } .fv-news i{ flex:none; width:38px; height:38px; border-radius:10px; background:#FFD23F; animation:fvPulse 1.4s ease-in-out infinite; } .fv-news span{ margin-left:auto; padding:7px 12px; border-radius:8px; background:#18191B; color:#fff; font-size:12px; }
+.fv-freeze .fv-mv, .fv-freeze .fv-mv *, .fv-freeze .fv-mv::after{ animation-play-state:paused !important; }
+.fv-pn{ position:absolute; z-index:6; pointer-events:none; background:var(--veil); transition:background .35s ease, backdrop-filter .35s ease; }
+.fv-blur .fv-pn{ -webkit-backdrop-filter:blur(var(--bl)); backdrop-filter:blur(var(--bl)); }
+.fv-ring{ position:absolute; z-index:7; pointer-events:none; border-radius:10px; box-shadow:0 0 0 1.5px color-mix(in srgb, var(--accent) 55%, transparent), 0 0 40px -6px color-mix(in srgb, var(--accent) 45%, transparent); }
+.fv-off .fv-pn, .fv-off .fv-ring{ display:none; }
+.cx-page:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+/* popover */
+
+.pc{ display:grid; gap:13px; }
+.pc-l{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
+.pc-l output{ font-family:var(--mono); letter-spacing:0; text-transform:none; color:var(--text); font-weight:600; }
+.pc-sw{ display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; padding:12px; border-radius:12px; text-align:left; border:1px solid var(--line); background:color-mix(in srgb, var(--accent) 6%, var(--panel)); transition:border-color .3s ease; }
+.pc-sw b{ display:block; font-size:14px; } .pc-sw small{ font-size:11.5px; color:var(--dim); }
+.pc-sw.sm{ padding:9px 12px; } .pc-sw.sm b{ font-size:13px; font-weight:600; }
+.pc-sw i{ flex:none; position:relative; width:44px; height:24px; border-radius:12px; background:color-mix(in srgb, var(--text) 18%, transparent); transition:background .25s ease; }
+.pc-sw i::after{ content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .45s cubic-bezier(.34,1.56,.64,1); }
+.pc-sw[aria-checked="true"]{ border-color:var(--accent); } .pc-sw[aria-checked="true"] i{ background:var(--accent); } .pc-sw[aria-checked="true"] i::after{ transform:translateX(20px); }
+.pc-seg{ display:flex; padding:3px; border-radius:11px; background:color-mix(in srgb, var(--text) 7%, transparent); }
+.pc-seg button{ flex:1; height:32px; border-radius:8px; font-size:12.5px; font-weight:600; color:var(--dim); transition:background .25s ease, color .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.pc-seg button:active{ transform:scale(.94); }
+.pc-seg button[aria-pressed="true"]{ background:var(--panel); color:var(--text); box-shadow:0 2px 6px rgba(0,0,0,.12); }
+.pc-hint{ margin-top:7px; font-size:12px; line-height:1.45; color:var(--dim); }
+.pc-chips{ display:grid; grid-template-columns:repeat(var(--n,4), 1fr); gap:6px; }
+.pc-chips button{ display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 2px 7px; border-radius:11px; border:1px solid var(--line); font-size:11px; font-weight:600; transition:transform .4s cubic-bezier(.34,1.56,.64,1), border-color .2s ease, box-shadow .2s ease; }
+.pc-chips button:hover{ transform:translateY(-3px); }
+.pc-chips button[aria-pressed="true"]{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 18px -10px var(--accent); }
+.pc-row{ display:flex; gap:6px; } .pc-row button{ flex:1; height:34px; border-radius:10px; border:1px solid var(--line); font-size:12px; font-weight:600; transition:border-color .2s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+.pc-row button:hover{ border-color:var(--accent); transform:translateY(-2px); }
+.pc-off{ opacity:.45; pointer-events:none; filter:saturate(.4); transition:opacity .3s ease; }
+.pc-empty{ font-size:12.5px; color:var(--dim); padding:4px 0; }
+
+.fv-st{ display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; } .fv-st button{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:9px 4px 8px; border-radius:11px; border:1px solid var(--line); font-size:11.5px; font-weight:600; transition:transform .35s cubic-bezier(.34,1.56,.64,1), border-color .2s ease; }
+.fv-st button:hover{ transform:translateY(-3px); } .fv-st button[aria-pressed="true"]{ border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+.fv-st i{ width:44px; height:28px; border-radius:6px; background:linear-gradient(90deg, var(--v) 0 30%, #fff 30% 70%, var(--v) 70%); box-shadow:inset 0 0 0 1px rgba(0,0,0,.1); }
+.fv-rng{ -webkit-appearance:none; appearance:none; width:100%; height:24px; background:transparent; cursor:pointer; }
+.fv-rng::-webkit-slider-runnable-track{ height:6px; border-radius:6px; background:linear-gradient(90deg, var(--accent) var(--p,50%), color-mix(in srgb, var(--text) 14%, transparent) var(--p,50%)); }
+.fv-rng::-moz-range-track{ height:6px; border-radius:6px; background:color-mix(in srgb, var(--text) 14%, transparent); } .fv-rng::-moz-range-progress{ height:6px; border-radius:6px; background:var(--accent); }
+.fv-rng::-webkit-slider-thumb{ -webkit-appearance:none; width:20px; height:20px; margin-top:-7px; border-radius:50%; background:#fff; border:2px solid var(--accent); box-shadow:0 3px 8px rgba(0,0,0,.25); } .fv-rng::-moz-range-thumb{ width:16px; height:16px; border-radius:50%; background:#fff; border:2px solid var(--accent); }
+.fv-prog{ padding:11px 12px; border-radius:12px; background:var(--tile-bg, var(--text)); color:var(--tile-ink, var(--bg)); } .fv-prog div{ display:flex; justify-content:space-between; font-size:12px; } .fv-prog b{ font:600 18px var(--mono); }
+.fv-prog i{ display:block; height:5px; margin-top:8px; border-radius:3px; background:rgba(255,255,255,.2); overflow:hidden; } .fv-prog i em{ display:block; height:100%; width:0; background:var(--accent-2); transition:width .3s ease; }
+@media(max-width:900px){ .fv-grid{ grid-template-columns:1fr; padding:16px 16px 60px; } .fv-trend{ display:none; } .fv-ads{ order:2; } .fv-ad{ height:110px; } .fv-main h1{ font-size:25px; }
+  .cx-pop{ top:auto; bottom:8px; left:8px; right:8px; width:auto; max-height:52%; border-radius:14px; } .cx-pop::before{ display:none; } }
+
+/* ---------- popover skin: glass ---------- */
+#cxPop.cx-pop{ --panel:#20232B; --text:#F3F4F7; --dim:rgba(243,244,247,.62); --line:rgba(255,255,255,.12); --tile-bg:rgba(255,255,255,.07); --tile-ink:#F3F4F7;
+  background:rgba(24,26,33,.86); color:var(--text); border:1px solid rgba(255,255,255,.14); border-radius:18px; -webkit-backdrop-filter:blur(22px) saturate(1.5); backdrop-filter:blur(22px) saturate(1.5); box-shadow:0 30px 70px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08); }
+#cxPop.cx-pop::before{ background:#1E2027; }
+#cxPop .cx-pop-h{ border-bottom-color:rgba(255,255,255,.1); } #cxPop .cx-pop-h i{ box-shadow:0 0 18px var(--accent); } #cxPop .cx-px{ color:var(--dim); } #cxPop .cx-px:hover{ background:rgba(255,255,255,.08); color:#fff; }
+#cxPop .pc-sw{ background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.1); } #cxPop .pc-sw[aria-checked="true"]{ border-color:color-mix(in srgb, var(--accent) 70%, transparent); background:color-mix(in srgb, var(--accent) 14%, transparent); }
+#cxPop .pc-sw i{ background:rgba(255,255,255,.14); } #cxPop .pc-sw[aria-checked="true"] i{ background:var(--accent); box-shadow:0 0 16px var(--accent); }
+#cxPop .pc-seg{ background:rgba(255,255,255,.06); } #cxPop .pc-seg button[aria-pressed="true"]{ background:rgba(255,255,255,.14); color:#fff; box-shadow:inset 0 1px 0 rgba(255,255,255,.15); }
+#cxPop .pc-chips button, #cxPop .pc-row button{ border-color:rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:var(--text); }
+#cxPop input, #cxPop select, #cxPop textarea{ background:rgba(255,255,255,.06) !important; color:var(--text) !important; border-color:rgba(255,255,255,.14) !important; }
+#cxPop option{ background:#20232B; color:#F3F4F7; }
+
+</style>
 </head>
-<body data-theme="7">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
+<body>
+<div class="prog" id="prog"></div>
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><i>F</i>FocusVeil</a><span class="sp"></span>
+  <a class="back" href="../../index.html#work">← Bazozo</a>
+  <button class="burger" type="button" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 </header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>Safari App Extensions</div>
-    <h1 class="device-title">FocusVeil</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Does one thing, does it well</p>
-    <div class="device-frame-wrap browser" id="deviceFrameWrap">
-      <div id="demoBody"></div>
-    </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>FocusVeil is a lightweight safari app extensions that does exactly what it says: dims everything on the page but the active reading column. No bloated settings screen, no background trackers, no upsell halfway through onboarding.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>One-Click Install</h4><p>No account, no setup wizard — it just works the moment you add it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Runs Entirely Offline</h4><p>No data ever leaves your browser unless you explicitly export it.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Tiny Footprint</h4><p>Built to add negligible memory or CPU overhead, even with dozens of tabs open.</p></div>
+<div class="menu" id="menu" data-variant="2" hidden>
+  <nav aria-label="Site"><a href="#demo-sec"><small>01</small>Try the extension</a><a href="#features"><small>02</small>Features</a><a href="#cta"><small>03</small>Get it</a><a href="../../index.html#contact"><small>04</small>Hire Bazozo</a></nav>
+  <p class="mnote">Safari extension · reading focus</p>
+</div>
+<main id="top">
+  <section class="hero ly-ed"><div class="wrap">
+    <div class="ed-dl"><span class="kick"><i></i>Safari extension · reading focus</span><span>Concept build · Safari extension</span></div>
+    <h1 id="h1"><span class="w"><span>The</span></span> <span class="w"><span>rest</span></span> <span class="w"><span>of</span></span> <span class="w"><span>the</span></span> <span class="w"><span>page</span></span> <span class="w"><span>can</span></span> <span class="w"><span>wait</span></span></h1>
+    <div class="ed-rule"></div>
+    <p class="lead ed-lead">FocusVeil softly dims ads, sidebars and autoplaying clutter so only the column you are reading stays bright. Follow it paragraph by paragraph, or narrow it to a two-line ruler.</p>
+    <div class="acts"><a class="btn pri" href="#demo-sec">Try the extension ↓</a><a class="btn ghost" href="#cta">Add to Safari</a></div>
+    <div class="ed-facts"><span><b>3 modes</b>column, paragraph or ruler</span><span><b>Freeze</b>tickers and moving ads</span><span><b>J · K</b>to step through paragraphs</span></div>
+  </div></section>
+  <section class="s" id="demo-sec" style="padding-top:40px"><div class="wrap"><figure class="ed-fig"><div class="cx sf" id="cx" role="region" aria-label="FocusVeil Safari simulator">
+      <div class="cx-bar"><span class="sf-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="sf-side" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M9 5v14"/></svg></span>
+        <span class="cx-nb" aria-hidden="true">‹</span><span class="cx-nb" aria-hidden="true">›</span>
+        <div class="cx-omni"><span class="sf-aa" aria-hidden="true">aA</span><svg class="fx-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span id="cxUrl">dailypulse.example/science/night-sky</span><span class="cx-nb sf-rl" aria-hidden="true">↻</span></div>
+        <button class="cx-ext" type="button" id="cxExt" aria-expanded="false" aria-controls="cxPop" aria-label="Open FocusVeil"><i>F</i><b class="cx-badge" id="cxBadge" hidden></b></button>
+        <span class="sf-tool" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg></span>
+        <span class="sf-tool" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></span></div>
+      <div class="cx-tabs"><div class="cx-tab on"><b aria-hidden="true">×</b><i class="fav"></i><span>Why the night sky is getting brighter — Daily Pulse</span></div><div class="cx-tab"><i class="fav f2"></i><span>Favourites</span></div><span class="cx-plus" aria-hidden="true">+</span></div>
+      <div class="cx-view"><div class="cx-page" id="cxPage" data-lenis-prevent></div>
+        <div class="cx-pop" id="cxPop" role="dialog" aria-label="FocusVeil" hidden style="--pw:320px"><div class="cx-pop-h"><i>F</i><b>FocusVeil</b><span class="cx-pop-s">this site</span><button class="cx-px" type="button" id="cxPopX" aria-label="Close popup">×</button></div><div class="cx-pop-b" id="cxPopBody"></div></div>
       </div>
     </div>
-  </div>
-</section>
-
+    <figcaption class="rv"><b>Fig. 1</b><span><strong>Calm a busy page.</strong> This news page is doing everything at once. Turn FocusVeil on, try the paragraph and ruler modes, then scroll the article and watch the light follow you.</span></figcaption></figure></div></section>
+  <section class="s" id="features" style="padding-top:0"><div class="wrap"><h2 class="sh rv ed-center">Attention, protected</h2>
+    <div class="ed-cols"><article class="ed-col rv"><span class="n">I</span><h3>Light where you read</h3><p>The veil leaves your column, paragraph or line clear and quietly dims everything else.</p></article><article class="ed-col rv"><span class="n">II</span><h3>Stops the jitter</h3><p>Tickers, carousels and blinking ads freeze outside the light, so your eyes stop wandering.</p></article><article class="ed-col rv"><span class="n">III</span><h3>Follows your place</h3><p>Scroll or press J and K and the light glides to the next paragraph.</p></article></div></div></section>
+  <section class="s ed-cta" id="cta"><div class="wrap"><p class="ed-q rv">Read one thing at a time</p><cite class="rv">FocusVeil — Free for Safari on Mac, iPhone and iPad.</cite><a class="btn pri rv" href="../../index.html#contact">Add to Safari →</a></div></section>
+</main>
 <style>.bz-about{max-width:880px;margin:56px auto 32px;padding:26px 28px;border-radius:18px;border:1px solid rgba(127,127,127,.28);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:rgba(127,127,127,.06)}.bz-about h2{font:700 20px/1.25 Unbounded,system-ui,sans-serif;margin:0 0 10px}.bz-about p{margin:0 0 10px;opacity:.88}.bz-about .bz-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}.bz-about .bz-links a{padding:9px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:600;font-size:14px;color:inherit}@media(max-width:600px){.bz-about{margin:40px 16px 24px;padding:20px}}</style>
 <section class="bz-about" aria-labelledby="bzAboutTitle">
   <h2 id="bzAboutTitle">About FocusVeil</h2>
@@ -63,72 +302,11 @@
   <p>Want something like this for your business? Bazozo Studio takes browser extensions from first sketch to App Store release, with a written quote before any work starts and full code ownership on final payment.</p>
   <nav class="bz-links" aria-label="Related"><a href="../../chrome-extension-development.html">Browser extension development &rarr;</a><a href="../../index.html#contact">Start a project</a></nav>
 </section>
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects.find(p => p.cat === 'safari' && slugFor(p) === 'focusveil'));
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-safari');
-</script>
+<footer class="foot"><div class="wrap"><span>© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project</span><a href="../../index.html#work">← Back to Bazozo</a></div></footer>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="focusveil.js" defer></script>
 </body>
 </html>

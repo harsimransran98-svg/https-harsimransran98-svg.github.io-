@@ -3,59 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Petframe — Case Study by Bazozo</title>
-<meta name="description" content="Pet health, vaccine, and vet-visit tracker. An iOS app concept designed and built by Bazozo Studio — try the live interactive demo.">
+<title>Petframe — every pet’s health, on one card · iOS app by Bazozo Studio</title>
+<meta name="description" content="Petframe: switch between three pets, stamp a vaccine in the passport, log a weigh-in against the breed’s healthy range, give today’s medicine and book a vet slot. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F5FAF7">
 <link rel="canonical" href="https://bazozo.in/demo/ios/petframe.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{ --page:#E7F1EC; --bg:#F5FAF7; --text:#17302A; --dim:color-mix(in srgb, var(--text) 60%, transparent); --faint:color-mix(in srgb, var(--text) 38%, transparent); --accent:#FF6B3D; --accent-2:#2F8F6B; --on-accent:#fff; --card:#FFFFFF; --line:rgba(23,48,42,.12); --display:'Fredoka', system-ui, sans-serif; --dw:700; --body:'Nunito', system-ui, sans-serif; --mono:'DM Mono', ui-monospace, monospace; }
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+[hidden]{ display:none !important; }
+html{ background:var(--page); }
+body{ background:var(--page); color:var(--text); font-family:var(--body); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; min-height:100vh; }
+a{ color:inherit; text-decoration:none; } button, input, select, textarea{ font:inherit; color:inherit; } button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.top{ position:relative; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); }
+.brand{ font-family:var(--display); font-weight:var(--dw); font-size:19px; letter-spacing:-.02em; } .brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13.5px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.back:hover{ color:var(--text); border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent); transform:translateX(-3px); }
+.kick{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--dim); } .kick i{ width:8px; height:8px; border-radius:2px; background:var(--accent); }
+.h1{ font-family:var(--display); font-weight:var(--dw); letter-spacing:-.04em; line-height:.95; } .h1 span{ color:var(--accent); }
+.lede{ color:var(--dim); font-size:16px; line-height:1.6; }
+.try{ padding:18px; border-radius:16px; border:1px solid var(--line); background:var(--card); }
+.try-h{ display:flex; justify-content:space-between; font-weight:700; font-size:14px; } .try-h b{ font-family:var(--mono); color:var(--accent); font-weight:500; }
+.try-bar{ height:6px; border-radius:6px; background:var(--line); margin:12px 0 14px; overflow:hidden; } .try-bar i{ display:block; height:100%; width:0; background:var(--accent); border-radius:inherit; transition:width .7s cubic-bezier(.34,1.56,.64,1); }
+.try ul{ list-style:none; display:grid; gap:10px; } .try li{ display:flex; gap:12px; align-items:center; font-size:14.5px; color:var(--dim); }
+.try li i{ width:20px; height:20px; flex:none; border-radius:6px; border:1.5px solid var(--faint); position:relative; transition:all .45s cubic-bezier(.34,1.56,.64,1); }
+.try li.done{ color:var(--text); text-decoration:line-through; text-decoration-color:var(--faint); } .try li.done i{ background:var(--accent); border-color:var(--accent); transform:rotate(-8deg) scale(1.1); }
+.try li.done i::after{ content:''; position:absolute; left:5.5px; top:2px; width:5px; height:10px; border-right:2.5px solid #fff; border-bottom:2.5px solid #fff; transform:rotate(45deg); }
+.spec-h{ font-family:var(--mono); font-size:12px; color:var(--dim); margin-bottom:12px; }
+.spec{ border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden; } .spec div{ display:grid; grid-template-columns:96px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; } .spec div:last-child{ border-bottom:none; } .spec dt{ font-family:var(--mono); color:var(--dim); font-size:12px; padding-top:2px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; } .metric{ padding:14px; border-radius:16px; background:var(--text); color:var(--page); } .metric b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:22px; letter-spacing:-.03em; } .metric span{ font-family:var(--mono); font-size:11px; opacity:.65; }
+.jump{ display:flex; flex-wrap:wrap; gap:6px; } .jump button{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.jump button:hover{ color:var(--text); border-color:var(--accent); transform:translateY(-2px); }
+.cta{ position:relative; display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 24px; border-radius:999px; background:var(--accent); color:var(--on-accent,#fff); font-weight:700; font-size:15px; overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+.cta::after{ content:''; position:absolute; inset:0; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%); transform:translateX(-120%); transition:transform .8s ease; }
+.cta:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 18px 34px -14px var(--accent); } .cta:hover::after{ transform:translateX(120%); }
+.foot{ padding:26px clamp(16px,3vw,40px) 34px; font-size:13px; color:var(--dim); text-align:center; } .foot b{ color:var(--text); }
+.toastx{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--page); font-size:14px; font-weight:600; box-shadow:0 20px 40px -12px rgba(0,0,0,.4); }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+.layout{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:clamp(20px,3vw,48px); align-items:center; padding:10px clamp(16px,3vw,40px) 60px; max-width:1500px; margin:0 auto; }
+.side{ display:grid; gap:16px; align-content:center; } .side .h1{ font-size:clamp(44px,4.6vw,68px); } .side .lede{ max-width:400px; }
+@media(max-width:1180px){ .layout{ grid-template-columns:1fr; justify-items:center; } .stage{ order:-1; } .side{ width:100%; max-width:560px; } }
+
+.stage{ display:flex; justify-content:center; }
+.scale-box{ position:relative; width:calc(390px * var(--s,1)); height:calc(820px * var(--s,1)); }
+.device{ position:absolute; top:0; left:0; width:390px; height:820px; transform:scale(var(--s,1)); transform-origin:0 0; border-radius:68px; padding:13px; background:linear-gradient(135deg, var(--metal-1,#C9C3BA) 0%, #6B655E 18%, var(--metal-1,#C9C3BA) 38%, #57524C 55%, #B2ACA4 78%, #615C56 100%);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22), inset 0 0 0 4px #070707, 0 60px 110px -40px rgba(0,0,0,.6), 0 0 120px -40px color-mix(in srgb, var(--accent) 55%, transparent); }
+.screen{ position:relative; width:100%; height:100%; border-radius:56px; overflow:hidden; background:var(--bg); color:var(--app-ink, var(--text)); isolation:isolate; }
+.status{ position:absolute; z-index:40; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; font-weight:600; pointer-events:none; color:var(--status-ink, currentColor); }
+.status .icons{ display:flex; gap:6px; align-items:center; } .status svg{ fill:currentColor; }
+#app{ position:absolute; inset:0; overflow:hidden; }
+.snack{ position:absolute; z-index:80; left:16px; right:16px; bottom:30px; padding:12px 14px; border-radius:14px; background:var(--app-ink, #111); color:var(--bg); font-size:13.5px; font-weight:600; opacity:0; pointer-events:none; box-shadow:0 12px 26px -10px rgba(0,0,0,.5); }
+.device::before{ content:''; position:absolute; left:-3px; top:180px; width:4px; height:34px; border-radius:2px; background:#8A847C; box-shadow:0 56px 0 #8A847C, 0 120px 0 #8A847C; }
+.device::after{ content:''; position:absolute; right:-3px; top:230px; width:4px; height:96px; border-radius:2px; background:#8A847C; }
+.status{ height:54px; padding:6px 34px 0 40px; font-size:16px; } .island{ position:absolute; z-index:50; top:11px; left:50%; width:124px; height:36px; margin-left:-62px; border-radius:22px; background:#000; }
+.home-ind{ position:absolute; z-index:60; bottom:8px; left:50%; width:136px; height:5px; margin-left:-68px; border-radius:3px; background:currentColor; opacity:.55; pointer-events:none; }
+/* ---------- Petframe app ---------- */
+
+#screen{ background:#F5FAF7; }
+.pf{ position:absolute; inset:0; overflow:hidden; background:#F5FAF7; color:#17302A; font-family:'Nunito', system-ui, sans-serif; --pc:#E39B55; }
+.pf-top{ position:absolute; left:0; right:0; top:50px; z-index:5; padding:4px 16px 8px; display:flex; align-items:center; justify-content:space-between; }
+.pf-top small{ display:block; font:500 10.5px 'DM Mono', monospace; color:#6E847D; } .pf-top h2{ font:700 26px/1.05 'Fredoka', sans-serif; }
+.pf-av{ display:flex; } .pf-av button{ width:40px; height:40px; margin-left:-8px; border-radius:50%; background:#fff; box-shadow:0 0 0 3px #F5FAF7; overflow:hidden; transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease; } .pf-av button svg{ width:100%; height:100%; }
+.pf-av button[aria-pressed="true"]{ transform:translateY(-3px) scale(1.12); box-shadow:0 0 0 3px #F5FAF7, 0 0 0 5.5px var(--pc); z-index:1; } .pf-av button:hover{ transform:translateY(-2px); }
+.pf-v{ position:absolute; inset:0; overflow-y:auto; padding:108px 14px 110px; scrollbar-width:none; } .pf-v::-webkit-scrollbar{ display:none; }
+.pf-hero{ position:relative; display:grid; grid-template-columns:118px 1fr; gap:12px; align-items:center; padding:14px; border-radius:28px; background:var(--pc); color:#fff; overflow:hidden; }
+.pf-hero::after{ content:''; position:absolute; right:-40px; bottom:-60px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,.13); }
+.pf-hero .pt{ width:118px; height:118px; border-radius:24px; background:rgba(255,255,255,.22); } .pf-hero .pt svg{ width:100%; height:100%; }
+.pf-hero h3{ font:700 30px/1 'Fredoka', sans-serif; } .pf-hero p{ font-size:13px; opacity:.92; margin-top:3px; } .pf-chips{ display:flex; gap:5px; flex-wrap:wrap; margin-top:9px; } .pf-chips span{ padding:3px 8px; border-radius:10px; background:rgba(255,255,255,.24); font:500 10.5px 'DM Mono', monospace; }
+.pf-tiles{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+.pf-tile{ padding:12px; border-radius:20px; background:#fff; text-align:left; box-shadow:0 1px 0 rgba(23,48,42,.05); transition:transform .3s cubic-bezier(.34,1.56,.64,1); } .pf-tile:hover{ transform:translateY(-2px); }
+.pf-tile small{ display:block; font:500 10px 'DM Mono', monospace; color:#6E847D; text-transform:uppercase; letter-spacing:.06em; } .pf-tile b{ display:block; margin-top:4px; font:600 18px/1.15 'Fredoka', sans-serif; } .pf-tile span{ font-size:12px; color:#6E847D; }
+.pf-tile.warn{ box-shadow:inset 0 0 0 2px #FF6B3D; } .pf-tile.warn small{ color:#E2522A; }
+.pf-med{ display:flex; gap:14px; align-items:center; margin-top:10px; padding:14px; border-radius:22px; background:#17302A; color:#fff; }
+.pf-ring{ position:relative; width:74px; height:74px; flex:none; } .pf-ring svg{ width:100%; height:100%; transform:rotate(-90deg); } .pf-ring circle{ fill:none; stroke-width:9; } .pf-ring .bg{ stroke:rgba(255,255,255,.14); } .pf-ring .fg{ stroke:#8CE0B8; stroke-linecap:round; transition:stroke-dashoffset .7s cubic-bezier(.34,1.3,.64,1); }
+.pf-ring b{ position:absolute; inset:0; display:grid; place-items:center; font:600 17px 'Fredoka', sans-serif; }
+.pf-med h4{ font:600 16px 'Fredoka', sans-serif; } .pf-med p{ font-size:12px; opacity:.75; margin:2px 0 8px; }
+.pf-go{ height:34px; padding:0 14px; border-radius:17px; background:#8CE0B8; color:#17302A; font-weight:800; font-size:13px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); } .pf-go:hover{ transform:scale(1.04); } .pf-go:disabled{ background:rgba(255,255,255,.14); color:#fff; }
+.pf-h{ display:flex; justify-content:space-between; align-items:baseline; margin:4px 4px 10px; } .pf-h h3{ font:700 24px 'Fredoka', sans-serif; } .pf-h span{ font:500 11px 'DM Mono', monospace; color:#6E847D; }
+.pf-pass{ padding:14px 12px; border-radius:22px; background:#FFF8EA; background-image:radial-gradient(rgba(23,48,42,.07) 1px, transparent 1.2px); background-size:12px 12px; box-shadow:inset 0 0 0 1.5px #EADFC5; }
+.pf-vac{ position:relative; display:grid; grid-template-columns:44px 1fr auto; gap:10px; align-items:center; padding:10px 6px; border-bottom:1.5px dashed #E1D4B5; } .pf-vac:last-child{ border-bottom:0; }
+.pf-vr{ width:44px; height:44px; } .pf-vr circle{ fill:none; stroke-width:5; } .pf-vr .bg{ stroke:#EFE6CF; }
+.pf-vac h4{ font:600 15px 'Fredoka', sans-serif; } .pf-vac p{ font-size:11.5px; color:#6E847D; } .pf-vac p.od{ color:#E2522A; font-weight:700; } .pf-vac p.sn{ color:#B7791F; font-weight:700; }
+.pf-stp{ height:30px; padding:0 11px; border-radius:15px; background:#17302A; color:#fff; font-size:12px; font-weight:800; transition:transform .3s cubic-bezier(.34,1.56,.64,1); } .pf-stp:hover{ transform:rotate(-3deg) scale(1.05); }
+.pf-stamp{ position:absolute; right:6px; top:50%; padding:3px 8px; border:2.5px solid #2F8F6B; border-radius:8px; color:#2F8F6B; font:700 12px/1.1 'DM Mono', monospace; text-align:center; transform:translateY(-50%) rotate(-12deg); background:rgba(245,250,247,.75); pointer-events:none; }
+.pf-ch{ padding:12px 8px 6px; border-radius:22px; background:#fff; } .pf-ch svg{ display:block; width:100%; height:auto; } .pf-ch text{ font:500 9px 'DM Mono', monospace; fill:#8AA098; }
+.pf-scale{ margin-top:10px; padding:14px; border-radius:22px; background:#fff; text-align:center; } .pf-scale small{ font:500 10.5px 'DM Mono', monospace; color:#6E847D; }
+.pf-num{ display:flex; align-items:center; justify-content:center; gap:14px; margin:6px 0 10px; } .pf-num b{ font:700 46px/1 'Fredoka', sans-serif; letter-spacing:-.02em; min-width:130px; } .pf-num b i{ font-style:normal; font-size:18px; color:#6E847D; }
+.pf-num button{ width:44px; height:44px; border-radius:50%; background:#EAF3EE; font:700 22px 'Fredoka', sans-serif; transition:transform .25s cubic-bezier(.34,1.56,.64,1), background .2s ease; } .pf-num button:hover{ background:#DCEDE4; } .pf-num button:active{ transform:scale(.88); }
+.pf-save{ width:100%; height:48px; border-radius:16px; background:var(--pc); color:#fff; font:600 16px 'Fredoka', sans-serif; transition:transform .3s cubic-bezier(.34,1.56,.64,1), filter .2s ease; } .pf-save:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+.pf-verd{ margin-top:8px; font-size:12.5px; font-weight:700; } .pf-verd.ok{ color:#2F8F6B; } .pf-verd.no{ color:#E2522A; }
+.pf-days{ display:flex; gap:6px; overflow-x:auto; padding:2px 2px 8px; scrollbar-width:none; } .pf-days::-webkit-scrollbar{ display:none; }
+.pf-days button{ flex:none; width:52px; height:66px; border-radius:18px; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; transition:transform .3s cubic-bezier(.34,1.56,.64,1); } .pf-days small{ font:500 10px 'DM Mono', monospace; color:#6E847D; } .pf-days b{ font:600 20px 'Fredoka', sans-serif; }
+.pf-days button[aria-pressed="true"]{ background:#17302A; color:#fff; transform:translateY(-3px); } .pf-days button[aria-pressed="true"] small{ color:#8CE0B8; } .pf-days button:disabled{ opacity:.35; }
+.pf-lab{ margin:10px 4px 6px; font:500 10.5px 'DM Mono', monospace; color:#6E847D; text-transform:uppercase; letter-spacing:.08em; }
+.pf-slots{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; } .pf-slots button{ height:38px; border-radius:12px; background:#fff; font:500 13px 'DM Mono', monospace; transition:background .2s ease, transform .25s ease; } .pf-slots button:disabled{ text-decoration:line-through; color:#B5C3BE; background:#EEF4F1; } .pf-slots button[aria-pressed="true"]{ background:var(--pc); color:#fff; transform:scale(1.04); }
+.pf-rs{ display:flex; flex-wrap:wrap; gap:6px; } .pf-rs button{ height:32px; padding:0 12px; border-radius:16px; background:#fff; box-shadow:inset 0 0 0 1.5px #D7E4DE; font-size:13px; font-weight:700; } .pf-rs button[aria-pressed="true"]{ box-shadow:inset 0 0 0 2px #17302A; background:#17302A; color:#fff; }
+.pf-book{ width:100%; height:50px; margin-top:12px; border-radius:16px; background:#17302A; color:#fff; font:600 16px 'Fredoka', sans-serif; transition:transform .3s cubic-bezier(.34,1.56,.64,1); } .pf-book:disabled{ opacity:.4; } .pf-book:not(:disabled):hover{ transform:translateY(-1px); }
+.pf-up{ display:flex; align-items:center; gap:10px; padding:11px 12px; margin-top:6px; border-radius:16px; background:#fff; font-size:13.5px; } .pf-up i{ font-style:normal; width:36px; height:36px; border-radius:12px; display:grid; place-items:center; background:var(--pc); color:#fff; font:600 14px 'Fredoka', sans-serif; } .pf-up small{ display:block; color:#6E847D; font-size:11.5px; } .pf-up.new{ box-shadow:0 0 0 2px var(--pc); }
+.pf-nav{ position:absolute; z-index:20; left:50%; bottom:24px; transform:translateX(-50%); display:flex; gap:2px; padding:5px; border-radius:26px; background:rgba(23,48,42,.92); backdrop-filter:blur(12px); box-shadow:0 14px 30px -12px rgba(23,48,42,.6); }
+.pf-nav button{ height:42px; padding:0 13px; border-radius:21px; color:#BFD3CB; font-size:12.5px; font-weight:800; display:flex; align-items:center; gap:6px; transition:background .3s ease, color .3s ease, padding .35s cubic-bezier(.34,1.56,.64,1); } .pf-nav button span{ font-size:15px; }
+.pf-nav button[aria-selected="true"]{ background:#fff; color:#17302A; padding:0 15px; } .pf-nav button:not([aria-selected="true"]) em{ display:none; } .pf-nav em{ font-style:normal; }
+
+</style>
 </head>
-<body data-theme="7">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
-</header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>iOS Apps</div>
-    <h1 class="device-title">Petframe</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">An app that stays out of your way</p>
-    <div class="device-frame-wrap phone" id="deviceFrameWrap">
-      <div id="demoBody"></div>
-    </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>Petframe is a native app built around a single job: pet health, vaccine, and vet-visit tracker. No fifteen-tab navigation, no feature creep — just the one thing, done well.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>Native Performance</h4><p>Built directly for the platform, not wrapped in a cross-platform shell.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Minimal Permissions</h4><p>Only asks for exactly what it needs to function, nothing more.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Offline-First</h4><p>Core features work fully without a network connection.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<body>
+<header class="top"><a class="brand" href="../../index.html">bazozo<span>.</span></a><a class="back" href="../../index.html#work">← Back to Bazozo</a></header>
+<main class="layout"><section class="side" aria-label="About this app"><span class="kick"><i></i>ios · pet health · family sharing</span><h1 class="h1" id="h1">Pet<span>frame</span></h1><p class="lede">Petframe keeps each pet’s vaccines, weight, medicine and vet visits together, so you know what is due before the vet has to remind you. Switch pets and everything follows.</p><div class="try" role="group" aria-label="Things to try"><div class="try-h"><span>Try it</span><b id="tryCount">0/5</b></div><div class="try-bar"><i id="tryBar"></i></div><ul id="tryList"><li data-t="pet"><i></i>Switch to another pet</li><li data-t="vaccine"><i></i>Stamp a vaccine as given</li><li data-t="weight"><i></i>Log a weigh-in</li><li data-t="meds"><i></i>Give today’s medicine</li><li data-t="visit"><i></i>Book a vet visit</li></ul></div></section><div class="stage" id="stage"><div class="scale-box"><div class="device" id="device"><div class="screen" id="screen">
+    <div class="status" aria-hidden="true"><span data-clock>9:41</span><span class="icons"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 12 0 3a11 11 0 0 1 16 0L8 12Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14"><path d="M0 14 14 0v14H0Z"/></svg><svg width="22" height="12" viewBox="0 0 22 12"><rect x=".5" y=".5" width="18" height="11" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="2" width="13" height="8" rx="1.5"/><rect x="19.5" y="4" width="2" height="4" rx="1"/></svg></span></div><div class="island" id="island" aria-hidden="true"></div>
+    <div id="app" role="application" aria-label="Petframe app"></div><div class="snack" id="snack" role="status"></div><div class="home-ind" aria-hidden="true"></div>
+  </div></div></div></div><section class="side" aria-label="Architecture"><div><h2 class="spec-h">// architecture</h2><dl class="spec"><div><dt>data</dt><dd>SwiftData records per pet, shared with family via CloudKit</dd></div><div><dt>alerts</dt><dd>Vaccine and dose reminders as time-sensitive notifications</dd></div><div><dt>charts</dt><dd>Swift Charts weight curve with breed range</dd></div><div><dt>widgets</dt><dd>Lock Screen widget for today’s doses</dd></div><div><dt>export</dt><dd>Vet summary PDF in one tap</dd></div></dl></div><div class="metrics"><div class="metric"><b>3</b><span>pets</span></div><div class="metric"><b>7</b><span>vaccines tracked</span></div><div class="metric"><b>1 tap</b><span>vet summary</span></div></div><div class="jump" role="group" aria-label="Jump to a screen"><button type="button" data-jump="home">today</button><button type="button" data-jump="vacc">passport</button><button type="button" data-jump="weight">weight</button><button type="button" data-jump="visit">book vet</button></div><div><a class="cta" href="../../index.html#contact">Build an app like this →</a></div></section></main>
 <style>.bz-about{max-width:880px;margin:56px auto 32px;padding:26px 28px;border-radius:18px;border:1px solid rgba(127,127,127,.28);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:rgba(127,127,127,.06)}.bz-about h2{font:700 20px/1.25 Unbounded,system-ui,sans-serif;margin:0 0 10px}.bz-about p{margin:0 0 10px;opacity:.88}.bz-about .bz-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}.bz-about .bz-links a{padding:9px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:600;font-size:14px;color:inherit}@media(max-width:600px){.bz-about{margin:40px 16px 24px;padding:20px}}</style>
 <section class="bz-about" aria-labelledby="bzAboutTitle">
   <h2 id="bzAboutTitle">About Petframe</h2>
@@ -63,72 +124,10 @@
   <p>Want something like this for your business? Bazozo Studio takes iOS and Android apps from first sketch to App Store release, with a written quote before any work starts and full code ownership on final payment.</p>
   <nav class="bz-links" aria-label="Related"><a href="../../mobile-app-development.html">iOS &amp; Android app development &rarr;</a><a href="../../index.html#contact">Start a project</a></nav>
 </section>
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects.find(p => p.cat === 'ios' && slugFor(p) === 'petframe'));
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-ios');
-</script>
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
+<div class="toastx" id="toastx" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="petframe.js" defer></script>
 </body>
 </html>

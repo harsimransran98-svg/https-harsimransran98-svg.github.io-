@@ -3,59 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skyframe — Case Study by Bazozo</title>
-<meta name="description" content="Weather app with hyperlocal radar animation. An iOS app concept designed and built by Bazozo Studio — try the live interactive demo.">
+<title>Skyframe — rain, to the minute, on your street · iOS app by Bazozo Studio</title>
+<meta name="description" content="Skyframe: scrub a radar loop from an hour ago to an hour ahead, drop a pin anywhere on the map and watch the next-hour rain chart recompute from the same moving storm cells, then switch to wind and temperature layers. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F4F8FD">
 <link rel="canonical" href="https://bazozo.in/demo/ios/skyframe.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Public+Sans:wght@400;500;600;700&family=Fragment+Mono&display=swap">
+<style>
+:root{ --page:#E5EDF7; --bg:#F4F8FD; --text:#0D1B2E; --dim:color-mix(in srgb, var(--text) 60%, transparent); --faint:color-mix(in srgb, var(--text) 38%, transparent); --accent:#2F6BFF; --accent-2:#00A3A3; --on-accent:#fff; --card:#FFFFFF; --line:rgba(13,27,46,.12); --display:'Sora', system-ui, sans-serif; --dw:700; --body:'Public Sans', system-ui, sans-serif; --mono:'Fragment Mono', ui-monospace, monospace; }
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+[hidden]{ display:none !important; }
+html{ background:var(--page); }
+body{ background:var(--page); color:var(--text); font-family:var(--body); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; min-height:100vh; }
+a{ color:inherit; text-decoration:none; } button, input, select, textarea{ font:inherit; color:inherit; } button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.top{ position:relative; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); }
+.brand{ font-family:var(--display); font-weight:var(--dw); font-size:19px; letter-spacing:-.02em; } .brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13.5px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.back:hover{ color:var(--text); border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent); transform:translateX(-3px); }
+.kick{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--dim); } .kick i{ width:8px; height:8px; border-radius:2px; background:var(--accent); }
+.h1{ font-family:var(--display); font-weight:var(--dw); letter-spacing:-.04em; line-height:.95; } .h1 span{ color:var(--accent); }
+.lede{ color:var(--dim); font-size:16px; line-height:1.6; }
+.try{ padding:18px; border-radius:16px; border:1px solid var(--line); background:var(--card); }
+.try-h{ display:flex; justify-content:space-between; font-weight:700; font-size:14px; } .try-h b{ font-family:var(--mono); color:var(--accent); font-weight:500; }
+.try-bar{ height:6px; border-radius:6px; background:var(--line); margin:12px 0 14px; overflow:hidden; } .try-bar i{ display:block; height:100%; width:0; background:var(--accent); border-radius:inherit; transition:width .7s cubic-bezier(.34,1.56,.64,1); }
+.try ul{ list-style:none; display:grid; gap:10px; } .try li{ display:flex; gap:12px; align-items:center; font-size:14.5px; color:var(--dim); }
+.try li i{ width:20px; height:20px; flex:none; border-radius:6px; border:1.5px solid var(--faint); position:relative; transition:all .45s cubic-bezier(.34,1.56,.64,1); }
+.try li.done{ color:var(--text); text-decoration:line-through; text-decoration-color:var(--faint); } .try li.done i{ background:var(--accent); border-color:var(--accent); transform:rotate(-8deg) scale(1.1); }
+.try li.done i::after{ content:''; position:absolute; left:5.5px; top:2px; width:5px; height:10px; border-right:2.5px solid #fff; border-bottom:2.5px solid #fff; transform:rotate(45deg); }
+.spec-h{ font-family:var(--mono); font-size:12px; color:var(--dim); margin-bottom:12px; }
+.spec{ border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden; } .spec div{ display:grid; grid-template-columns:96px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; } .spec div:last-child{ border-bottom:none; } .spec dt{ font-family:var(--mono); color:var(--dim); font-size:12px; padding-top:2px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; } .metric{ padding:14px; border-radius:16px; background:var(--text); color:var(--page); } .metric b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:22px; letter-spacing:-.03em; } .metric span{ font-family:var(--mono); font-size:11px; opacity:.65; }
+.jump{ display:flex; flex-wrap:wrap; gap:6px; } .jump button{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.jump button:hover{ color:var(--text); border-color:var(--accent); transform:translateY(-2px); }
+.cta{ position:relative; display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 24px; border-radius:999px; background:var(--accent); color:var(--on-accent,#fff); font-weight:700; font-size:15px; overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+.cta::after{ content:''; position:absolute; inset:0; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%); transform:translateX(-120%); transition:transform .8s ease; }
+.cta:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 18px 34px -14px var(--accent); } .cta:hover::after{ transform:translateX(120%); }
+.foot{ padding:26px clamp(16px,3vw,40px) 34px; font-size:13px; color:var(--dim); text-align:center; } .foot b{ color:var(--text); }
+.toastx{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--page); font-size:14px; font-weight:600; box-shadow:0 20px 40px -12px rgba(0,0,0,.4); }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+.ch-wrap{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:clamp(30px,5vw,80px); max-width:1300px; margin:0 auto; padding:10px clamp(16px,3vw,40px) 60px; }
+.ch-dev{ position:sticky; top:20px; align-self:start; } .ch-intro .h1{ font-size:clamp(44px,5.4vw,84px); margin:12px 0; } .ch-intro .lede{ max-width:520px; }
+.chs{ display:grid; gap:18px; margin-top:34px; } .ch{ min-height:46vh; padding:28px; border-radius:22px; background:var(--card); border:1px solid var(--line); display:flex; flex-direction:column; justify-content:center; gap:10px; transition:border-color .4s ease, box-shadow .4s ease, transform .5s cubic-bezier(.34,1.56,.64,1); }
+.ch.on{ border-color:var(--accent); box-shadow:0 24px 50px -30px var(--accent); transform:translateX(6px); } .ch small{ font-family:var(--mono); color:var(--accent); font-size:12px; } .ch h3{ font-family:var(--display); font-weight:var(--dw); font-size:30px; letter-spacing:-.02em; line-height:1.05; } .ch p{ color:var(--dim); max-width:460px; }
+.ch button{ align-self:flex-start; height:38px; padding:0 16px; border-radius:999px; background:color-mix(in srgb, var(--accent) 12%, transparent); color:var(--accent); font-weight:700; font-size:13px; transition:all .3s ease; } .ch button:hover{ background:var(--accent); color:var(--on-accent,#fff); }
+.ch-end{ display:grid; gap:16px; margin-top:24px; }
+@media(max-width:1000px){ .ch-wrap{ grid-template-columns:1fr; } .ch-dev{ position:relative; top:0; justify-self:center; } .ch{ min-height:0; } }
+
+.stage{ display:flex; justify-content:center; }
+.scale-box{ position:relative; width:calc(390px * var(--s,1)); height:calc(820px * var(--s,1)); }
+.device{ position:absolute; top:0; left:0; width:390px; height:820px; transform:scale(var(--s,1)); transform-origin:0 0; border-radius:68px; padding:13px; background:linear-gradient(135deg, var(--metal-1,#C9C3BA) 0%, #6B655E 18%, var(--metal-1,#C9C3BA) 38%, #57524C 55%, #B2ACA4 78%, #615C56 100%);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22), inset 0 0 0 4px #070707, 0 60px 110px -40px rgba(0,0,0,.6), 0 0 120px -40px color-mix(in srgb, var(--accent) 55%, transparent); }
+.screen{ position:relative; width:100%; height:100%; border-radius:56px; overflow:hidden; background:var(--bg); color:var(--app-ink, var(--text)); isolation:isolate; }
+.status{ position:absolute; z-index:40; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; font-weight:600; pointer-events:none; color:var(--status-ink, currentColor); }
+.status .icons{ display:flex; gap:6px; align-items:center; } .status svg{ fill:currentColor; }
+#app{ position:absolute; inset:0; overflow:hidden; }
+.snack{ position:absolute; z-index:80; left:16px; right:16px; bottom:30px; padding:12px 14px; border-radius:14px; background:var(--app-ink, #111); color:var(--bg); font-size:13.5px; font-weight:600; opacity:0; pointer-events:none; box-shadow:0 12px 26px -10px rgba(0,0,0,.5); }
+.device::before{ content:''; position:absolute; left:-3px; top:180px; width:4px; height:34px; border-radius:2px; background:#8A847C; box-shadow:0 56px 0 #8A847C, 0 120px 0 #8A847C; }
+.device::after{ content:''; position:absolute; right:-3px; top:230px; width:4px; height:96px; border-radius:2px; background:#8A847C; }
+.status{ height:54px; padding:6px 34px 0 40px; font-size:16px; } .island{ position:absolute; z-index:50; top:11px; left:50%; width:124px; height:36px; margin-left:-62px; border-radius:22px; background:#000; }
+.home-ind{ position:absolute; z-index:60; bottom:8px; left:50%; width:136px; height:5px; margin-left:-68px; border-radius:3px; background:currentColor; opacity:.55; pointer-events:none; }
+/* ---------- Skyframe app ---------- */
+
+#screen{ background:#F4F8FD; }
+.sf{ position:absolute; inset:0; overflow:hidden; background:linear-gradient(180deg, #DCE8F7 0%, #F4F8FD 320px); color:#0D1B2E; font-family:'Public Sans', system-ui, sans-serif; }
+.sf-v{ position:absolute; inset:0; overflow-y:auto; padding:54px 14px 40px; scrollbar-width:none; scroll-behavior:smooth; } .sf-v::-webkit-scrollbar{ display:none; }
+.sf-now{ display:flex; justify-content:space-between; align-items:flex-end; padding:2px 4px 10px; } .sf-now small{ font:400 11px 'Fragment Mono', monospace; color:#51627A; } .sf-now h2{ font:600 17px 'Sora', sans-serif; } .sf-now b{ font:400 58px/1 'Sora', sans-serif; letter-spacing:-.04em; } .sf-now p{ font-size:13px; color:#51627A; text-align:right; }
+.sf-ban{ display:flex; align-items:center; gap:10px; padding:11px 14px; border-radius:18px; background:#0D1B2E; color:#fff; font-weight:600; font-size:14px; } .sf-ban i{ font-style:normal; font-size:20px; } .sf-ban small{ display:block; font-weight:400; font-size:11.5px; color:#9FB2CF; }
+.sf-map{ position:relative; margin-top:10px; border-radius:22px; overflow:hidden; background:#E9EEF2; box-shadow:0 1px 0 rgba(13,27,46,.06); } .sf-map canvas{ display:block; width:100%; height:auto; } .sf-map canvas + canvas{ position:absolute; inset:0; height:100%; cursor:crosshair; touch-action:manipulation; }
+.sf-lay{ position:absolute; top:8px; left:8px; display:flex; gap:3px; padding:3px; border-radius:14px; background:rgba(255,255,255,.86); backdrop-filter:blur(10px); }
+.sf-lay button{ height:28px; padding:0 10px; border-radius:11px; font-size:12px; font-weight:700; color:#51627A; transition:background .2s ease, color .2s ease; } .sf-lay button[aria-pressed="true"]{ background:#0D1B2E; color:#fff; }
+.sf-tag{ position:absolute; top:8px; right:8px; padding:5px 9px; border-radius:10px; background:rgba(255,255,255,.86); font:400 11px 'Fragment Mono', monospace; } .sf-tag.fut{ background:#2F6BFF; color:#fff; }
+.sf-key{ position:absolute; left:8px; bottom:8px; display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:9px; background:rgba(255,255,255,.86); font:400 9.5px 'Fragment Mono', monospace; color:#51627A; } .sf-key i{ width:70px; height:6px; border-radius:3px; background:var(--g); }
+.sf-scr{ display:flex; align-items:center; gap:10px; margin-top:8px; padding:8px 10px; border-radius:18px; background:#fff; }
+.sf-pl{ width:38px; height:38px; flex:none; border-radius:50%; background:#2F6BFF; color:#fff; font-size:13px; transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease; } .sf-pl:hover{ transform:scale(1.07); box-shadow:0 0 0 6px rgba(47,107,255,.15); }
+.sf-rng{ position:relative; flex:1; } .sf-rng input{ -webkit-appearance:none; appearance:none; width:100%; height:30px; background:transparent; margin:0; cursor:pointer; }
+.sf-rng input::-webkit-slider-runnable-track{ height:6px; border-radius:3px; background:linear-gradient(90deg, #C9D4E3 50%, #A9C1FF 50%); } .sf-rng input::-moz-range-track{ height:6px; border-radius:3px; background:linear-gradient(90deg, #C9D4E3 50%, #A9C1FF 50%); }
+.sf-rng input::-webkit-slider-thumb{ -webkit-appearance:none; width:20px; height:20px; margin-top:-7px; border-radius:50%; background:#fff; box-shadow:0 0 0 2px #0D1B2E, 0 3px 8px rgba(13,27,46,.3); } .sf-rng input::-moz-range-thumb{ width:18px; height:18px; border:0; border-radius:50%; background:#fff; box-shadow:0 0 0 2px #0D1B2E; }
+.sf-rng input:focus-visible{ outline:2px solid #2F6BFF; outline-offset:2px; border-radius:6px; } .sf-rng span{ position:absolute; left:0; right:0; bottom:-8px; display:flex; justify-content:space-between; font:400 9px 'Fragment Mono', monospace; color:#7A8BA3; pointer-events:none; }
+.sf-card{ margin-top:10px; padding:14px; border-radius:22px; background:#fff; } .sf-card h3{ font:600 15px 'Sora', sans-serif; } .sf-card > small{ display:block; margin:2px 0 10px; font-size:12.5px; color:#51627A; }
+.sf-nc{ display:flex; align-items:flex-end; gap:1px; height:84px; padding-bottom:1px; border-bottom:1px solid #DCE4EE; } .sf-nc i{ flex:1; min-height:1px; border-radius:2px 2px 0 0; background:var(--c, #2F6BFF); transition:height .35s ease; }
+.sf-ncl{ display:flex; justify-content:space-between; margin-top:4px; font:400 9.5px 'Fragment Mono', monospace; color:#7A8BA3; }
+.sf-hr{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; } .sf-hr::-webkit-scrollbar{ display:none; } .sf-hr div{ flex:none; width:52px; padding:10px 0; border-radius:16px; background:#F1F5FB; text-align:center; } .sf-hr small{ display:block; font:400 10px 'Fragment Mono', monospace; color:#51627A; } .sf-hr span{ display:block; font-size:20px; margin:4px 0; } .sf-hr b{ font:600 14px 'Sora', sans-serif; } .sf-hr div.on{ background:#0D1B2E; color:#fff; } .sf-hr div.on small{ color:#9FB2CF; }
+
+</style>
 </head>
-<body data-theme="5">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
-</header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>iOS Apps</div>
-    <h1 class="device-title">Skyframe</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Fast where it matters, quiet everywhere else</p>
-    <div class="device-frame-wrap phone" id="deviceFrameWrap">
-      <div id="demoBody"></div>
-    </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>Skyframe is a native app built around a single job: weather app with hyperlocal radar animation. No fifteen-tab navigation, no feature creep — just the one thing, done well.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>Native Performance</h4><p>Built directly for the platform, not wrapped in a cross-platform shell.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Minimal Permissions</h4><p>Only asks for exactly what it needs to function, nothing more.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Offline-First</h4><p>Core features work fully without a network connection.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<body>
+<header class="top"><a class="brand" href="../../index.html">bazozo<span>.</span></a><a class="back" href="../../index.html#work">← Back to Bazozo</a></header>
+<main class="ch-wrap"><div class="ch-dev"><div class="stage" id="stage"><div class="scale-box"><div class="device" id="device"><div class="screen" id="screen">
+    <div class="status" aria-hidden="true"><span data-clock>9:41</span><span class="icons"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 12 0 3a11 11 0 0 1 16 0L8 12Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14"><path d="M0 14 14 0v14H0Z"/></svg><svg width="22" height="12" viewBox="0 0 22 12"><rect x=".5" y=".5" width="18" height="11" rx="3" fill="none" stroke="currentColor"/><rect x="2" y="2" width="13" height="8" rx="1.5"/><rect x="19.5" y="4" width="2" height="4" rx="1"/></svg></span></div><div class="island" id="island" aria-hidden="true"></div>
+    <div id="app" role="application" aria-label="Skyframe app"></div><div class="snack" id="snack" role="status"></div><div class="home-ind" aria-hidden="true"></div>
+  </div></div></div></div></div><div><div class="ch-intro"><span class="kick"><i></i>ios · weatherkit · radar nowcast</span><h1 class="h1" id="h1">Sky<span>frame</span></h1><p class="lede">Skyframe animates the rain radar for your exact street and turns it into a plain answer: when it starts, how hard, and when it stops. In this demo the storm cells really move, and the forecast is read from them.</p></div>
+      <div class="chs"><article class="ch" data-ch="radar"><small>01 · chapter</small><h3>A radar you can scrub</h3><p>An hour of history and an hour of nowcast on one slider. Drag it and the storm moves with you.</p><button type="button" data-jump="radar">Show me</button></article><article class="ch" data-ch="pin"><small>02 · chapter</small><h3>Hyperlocal means your pin</h3><p>Tap anywhere on the map. The next-hour forecast is recomputed for that exact point.</p><button type="button" data-jump="pin">Show me</button></article><article class="ch" data-ch="nowcast"><small>03 · chapter</small><h3>The next hour, minute by minute</h3><p>Bars for every minute, with a plain sentence on top: starts in, peaks at, stops by.</p><button type="button" data-jump="nowcast">Show me</button></article><article class="ch" data-ch="layers"><small>04 · chapter</small><h3>Wind and warmth too</h3><p>Flowing wind particles and a temperature field share the same timeline.</p><button type="button" data-jump="layers">Show me</button></article></div>
+      <div class="ch-end"><div class="try" role="group" aria-label="Things to try"><div class="try-h"><span>Try it</span><b id="tryCount">0/5</b></div><div class="try-bar"><i id="tryBar"></i></div><ul id="tryList"><li data-t="scrub"><i></i>Scrub the radar timeline</li><li data-t="play"><i></i>Play the radar loop</li><li data-t="pin"><i></i>Drop a pin somewhere else</li><li data-t="layer"><i></i>Switch to the wind layer</li><li data-t="nowcast"><i></i>Check the next-hour chart</li></ul></div><div><h2 class="spec-h">// architecture</h2><dl class="spec"><div><dt>data</dt><dd>WeatherKit minute forecast + radar tiles</dd></div><div><dt>render</dt><dd>Metal radar interpolation between 5-minute frames</dd></div><div><dt>map</dt><dd>MapKit base map with a custom style</dd></div><div><dt>alerts</dt><dd>Rain-soon notification for saved places</dd></div><div><dt>a11y</dt><dd>Audio graph for the next-hour chart</dd></div></dl></div><div class="metrics"><div class="metric"><b>1 min</b><span>forecast steps</span></div><div class="metric"><b>120 min</b><span>radar window</span></div><div class="metric"><b>250 m</b><span>grid resolution</span></div></div><div><a class="cta" href="../../index.html#contact">Build an app like this →</a></div></div></div></main>
 <style>.bz-about{max-width:880px;margin:56px auto 32px;padding:26px 28px;border-radius:18px;border:1px solid rgba(127,127,127,.28);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:rgba(127,127,127,.06)}.bz-about h2{font:700 20px/1.25 Unbounded,system-ui,sans-serif;margin:0 0 10px}.bz-about p{margin:0 0 10px;opacity:.88}.bz-about .bz-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}.bz-about .bz-links a{padding:9px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:600;font-size:14px;color:inherit}@media(max-width:600px){.bz-about{margin:40px 16px 24px;padding:20px}}</style>
 <section class="bz-about" aria-labelledby="bzAboutTitle">
   <h2 id="bzAboutTitle">About Skyframe</h2>
@@ -63,72 +106,10 @@
   <p>Want something like this for your business? Bazozo Studio takes iOS and Android apps from first sketch to App Store release, with a written quote before any work starts and full code ownership on final payment.</p>
   <nav class="bz-links" aria-label="Related"><a href="../../mobile-app-development.html">iOS &amp; Android app development &rarr;</a><a href="../../index.html#contact">Start a project</a></nav>
 </section>
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects.find(p => p.cat === 'ios' && slugFor(p) === 'skyframe'));
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-ios');
-</script>
+<footer class="foot">© <span id="year"></span> · <b>Interactive Architecture &amp; Production Build by Bazozo Studio</b> · Concept project · <a href="../../index.html#work">← Back to Bazozo</a></footer>
+<div class="toastx" id="toastx" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="skyframe.js" defer></script>
 </body>
 </html>
