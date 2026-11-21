@@ -3,59 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuietDock — Case Study by Bazozo</title>
-<meta name="description" content="Auto-hides dock icons based on the active app. A macOS app concept designed and built by Bazozo Studio — try the live interactive demo.">
+<title>QuietDock — a dock that only shows what you need · macOS app by Bazozo Studio</title>
+<meta name="description" content="QuietDock: click between Xcode, Pages, Figma and Zoom and watch a real magnifying Dock reshuffle to show only the apps for that task, edit the rules from the menu bar and pin the icons that must never hide. Concept build by Bazozo Studio.">
 <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="canonical" href="https://bazozo.in/demo/mac/quietdock.html">
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Fredoka:wght@400;600;700&family=Fraunces:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=optional"></noscript>
-<link rel="stylesheet" href="../../styles.css">
-<link rel="stylesheet" href="../../work.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..150,500;75..150,800&family=Instrument+Sans:wght@400;500;600;700&family=Kode+Mono:wght@400;500;600&display=swap">
+<style>
+:root{ --page:#FBF3EA; --bg:#FFFFFF; --text:#1C2421; --dim:color-mix(in srgb, var(--text) 60%, transparent); --faint:color-mix(in srgb, var(--text) 38%, transparent); --accent:#0F766E; --accent-2:#F59E0B; --on-accent:#fff; --card:#FFFDF9; --line:rgba(28,36,33,.12); --display:'Anybody', system-ui, sans-serif; --dw:800; --body:'Instrument Sans', system-ui, sans-serif; --mono:'Kode Mono', ui-monospace, monospace; }
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+[hidden]{ display:none !important; }
+html{ background:var(--page); }
+body{ background:var(--page); color:var(--text); font-family:var(--body); line-height:1.45; overflow-x:hidden; -webkit-font-smoothing:antialiased; min-height:100vh; }
+a{ color:inherit; text-decoration:none; } button, input, select, textarea{ font:inherit; color:inherit; } button{ cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.top{ position:relative; z-index:5; display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px clamp(16px,3vw,40px); }
+.brand{ font-family:var(--display); font-weight:var(--dw); font-size:19px; letter-spacing:-.02em; } .brand span{ color:var(--accent); }
+.back{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13.5px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.back:hover{ color:var(--text); border-color:var(--accent); box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent); transform:translateX(-3px); }
+.kick{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--dim); } .kick i{ width:8px; height:8px; border-radius:2px; background:var(--accent); }
+.h1{ font-family:var(--display); font-weight:var(--dw); letter-spacing:-.04em; line-height:.95; } .h1 span{ color:var(--accent); }
+.lede{ color:var(--dim); font-size:16px; line-height:1.6; }
+.try{ padding:18px; border-radius:16px; border:1px solid var(--line); background:var(--card); }
+.try-h{ display:flex; justify-content:space-between; font-weight:700; font-size:14px; } .try-h b{ font-family:var(--mono); color:var(--accent); font-weight:500; }
+.try-bar{ height:6px; border-radius:6px; background:var(--line); margin:12px 0 14px; overflow:hidden; } .try-bar i{ display:block; height:100%; width:0; background:var(--accent); border-radius:inherit; transition:width .7s cubic-bezier(.34,1.56,.64,1); }
+.try ul{ list-style:none; display:grid; gap:10px; } .try li{ display:flex; gap:12px; align-items:center; font-size:14.5px; color:var(--dim); }
+.try li i{ width:20px; height:20px; flex:none; border-radius:6px; border:1.5px solid var(--faint); position:relative; transition:all .45s cubic-bezier(.34,1.56,.64,1); }
+.try li.done{ color:var(--text); text-decoration:line-through; text-decoration-color:var(--faint); } .try li.done i{ background:var(--accent); border-color:var(--accent); transform:rotate(-8deg) scale(1.1); }
+.try li.done i::after{ content:''; position:absolute; left:5.5px; top:2px; width:5px; height:10px; border-right:2.5px solid #fff; border-bottom:2.5px solid #fff; transform:rotate(45deg); }
+.spec-h{ font-family:var(--mono); font-size:12px; color:var(--dim); margin-bottom:12px; }
+.spec{ border:1px solid var(--line); border-radius:16px; background:var(--card); overflow:hidden; } .spec div{ display:grid; grid-template-columns:96px 1fr; gap:10px; padding:12px 16px; border-bottom:1px solid var(--line); font-size:14px; } .spec div:last-child{ border-bottom:none; } .spec dt{ font-family:var(--mono); color:var(--dim); font-size:12px; padding-top:2px; }
+.metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; } .metric{ padding:14px; border-radius:16px; background:var(--text); color:var(--page); } .metric b{ display:block; font-family:var(--display); font-weight:var(--dw); font-size:22px; letter-spacing:-.03em; } .metric span{ font-family:var(--mono); font-size:11px; opacity:.65; }
+.jump{ display:flex; flex-wrap:wrap; gap:6px; } .jump button{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13px; font-weight:600; color:var(--dim); transition:all .3s cubic-bezier(.34,1.56,.64,1); }
+.jump button:hover{ color:var(--text); border-color:var(--accent); transform:translateY(-2px); }
+.cta{ position:relative; display:inline-flex; align-items:center; gap:10px; height:52px; padding:0 24px; border-radius:999px; background:var(--accent); color:var(--on-accent,#fff); font-weight:700; font-size:15px; overflow:hidden; transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease; }
+.cta::after{ content:''; position:absolute; inset:0; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%); transform:translateX(-120%); transition:transform .8s ease; }
+.cta:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 18px 34px -14px var(--accent); } .cta:hover::after{ transform:translateX(120%); }
+.foot{ padding:26px clamp(16px,3vw,40px) 34px; font-size:13px; color:var(--dim); text-align:center; } .foot b{ color:var(--text); }
+.toastx{ position:fixed; z-index:90; left:50%; bottom:24px; transform:translateX(-50%); padding:12px 18px; border-radius:12px; background:var(--text); color:var(--page); font-size:14px; font-weight:600; box-shadow:0 20px 40px -12px rgba(0,0,0,.4); }
+@media (prefers-reduced-motion: reduce){ *{ transition-duration:.01ms !important; animation:none !important; } }
+.dc-head{ max-width:1000px; margin:0 auto; padding:38px clamp(16px,3vw,40px) 30px; text-align:center; display:grid; justify-items:center; gap:16px; }
+.dc-head .h1{ font-size:clamp(52px,8.6vw,132px); background:linear-gradient(100deg, var(--text) 25%, var(--accent) 62%, var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; } .dc-head .h1 span{ color:transparent; }
+.dc-head .lede{ max-width:640px; } .dc-steps{ list-style:none; display:flex; flex-wrap:wrap; justify-content:center; gap:2px; padding:4px; border-radius:22px; background:var(--card); box-shadow:0 0 0 1px var(--line); }
+.dc-steps li{ display:flex; align-items:center; gap:7px; padding:8px 14px; border-radius:18px; font-size:13px; color:var(--dim); transition:background .35s ease, color .35s ease; } .dc-steps li i{ width:8px; height:8px; border-radius:50%; background:var(--faint); transition:background .3s ease; }
+.dc-steps li.done{ background:var(--text); color:var(--page); } .dc-steps li.done i{ background:var(--accent); }
+.dc-stage{ max-width:1320px; margin:0 auto; padding:0 clamp(16px,3vw,40px); perspective:1700px; } .dc-tilt{ transform-origin:50% 0; will-change:transform; } .spec-grid{ display:grid; grid-template-columns:1.3fr 1fr auto; gap:20px; align-items:start; max-width:1320px; margin:30px auto 50px; padding:0 clamp(16px,3vw,40px); } @media(max-width:1000px){ .spec-grid{ grid-template-columns:1fr; } }
+.nv{ position:sticky; top:0; z-index:40; display:flex; justify-content:space-between; align-items:center; padding:14px clamp(16px,3vw,40px); backdrop-filter:blur(14px); background:color-mix(in srgb, var(--page) 78%, transparent); }
+.nv .brand{ font-family:var(--display); font-weight:var(--dw); font-size:20px; } .nv .brand span{ color:var(--accent); }
+.nv-burger{ position:relative; width:48px; height:48px; border-radius:16px; background:var(--text); transition:border-radius .5s cubic-bezier(.34,1.56,.64,1), transform .4s ease; } .nv-burger:hover{ border-radius:50%; transform:rotate(-6deg); }
+.nv-burger i{ position:absolute; left:14px; width:20px; height:2px; border-radius:2px; background:var(--page); transition:transform .6s cubic-bezier(.68,-0.6,.32,1.6), opacity .2s ease, width .4s ease; } .nv-burger i:nth-child(1){ top:17px; } .nv-burger i:nth-child(2){ top:23px; width:13px; } .nv-burger i:nth-child(3){ top:29px; }
+.nv-burger[aria-expanded="true"] i:nth-child(1){ transform:translateY(6px) rotate(45deg); } .nv-burger[aria-expanded="true"] i:nth-child(2){ opacity:0; transform:translateX(8px); } .nv-burger[aria-expanded="true"] i:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+.nv-menu{ position:fixed; inset:0; z-index:39; display:grid; place-items:center; background:var(--accent); color:var(--on-accent,#fff); } .nv-menu ol{ list-style:none; counter-reset:m; display:grid; gap:6px; width:min(620px, 88vw); }
+.nv-menu li{ counter-increment:m; } .nv-menu a{ display:flex; align-items:baseline; gap:18px; padding:10px 0; border-bottom:1px solid color-mix(in srgb, currentColor 25%, transparent); font-family:var(--display); font-weight:var(--dw); font-size:clamp(30px,6vw,64px); letter-spacing:-.03em; line-height:1; transition:padding .5s cubic-bezier(.34,1.56,.64,1); }
+.nv-menu a::before{ content:'0' counter(m); font:500 12px var(--mono); opacity:.7; } .nv-menu a:hover{ padding-left:18px; }
+.fg{ padding:40px clamp(16px,3vw,40px) 26px; overflow:hidden; } .fg-row{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:13px; color:var(--dim); } .fg-row a{ font-weight:700; color:var(--text); } .fg-row a:hover{ color:var(--accent); }
+.fg-word{ font-family:var(--display); font-weight:var(--dw); font-size:clamp(70px, 19vw, 290px); line-height:.8; letter-spacing:-.06em; color:transparent; -webkit-text-stroke:1.5px color-mix(in srgb, var(--text) 30%, transparent); margin-top:18px; white-space:nowrap; transition:-webkit-text-stroke-color .4s ease; } .fg:hover .fg-word{ -webkit-text-stroke-color:var(--accent); }
+body{ position:relative; isolation:isolate; } body::before{ content:''; position:absolute; z-index:-1; inset:0 0 auto 0; height:80vh; background:conic-gradient(from 200deg at 80% -10%, transparent 0deg, color-mix(in srgb, var(--accent) 16%, transparent) 14deg, transparent 28deg, color-mix(in srgb, var(--accent-2) 16%, transparent) 46deg, transparent 62deg); pointer-events:none; }
+
+.stage{ width:100%; } .desk-wrap{ width:min(100%, 1200px); margin-inline:auto; border-radius:14px; overflow:hidden; box-shadow:0 0 0 1px var(--line), 0 50px 100px -40px rgba(0,0,0,.55); }
+.scale-box{ position:relative; width:calc(1200px * var(--s,1)); height:calc(720px * var(--s,1)); }
+.desk{ position:absolute; top:0; left:0; width:1200px; height:720px; transform:scale(var(--s,1)); transform-origin:0 0; overflow:hidden; isolation:isolate; font-size:13px; background:var(--wall); }
+.menubar{ position:absolute; z-index:50; top:0; left:0; right:0; height:26px; display:flex; align-items:center; gap:18px; padding:0 14px; background:rgba(255,255,255,.28); backdrop-filter:blur(24px) saturate(1.6); color:#111; font:500 13px -apple-system, 'SF Pro Text', system-ui, sans-serif; }
+.menubar b{ font-weight:700; } .menubar .r{ margin-left:auto; display:flex; gap:14px; align-items:center; } .menubar .extra{ display:flex; gap:12px; align-items:center; }
+.dock{ position:absolute; z-index:40; left:50%; bottom:8px; transform:translateX(-50%); display:flex; gap:8px; padding:7px 9px; border-radius:20px; background:rgba(255,255,255,.3); backdrop-filter:blur(20px); box-shadow:inset 0 0 0 1px rgba(255,255,255,.4); }
+.dock i{ width:44px; height:44px; border-radius:11px; background:var(--di); box-shadow:0 4px 10px -4px rgba(0,0,0,.4); position:relative; } .dock i.run::after{ content:''; position:absolute; bottom:-5px; left:50%; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:#222; }
+.tbar{ height:46px; flex:none; display:flex; align-items:center; gap:12px; padding:0 14px; background:var(--tbar, color-mix(in srgb, var(--bg) 92%, #000)); border-bottom:1px solid color-mix(in srgb, var(--app-ink, #000) 10%, transparent); }
+.lights{ display:flex; gap:8px; } .lights i{ width:12px; height:12px; border-radius:50%; background:#FF5F57; box-shadow:inset 0 0 0 .5px rgba(0,0,0,.25); } .lights i:nth-child(2){ background:#FEBC2E; } .lights i:nth-child(3){ background:#28C840; }
+.tbar .ttl{ font:600 13px -apple-system, system-ui, sans-serif; } .tbar .tools{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+.win{ position:absolute; z-index:20; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); color:var(--app-ink, var(--text)); left:60px; top:44px; width:1080px; height:590px; border-radius:12px; box-shadow:0 40px 80px -20px rgba(0,0,0,.55), 0 0 0 .5px rgba(0,0,0,.3); }
+#app{ position:relative; flex:1; min-height:0; overflow:hidden; }
+.snack{ position:absolute; z-index:80; left:50%; bottom:70px; transform:translateX(-50%); padding:11px 16px; border-radius:12px; background:rgba(20,20,24,.9); color:#fff; font-size:13px; font-weight:600; opacity:0; pointer-events:none; white-space:nowrap; box-shadow:0 14px 30px -10px rgba(0,0,0,.6); }
+/* ---------- QuietDock app ---------- */
+
+.dock{ display:none !important; }
+.win{ --tbar:#F3EFE8; left:40px !important; top:52px !important; width:520px !important; height:320px !important; transition:box-shadow .3s ease; }
+.qd-w{ position:absolute; z-index:20; display:flex; flex-direction:column; overflow:hidden; border-radius:12px; background:#fff; box-shadow:0 30px 60px -24px rgba(0,0,0,.45), 0 0 0 .5px rgba(0,0,0,.25); font-family:'Instrument Sans', system-ui, sans-serif; color:#1C2421; cursor:default; }
+.qd-w header{ height:34px; flex:none; display:flex; align-items:center; gap:10px; padding:0 12px; background:#F3EFE8; font-size:12px; font-weight:600; } .qd-w header i{ width:11px; height:11px; border-radius:50%; background:#FF5F57; box-shadow:15px 0 0 #FEBC2E, 30px 0 0 #28C840; margin-right:34px; }
+.qd-w .bd{ flex:1; padding:14px; overflow:hidden; } .on-top{ box-shadow:0 0 0 2px #0F766E, 0 36px 70px -24px rgba(0,0,0,.5) !important; }
+.qd-code{ position:absolute; inset:0; padding:12px 0; background:#FDFBF7; font:400 13px/1.75 'Kode Mono', monospace; color:#3A4440; } .qd-code div{ display:grid; grid-template-columns:40px 1fr; white-space:pre; } .qd-code span:first-child{ color:#B7B0A4; text-align:right; padding-right:12px; } .qd-code .k{ color:#B4235A; } .qd-code .t{ color:#0F766E; } .qd-code .s2{ color:#B45309; }
+.qd-doc h4{ font:800 22px/1.1 'Anybody', sans-serif; font-stretch:120%; margin-bottom:8px; } .qd-doc p{ font-size:12.5px; line-height:1.6; color:#5A6560; margin-bottom:6px; }
+.qd-fig{ display:grid; grid-template-columns:60px 1fr; gap:10px; height:100%; } .qd-fig aside{ display:grid; gap:6px; align-content:start; } .qd-fig aside i{ height:10px; border-radius:3px; background:#ECE6DC; } .qd-fig .cv{ position:relative; border-radius:8px; background:#F1EDE6; } .qd-fig .cv b{ position:absolute; border-radius:8px; }
+.qd-zoom{ display:grid; grid-template-columns:1fr 1fr; gap:6px; height:100%; } .qd-zoom div{ border-radius:8px; display:grid; place-items:end start; padding:6px 8px; font-size:11px; font-weight:600; color:#fff; }
+.qd-dk{ position:absolute; z-index:45; left:50%; bottom:10px; transform:translateX(-50%); display:flex; align-items:flex-end; height:66px; padding:6px 8px; border-radius:20px; background:rgba(255,255,255,.42); backdrop-filter:blur(22px) saturate(1.5); box-shadow:inset 0 0 0 1px rgba(255,255,255,.6), 0 14px 30px -12px rgba(0,0,0,.35); }
+.qd-ic{ position:relative; flex:none; width:48px; height:48px; margin:0 3px; transform-origin:50% 100%; overflow:visible; }
+.qd-ic b{ position:absolute; left:50%; bottom:0; width:48px; height:48px; margin-left:-24px; transform-origin:50% 100%; display:grid; place-items:center; border-radius:12px; background:var(--c); color:#fff; font:700 17px 'Anybody', sans-serif; box-shadow:inset 0 -3px 0 rgba(0,0,0,.18), 0 4px 10px -4px rgba(0,0,0,.4); }
+.qd-ic em{ position:absolute; left:50%; bottom:-7px; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:#1C2421; opacity:0; font-style:normal; } .qd-ic.qd-run em{ opacity:.8; }
+.qd-ic small{ position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%); padding:3px 8px; border-radius:6px; background:rgba(28,36,33,.86); color:#fff; font:500 11px 'Instrument Sans', sans-serif; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s ease; } .qd-ic:hover small{ opacity:1; }
+.qd-ic.qd-pin b::after{ content:''; position:absolute; right:-3px; top:-3px; width:12px; height:12px; border-radius:50%; background:#F59E0B; box-shadow:0 0 0 2px #fff; }
+.qd-sep{ width:1px; height:44px; margin:0 6px 2px; background:rgba(28,36,33,.2); flex:none; }
+.qd-mx{ display:flex; align-items:center; gap:5px; height:22px; padding:0 7px; border-radius:5px; font:600 12px -apple-system, system-ui, sans-serif; color:#111; } .qd-mx:hover, .qd-mx[aria-expanded="true"]{ background:rgba(0,0,0,.12); } .qd-mx i{ display:flex; gap:2px; } .qd-mx i b{ width:4px; height:9px; border-radius:1px; background:#111; } .qd-mx i b:nth-child(2){ height:6px; opacity:.45; }
+.qd-dd{ position:absolute; z-index:60; top:30px; width:330px; padding:14px; border-radius:18px; background:rgba(255,253,249,.94); backdrop-filter:blur(30px) saturate(1.5); box-shadow:0 24px 54px -14px rgba(0,0,0,.42), 0 0 0 .5px rgba(0,0,0,.18); font-family:'Instrument Sans', system-ui, sans-serif; color:#1C2421; }
+.qd-dd header{ display:flex; justify-content:space-between; align-items:center; } .qd-dd header b{ font:800 18px 'Anybody', sans-serif; font-stretch:125%; } .qd-dd header small{ display:block; font:400 11px 'Kode Mono', monospace; color:#6B7671; }
+.qd-tg{ position:relative; width:40px; height:24px; border-radius:12px; background:#CFD6D2; flex:none; transition:background .25s ease; } .qd-tg::after{ content:''; position:absolute; left:3px; top:3px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .35s cubic-bezier(.34,1.56,.64,1); } .qd-tg[aria-checked="true"]{ background:#0F766E; } .qd-tg[aria-checked="true"]::after{ transform:translateX(16px); }
+.qd-ctx{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin:12px 0 10px; padding:3px; border-radius:12px; background:#EFEAE2; } .qd-ctx button{ height:30px; border-radius:9px; font-size:12px; font-weight:700; color:#6B7671; } .qd-ctx button[aria-pressed="true"]{ background:#fff; color:#0F766E; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.qd-dd h5{ margin:8px 0 6px; font:500 10.5px 'Kode Mono', monospace; color:#6B7671; text-transform:uppercase; letter-spacing:.1em; display:flex; justify-content:space-between; }
+.qd-chips{ display:flex; flex-wrap:wrap; gap:5px; } .qd-chips button{ display:inline-flex; align-items:center; gap:5px; height:28px; padding:0 9px 0 4px; border-radius:14px; font-size:12px; font-weight:600; background:#fff; box-shadow:inset 0 0 0 1px rgba(28,36,33,.14); color:#6B7671; transition:background .2s ease, color .2s ease, box-shadow .2s ease; }
+.qd-chips button i{ width:20px; height:20px; border-radius:6px; background:var(--c); font-style:normal; color:#fff; font-size:10px; display:grid; place-items:center; } .qd-chips button[aria-pressed="true"]{ background:#0F766E; color:#fff; box-shadow:none; }
+.qd-chips.pins button[aria-pressed="true"]{ background:#F59E0B; color:#1C2421; }
+.qd-sum{ margin-top:10px; padding:10px 12px; border-radius:12px; background:#E6F2EF; font-size:12.5px; } .qd-sum b{ color:#0F766E; }
+
+</style>
 </head>
-<body data-theme="2">
-
-<div class="msite-progress" id="msiteProgress"></div>
-
-<header class="device-nav">
-  <a class="brand" href="../../index.html">bazozo<span>.</span></a>
-  <a class="back" href="../../index.html#work">← Back to Bazozo</a>
-</header>
-
-<section class="device-hero">
-  <div class="msite-glow msite-glow-1" data-parallax="0.1"></div>
-  <div class="msite-glow msite-glow-2" data-parallax="-0.07"></div>
-  <div class="device-stage">
-    <div class="device-kicker"><span class="dot"></span>macOS Applications</div>
-    <h1 class="device-title">QuietDock</h1>
-    <p style="color:var(--site-ink-dim); max-width:440px; text-align:center; font-size:15px;">Runs quiet, works hard</p>
-    <div class="device-frame-wrap desktop" id="deviceFrameWrap">
-      <div id="demoBody"></div>
-    </div>
-  </div>
-</section>
-
-<section class="device-info">
-  <div class="wrap">
-    <div class="device-info-grid">
-      <div class="device-info-copy reveal">
-        <span class="msite-section-kicker">About this build</span>
-        <p>QuietDock is a native desktop utility built around one job: auto-hides dock icons based on the active app. It runs quietly in the background until you actually need it.</p>
-        <div class="device-cta-row">
-          <a class="device-cta-btn" href="../../index.html#contact">Start a project</a>
-        </div>
-      </div>
-      <div class="device-info-features">
-        <div class="device-info-feature reveal"><span class="num mono">01</span><h4>Native, Not a Web Shell</h4><p>Built directly against the platform's own UI toolkit for real performance.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">02</span><h4>Low Resource Use</h4><p>Sits quietly in the background without eating RAM or battery.</p></div>
-        <div class="device-info-feature reveal"><span class="num mono">03</span><h4>Starts Instantly</h4><p>No splash screen, no loading spinner — it's ready the moment you open it.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
+<body>
+<header class="nv"><a class="brand" href="../../index.html">bazozo<span>.</span></a><button class="nv-burger" type="button" aria-expanded="false" aria-controls="nvMenu" aria-label="Open menu"><i></i><i></i><i></i></button></header>
+<nav class="nv-menu" id="nvMenu" aria-label="Page menu" hidden><ol><li><a href="#h1">QuietDock</a></li><li><a href="#stage">Try the demo</a></li><li><a href="#specs">How it is built</a></li><li><a href="../../index.html#contact">Start a project</a></li><li><a href="../../index.html#work">Back to Bazozo</a></li></ol></nav>
+<header class="dc-head"><span class="kick"><i></i>macOS 15 · NSWorkspace · Dock contexts</span><h1 class="h1" id="h1">Quiet<span>Dock</span></h1><p class="lede">QuietDock watches which app you are working in and hides every Dock icon you do not need for it. Switch from code to a call and the Dock quietly rearranges itself. Click the windows below.</p><ul class="dc-steps" id="tryList"><li data-t="switch"><i></i>Click a different app window</li><li data-t="magnify"><i></i>Hover the Dock to magnify it</li><li data-t="rule"><i></i>Change a context rule</li><li data-t="pin"><i></i>Pin an icon so it never hides</li><li data-t="off"><i></i>Pause QuietDock to see the clutter</li></ul><b id="tryCount" hidden></b><i id="tryBar" hidden></i></header><div class="dc-stage"><div class="dc-tilt"><div class="stage" id="stage"><div class="desk-wrap"><div class="scale-box"><div class="desk" id="desk" style="--wall:radial-gradient(760px 520px at 15% 10%, #FFE0B8 0%, transparent 62%), radial-gradient(700px 520px at 92% 92%, #B8E6DD 0%, transparent 60%), linear-gradient(160deg, #F7EBDD, #E3EEEA)">
+    <div class="menubar" aria-hidden="true"><b></b><b>QuietDock</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span class="r"><span class="extra" id="menuExtra"></span><span data-clock>9:41</span></span></div>
+    <div class="win" id="win" role="application" aria-label="QuietDock window"><div class="tbar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="ttl">QuietDock</span><span class="tools" id="tools"></span></div><div id="app"></div></div>
+    <div class="dock" aria-hidden="true"><i style="--di:linear-gradient(135deg,#5AC8FA,#007AFF)"></i><i style="--di:linear-gradient(135deg,#FF9500,#FF2D55)"></i><i style="--di:linear-gradient(135deg,#34C759,#30B0C7)"></i><i class="run" style="--di:var(--accent)"></i><i style="--di:linear-gradient(135deg,#8E8E93,#3A3A3C)"></i></div>
+    <div class="snack" id="snack" role="status"></div>
+  </div></div></div></div></div></div><div class="spec-grid"><div id="specs"><h2 class="spec-h">// architecture</h2><dl class="spec"><div><dt>detect</dt><dd>NSWorkspace frontmost-app notifications</dd></div><div><dt>dock</dt><dd>Dock layout rewritten through its defaults domain, then a soft restart</dd></div><div><dt>rules</dt><dd>Per-app contexts with pinned exceptions</dd></div><div><dt>ui</dt><dd>SwiftUI MenuBarExtra with live preview</dd></div><div><dt>safety</dt><dd>Original Dock restored on quit, always</dd></div></dl></div><div style="display:grid;gap:12px"><div class="metrics"><div class="metric"><b>15 → 6</b><span>icons while coding</span></div><div class="metric"><b>0.2 s</b><span>to rearrange</span></div><div class="metric"><b>4</b><span>contexts</span></div></div><div class="jump" role="group" aria-label="Jump to a screen"><button type="button" data-jump="code">coding</button><button type="button" data-jump="write">writing</button><button type="button" data-jump="meet">meeting</button></div></div><div><a class="cta" href="../../index.html#contact">Build an app like this →</a></div></div>
 <style>.bz-about{max-width:880px;margin:56px auto 32px;padding:26px 28px;border-radius:18px;border:1px solid rgba(127,127,127,.28);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:rgba(127,127,127,.06)}.bz-about h2{font:700 20px/1.25 Unbounded,system-ui,sans-serif;margin:0 0 10px}.bz-about p{margin:0 0 10px;opacity:.88}.bz-about .bz-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}.bz-about .bz-links a{padding:9px 16px;border-radius:999px;border:1px solid currentColor;text-decoration:none;font-weight:600;font-size:14px;color:inherit}@media(max-width:600px){.bz-about{margin:40px 16px 24px;padding:20px}}</style>
 <section class="bz-about" aria-labelledby="bzAboutTitle">
   <h2 id="bzAboutTitle">About QuietDock</h2>
@@ -63,72 +123,10 @@
   <p>Want something like this for your business? Bazozo Studio takes macOS and Windows desktop utilities from first sketch to Mac App Store or direct download, with a written quote before any work starts and full code ownership on final payment.</p>
   <nav class="bz-links" aria-label="Related"><a href="../../index.html#services">What we build &rarr;</a><a href="../../index.html#contact">Start a project</a></nav>
 </section>
-<footer class="device-footer">
-  <span>© <span id="msiteYear"></span> bazozo.in — case study, illustrative portfolio sample</span>
-  <a href="../../index.html#work">← Back to Bazozo</a>
-</footer>
-
-<script>document.getElementById('msiteYear').textContent = new Date().getFullYear();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous"></script>
-<script src="../../data.js"></script>
-<script src="../../demos.js"></script>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const msiteProgress = document.getElementById('msiteProgress');
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  msiteProgress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, pct)) + ')';
-});
-
-const msiteGlows = document.querySelectorAll('[data-parallax]');
-if(!prefersReduced){
-  window.addEventListener('scroll', () => {
-    msiteGlows.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
-    });
-  });
-}
-
-if(prefersReduced){
-  gsap.set(['.device-kicker', '.device-title', '.device-frame-wrap'], {opacity:1, y:0, clearProps:'transform'});
-} else {
-  gsap.timeline({defaults:{ease:'power3.out'}})
-    .from('.device-kicker', {opacity:0, y:16, duration:0.6})
-    .from('.device-title', {opacity:0, y:24, duration:0.7}, '-=0.3')
-    .from('.device-hero p', {opacity:0, y:16, duration:0.6}, '-=0.4')
-    .from('.device-frame-wrap', {opacity:0, y:34, scale:0.94, duration:0.8}, '-=0.35');
-}
-
-document.querySelectorAll('.device-info-copy.reveal, .device-info-feature.reveal').forEach((el,i) => {
-  if(prefersReduced){ gsap.set(el, {opacity:1, y:0}); return; }
-  gsap.set(el, {opacity:0, y:24});
-  ScrollTrigger.create({
-    trigger: el, start:'top 92%', once:true,
-    onEnter: () => gsap.to(el, {opacity:1, y:0, duration:0.7, ease:'power3.out', delay:i*0.05})
-  });
-});
-
-/* subtle cursor-follow tilt on the device mockup */
-if(!prefersReduced && window.matchMedia('(hover:hover)').matches){
-  const stage = document.querySelector('.device-hero');
-  const frame = document.getElementById('deviceFrameWrap');
-  stage.addEventListener('mousemove', e => {
-    const r = stage.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    frame.style.transform = 'rotateY(' + (px*6) + 'deg) rotateX(' + (py*-6) + 'deg)';
-  });
-  stage.addEventListener('mouseleave', () => { frame.style.transform = ''; });
-}
-
-renderLiveDemo(projects.find(p => p.cat === 'mac' && slugFor(p) === 'quietdock'));
-const __bf = document.querySelector('.browser-frame');
-if(__bf) __bf.classList.add('browser-mac');
-</script>
+<footer class="fg"><div class="fg-row"><span>© <span id="year"></span> · Concept project · Interactive build by Bazozo Studio</span><a href="../../index.html#work">← Back to Bazozo</a></div><div class="fg-word" aria-hidden="true">bazozo.</div></footer>
+<div class="toastx" id="toastx" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="quietdock.js" defer></script>
 </body>
 </html>

@@ -251,7 +251,8 @@ services.forEach((s, i) => {
    ================================================================== */
 function dots(n, cls){ const f = document.createDocumentFragment(); for(let i = 0; i < n; i++) f.append(mk('i', cls)); return f; }
 /* bump when screenshots are re-captured so browsers and the CDN fetch the new images */
-const PREVIEW_VERSION = '20261120';
+const PREVIEW_VERSION = '20261121';
+const previewFilms = new Set(['theskyline', 'thecollection']);
 const previewKey = p => p.cat === 'web' ? slugFor(p) : `${p.cat}/${slugFor(p)}`;
 const previewLabel = p => p.url ? p.url.replace(/^https?:\/\//, '').replace(/\/$/, '') : p.cat === 'web' ? `bazozo.in/work/${slugFor(p)}` : `bazozo.in/demo/${p.cat}/${slugFor(p)}`;
 
@@ -268,10 +269,19 @@ function pvShot(p){
   if(previewShots.has(key)){
     const img = new Image();
     img.alt = `${p.title.replace(/"/g, '')}: ${meta.label.replace(/s$/, '')} preview`;
-    img.loading = 'lazy'; img.decoding = 'async'; img.width = 640; img.height = 1000; img.className = 'pv-scroll';
+    img.loading = 'lazy'; img.decoding = 'async'; img.width = 640; img.height = 1000;
     img.setAttribute('fetchpriority', 'low');
-    img.src = `images/preview/${key}.webp?v=${PREVIEW_VERSION}`;
-    shot.append(img, mk('span', 'pv-scrollhint mono', 'Hover to scroll ↓'));
+    if(previewFilms.has(key)){
+      img.className = 'pv-anim'; img.height = 400;
+      img.src = `images/preview/${key}-film.webp?v=${PREVIEW_VERSION}`;
+      shot.append(img, mk('span', 'pv-scrollhint mono', 'Scroll-driven film ▸'));
+    } else {
+      img.className = 'pv-scroll';
+      /* slower, length-aware pan: about 1 s per 300 px of page, 4 to 12 s */
+      img.addEventListener('load', () => { const s = Math.min(12, Math.max(4, img.naturalHeight / 300)); img.style.setProperty('--pv-d', s.toFixed(1) + 's'); }, { once:true });
+      img.src = `images/preview/${key}.webp?v=${PREVIEW_VERSION}`;
+      shot.append(img, mk('span', 'pv-scrollhint mono', 'Hover to scroll ↓'));
+    }
   } else {
     const ph = mk('span', 'pv-missing'); ph.append(icon(CAT_ICON[p.cat] || 'web'), mk('b', null, p.title)); shot.append(ph);
   }
@@ -1051,3 +1061,7 @@ if(!prefersReduced){
   if('requestIdleCallback' in window) requestIdleCallback(loadHeroGL, { timeout:2000 });
   else window.addEventListener('load', loadHeroGL);
 }
+
+/* beam buttons: keep their soft light circling only while they are on screen */
+(() => { const bs = document.querySelectorAll('.beam-btn'); if(!bs.length) return; if(!('IntersectionObserver' in window)){ bs.forEach(b => b.classList.add('beam-live')); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('beam-live', e.isIntersecting)), { rootMargin:'40px' }); bs.forEach(b => io.observe(b)); })();
