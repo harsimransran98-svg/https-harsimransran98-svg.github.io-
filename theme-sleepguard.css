@@ -1,0 +1,36 @@
+/* SleepGuard skin: cream + grid, violet ink, violet/peach accents, Funnel Display / Funnel Sans / Syne Mono.
+   Loaded after styles.css. Applies to the light theme (the default); dark mode keeps the original palette. */
+[data-theme="light"]{
+  --bg:#F7F3EC; --bg-soft:#F1ECE3; --surface:#FFFDF9; --surface-2:#EFE9F7;
+  --ink:#211A3A; --ink-dim:#4A4263; --ink-faint:#6E6688;
+  --brass:#5B3FD9; --brass-dim:#4630B0; --teal:#FF9E6B;
+  --line:rgba(33,26,58,.12); --line-strong:rgba(33,26,58,.24);
+  --live-accent:#5B3FD9 !important; --live-text:#5B3FD9 !important;
+}
+[data-theme="light"] body{
+  background-color:var(--bg);
+  background-image:linear-gradient(color-mix(in srgb, #211A3A 6%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, #211A3A 6%, transparent) 1px, transparent 1px);
+  background-size:44px 44px;
+}
+/* the slanted violet-to-peach band behind the hero */
+[data-theme="light"] .hero{ position:relative; isolation:isolate; }
+[data-theme="light"] .hero::before{ content:''; position:absolute; z-index:-1; inset:0 0 -40px 0; background:linear-gradient(120deg, #5B3FD9, #FF9E6B); clip-path:polygon(0 0, 100% 0, 100% 84%, 0 100%); pointer-events:none; }
+[data-theme="light"] .hero .eyebrow, [data-theme="light"] .hero h1, [data-theme="light"] .hero-sub, [data-theme="light"] .hero-proof b, [data-theme="light"] .hero-proof span{ color:#fff; }
+[data-theme="light"] .hero .eyebrow .dot{ background:#fff; box-shadow:none; }
+[data-theme="light"] .hero h1 .line:nth-child(2) .line-inner{ opacity:.62; } [data-theme="light"] .hero h1 .u{ color:#fff; }
+[data-theme="light"] .hero h1 .hl-3{ color:#fff; opacity:.95; }
+[data-theme="light"] .hero-sub .swap{ color:#fff; border-color:rgba(255,255,255,.7); }
+[data-theme="light"] .hero-proof{ border-color:rgba(255,255,255,.35); } [data-theme="light"] .hero-proof span{ opacity:.85; }
+[data-theme="light"] .hero .beam-btn-in{ background:#fff; color:#5B3FD9; }
+[data-theme="light"] .hero .ghost-btn{ color:#fff; border-color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
+[data-theme="light"] .hero .ghost-btn:hover{ background:rgba(255,255,255,.28); }
+/* floating tab-style nav */
+[data-theme="light"] header.nav .nav-pill{ border-radius:20px; }
+[data-theme="light"] header.nav.scrolled .nav-pill{ background:color-mix(in srgb, #FFFDF9 88%, transparent); box-shadow:0 12px 30px -18px rgba(33,26,58,.4), 0 0 0 1px var(--line); }
+[data-theme="light"] .nav-cta, [data-theme="light"] .beam-btn:not(.hero .beam-btn) .beam-btn-in{ border-radius:13px; }
+/* nav sits on the violet band until the page scrolls */
+[data-theme="light"] header.nav:not(.scrolled) .brand, [data-theme="light"] header.nav:not(.scrolled) .brand span, [data-theme="light"] header.nav:not(.scrolled) nav.links a, [data-theme="light"] header.nav:not(.scrolled) .brand-tag, [data-theme="light"] header.nav:not(.scrolled) .theme-btn{ color:#fff; }
+[data-theme="light"] header.nav:not(.scrolled) .brand-tag, [data-theme="light"] header.nav:not(.scrolled) .theme-btn{ border-color:rgba(255,255,255,.55); }
+[data-theme="light"] header.nav:not(.scrolled) .nav-cta .beam-btn-in{ background:#fff; color:#5B3FD9; }
+[data-theme="light"] header.nav:not(.scrolled) nav.links a::after{ background:#fff; }
+[data-theme="light"] header.nav:not(.scrolled) .bz-dark{ filter:brightness(0) invert(1); }
