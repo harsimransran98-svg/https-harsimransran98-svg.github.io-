@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Lectern — online classes platform for academies · Built by Bazozo Studio</title>
+<meta name="description" content="Lectern: a multi-tenant online classes app. A branded student app on the phone and an academy dashboard on the laptop, working live side by side: free and paid lectures, live classes with chat, admin studio and super-admin SaaS plans. Concept build by Bazozo Studio.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#E9E4D8">
+<link rel="canonical" href="https://bazozo.in/work/lectern.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#E9E4D8;
+  --text:#17181F;
+  --accent:#4A2FE0;
+  --bg-2:#F3EFE6;
+  --ink:#15161D;
+  --dim:#5C606E;
+  --faint:#8F929D;
+  --line:#D8D2C4;
+  --live:#F03E3E;
+  --display:'Familjen Grotesk', system-ui, sans-serif;
+  --body:'Figtree', system-ui, sans-serif;
+  --mono:'DM Mono', ui-monospace, monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --head-h:60px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); -webkit-text-size-adjust:100%; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); font-size:15px; line-height:1.5; overflow-x:clip; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; }
+button{ font:inherit; color:inherit; cursor:pointer; border:0; background:none; }
+h1,h2,h3{ font-family:var(--display); letter-spacing:-.02em; line-height:1.1; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:8px; }
+
+/* ---------- header ---------- */
+.head{ position:sticky; top:0; z-index:30; height:var(--head-h); display:flex; align-items:center; gap:12px; padding:0 clamp(14px,3vw,32px); background:rgba(233,228,216,.85); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; font-family:var(--display); font-weight:700; font-size:19px; letter-spacing:-.03em; }
+.brand-mark{ width:30px; height:30px; border-radius:9px; background:var(--ink); display:grid; place-items:center; flex:none; }
+.brand-mark svg{ width:18px; height:18px; }
+.brand em{ font-style:normal; font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:var(--live); padding:3px 7px 3px 6px; border-radius:6px; display:inline-flex; align-items:center; gap:5px; }
+.brand em::before{ content:''; width:6px; height:6px; border-radius:50%; background:#fff; animation:blink 1.2s infinite; }
+@keyframes blink{ 50%{ opacity:.3; } }
+.by{ font-size:12.5px; color:var(--dim); text-decoration:none; padding:5px 10px; border-radius:999px; border:1px solid var(--line); white-space:nowrap; transition:border-color .25s, color .25s, box-shadow .25s; }
+.by b{ color:var(--text); font-weight:800; }
+.by:hover{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(74,47,224,.1); }
+@media (max-width:420px){ .brand em{ display:none; } }
+.head-sub{ display:none; color:var(--dim); font-size:13px; }
+.head-actions{ margin-left:auto; display:flex; align-items:center; gap:6px; }
+.hbtn{ display:inline-flex; align-items:center; gap:7px; height:38px; padding:0 13px; border-radius:12px; font-size:13px; font-weight:700; color:var(--dim); text-decoration:none; transition:background .2s, color .2s, transform .3s var(--spring); }
+.hbtn:hover{ background:rgba(0,0,0,.06); color:var(--text); }
+.hbtn:active{ transform:scale(.95); }
+.hbtn svg{ width:17px; height:17px; transition:transform .6s var(--ease); }
+.hbtn.reset:hover svg{ transform:rotate(-200deg); }
+.hbtn.reset.armed{ background:var(--live); color:#fff; }
+.hbtn .lbl{ display:none; }
+
+/* ---------- mobile device switch ---------- */
+.switch{ position:sticky; top:var(--head-h); z-index:20; display:flex; gap:4px; margin:10px 12px; padding:4px; border-radius:16px; background:#fff; border:1px solid var(--line); box-shadow:0 8px 20px -14px rgba(0,0,0,.4); }
+.switch button{ flex:1; height:40px; border-radius:12px; font-size:13.5px; font-weight:800; color:var(--dim); display:flex; align-items:center; justify-content:center; gap:7px; transition:background .3s, color .3s; }
+.switch button svg{ width:17px; height:17px; }
+.switch button[aria-selected="true"]{ background:var(--ink); color:#fff; }
+
+/* ---------- stage ---------- */
+.stage{ position:relative; }
+.dev{ position:relative; }
+.dev iframe{ display:block; border:0; background:var(--bg-2); }
+.dev-label{ display:none; }
+
+/* phones/tablets (default): one app at a time, full width, no fake frames */
+@media (max-width:999px){
+  .dev{ display:none; }
+  .dev.on{ display:block; }
+  .scaler, .frame, .lid, .screen{ width:auto !important; height:auto !important; transform:none !important; position:static !important; padding:0 !important; margin:0 !important; border-radius:0 !important; background:none !important; box-shadow:none !important; }
+  .dev iframe{ width:100% !important; height:calc(100vh - var(--head-h) - 70px) !important; height:calc(100dvh - var(--head-h) - 70px) !important; border-top:1px solid var(--line); }
+  .island, .status, .deck, .cam-dot, .home-ind, .btn-side, .sync, .sync-chip{ display:none !important; }
+}
+
+/* desktop: phone + laptop side by side */
+@media (min-width:1000px){
+  .stage{ display:flex; align-items:flex-end; justify-content:center; gap:clamp(20px,3vw,56px); padding:clamp(18px,3vh,34px) clamp(16px,3vw,40px) 10px; min-height:calc(100vh - var(--head-h)); min-height:calc(100dvh - var(--head-h)); overflow:hidden; }
+  .switch{ display:none; }
+  .dev{ display:block; }
+  .dev-label{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:16px; font-size:13px; font-weight:700; color:var(--dim); }
+  .scaler{ position:relative; }
+  .frame{ transform-origin:0 0; position:absolute; left:0; top:0; }
+  /* before the script sizes things, keep the frames from blowing up the page */
+  .phone .scaler{ width:340px; height:713px; } .phone .frame{ transform:scale(.82); }
+  .laptop .scaler{ width:900px; height:553px; } .laptop .frame{ transform:scale(.634); }
+}
+.dev-label b{ font-family:var(--mono); font-weight:500; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:6px; background:rgba(0,0,0,.06); color:var(--dim); }
+
+/* phone */
+.phone .frame{ width:414px; height:868px; padding:12px; border-radius:62px; background:linear-gradient(145deg,#2B2C33,#0E0F13 40%,#24252C); box-shadow:inset 0 0 0 2px #3A3B43, 0 0 0 1px #0A0A0D, 0 40px 80px -30px rgba(20,18,40,.55), 0 18px 30px -18px rgba(0,0,0,.5); }
+.phone .screen{ position:relative; width:390px; height:844px; border-radius:50px; overflow:hidden; background:var(--bg-2); }
+.phone .status{ height:50px; display:flex; align-items:center; justify-content:space-between; padding:8px 30px 0 36px; font-family:-apple-system, 'SF Pro Text', var(--body); font-weight:700; font-size:16px; background:var(--bg-2); }
+.phone .status svg{ height:13px; }
+.phone .status .r{ display:flex; gap:6px; align-items:center; }
+.phone .island{ position:absolute; top:11px; left:50%; width:122px; height:35px; margin-left:-61px; border-radius:20px; background:#000; z-index:2; }
+.phone iframe{ width:390px; height:794px; }
+.phone .home-ind{ position:absolute; bottom:8px; left:50%; width:136px; height:5px; margin-left:-68px; border-radius:4px; background:rgba(0,0,0,.75); z-index:3; pointer-events:none; }
+.phone .btn-side{ position:absolute; width:4px; border-radius:2px; background:#1C1D22; }
+
+/* laptop */
+.laptop .frame{ width:1420px; height:872px; }
+.laptop .lid{ position:relative; width:1316px; margin:0 auto; padding:22px 18px 18px; border-radius:26px 26px 6px 6px; background:#0E0F13; box-shadow:inset 0 0 0 2px #2E2F36, 0 40px 80px -36px rgba(20,18,40,.55); }
+.laptop .cam-dot{ position:absolute; top:8px; left:50%; width:7px; height:7px; margin-left:-3.5px; border-radius:50%; background:#2B2D36; box-shadow:inset 0 0 0 1.5px #3E4150; }
+.laptop .screen{ width:1280px; height:800px; border-radius:6px; overflow:hidden; background:var(--bg-2); }
+.laptop iframe{ width:1280px; height:800px; }
+.laptop .deck{ position:relative; height:32px; margin-top:0; border-radius:2px 2px 22px 22px; background:linear-gradient(180deg,#D4D5DA,#A9AAB1 60%,#8D8E95); box-shadow:0 22px 30px -18px rgba(0,0,0,.45); }
+.laptop .deck::before{ content:''; position:absolute; top:0; left:50%; width:220px; height:12px; margin-left:-110px; border-radius:0 0 14px 14px; background:linear-gradient(180deg,#A3A4AB,#C3C4CA); }
+
+/* sync connector */
+.sync{ position:absolute; z-index:5; pointer-events:none; }
+.sync path{ fill:none; stroke:rgba(23,24,31,.22); stroke-width:2; stroke-dasharray:3 7; stroke-linecap:round; }
+.sync .packet{ fill:var(--accent); filter:drop-shadow(0 0 6px rgba(74,47,224,.8)); opacity:0; }
+.sync-chip{ position:absolute; z-index:6; transform:translate(-50%,-50%); display:flex; align-items:center; gap:6px; padding:6px 11px; border-radius:999px; background:#fff; border:1px solid var(--line); font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); box-shadow:0 10px 24px -14px rgba(0,0,0,.4); white-space:nowrap; transition:color .3s, border-color .3s; }
+.sync-chip i{ width:7px; height:7px; border-radius:50%; background:#12A150; }
+.sync-chip.flash{ color:var(--accent); border-color:var(--accent); }
+
+/* ---------- guide + about ---------- */
+.guide{ max-width:1180px; margin:0 auto; padding:56px 20px 10px; }
+.guide .eyebrow, .bz-about .eyebrow{ font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-bottom:10px; }
+.guide h2{ font-size:clamp(24px,4vw,34px); max-width:22ch; }
+.steps{ display:grid; gap:12px; margin-top:22px; counter-reset:s; }
+.step{ position:relative; padding:18px 18px 18px 62px; border-radius:20px; background:var(--bg-2); border:1px solid var(--line); transition:transform .4s var(--spring), box-shadow .3s, border-color .3s; }
+.step:hover{ transform:translateY(-3px); border-color:var(--accent); box-shadow:0 0 0 4px rgba(74,47,224,.08), 0 16px 30px -20px rgba(0,0,0,.35); }
+.step::before{ counter-increment:s; content:counter(s); position:absolute; left:18px; top:18px; width:30px; height:30px; border-radius:10px; background:var(--ink); color:#fff; display:grid; place-items:center; font-family:var(--mono); font-size:13px; }
+.step strong{ display:block; font-size:15px; margin-bottom:4px; }
+.step p{ color:var(--dim); font-size:14px; }
+.step .where{ display:inline-block; margin-top:10px; font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+.bz-about{ max-width:760px; margin:0 auto; padding:56px 20px 30px; }
+.bz-about h2{ font-size:clamp(24px,4vw,32px); margin-bottom:14px; }
+.bz-about p{ color:var(--dim); margin-bottom:12px; }
+.bz-about ul{ color:var(--dim); margin:0 0 14px 18px; display:grid; gap:6px; font-size:14.5px; }
+.bz-links{ display:flex; gap:16px; flex-wrap:wrap; margin-top:16px; font-weight:800; }
+.bz-links a{ color:var(--accent); text-decoration:none; }
+.bz-links a:hover{ text-decoration:underline; }
+.foot{ padding:22px 20px 40px; text-align:center; font-size:12.5px; color:var(--faint); }
+.foot a{ font-weight:700; color:var(--dim); }
+
+@media (min-width:640px){
+  .hbtn .lbl{ display:inline; }
+  .steps{ grid-template-columns:repeat(3,1fr); }
+}
+@media (min-width:1000px){
+  .head-sub{ display:inline; }
+}
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+<header class="head">
+  <a class="brand" href="../index.html#work" aria-label="Back to Bazozo work">
+    <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l8-3 8 3-8 3-8-3z"/><path d="M8 7.6V14c0 1.4 1.8 2.5 4 2.5s4-1.1 4-2.5V7.6"/><path d="M12 16.5V21"/></svg></span>
+    Lectern <em>Live demo</em>
+  </a>
+  <a class="by" href="../index.html" aria-label="Created by Bazozo Studio">by <b>Bazozo Studio</b></a>
+  <span class="head-sub">Student app and academy dashboard, running side by side. Try both.</span>
+  <div class="head-actions">
+    <button class="hbtn reset" id="resetBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="lbl">Reset demo</span></button>
+    <a class="hbtn" href="../index.html#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg><span class="lbl">Bazozo</span></a>
+  </div>
+</header>
+
+<main>
+  <section class="stage" id="stage" aria-label="Live demo">
+    <div class="switch" role="tablist" aria-label="Choose app">
+      <button role="tab" aria-selected="true" data-dev="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M11 18h2"/></svg>Student app</button>
+      <button role="tab" aria-selected="false" data-dev="laptop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v10H4z"/><path d="M2 19h20"/></svg>Academy dashboard</button>
+    </div>
+
+    <div class="dev phone on" id="phone">
+      <div class="scaler">
+        <div class="frame">
+          <span class="btn-side" style="left:-3px;top:170px;height:32px"></span>
+          <span class="btn-side" style="left:-3px;top:225px;height:62px"></span>
+          <span class="btn-side" style="left:-3px;top:300px;height:62px"></span>
+          <span class="btn-side" style="right:-3px;top:250px;height:96px"></span>
+          <div class="screen">
+            <span class="island"></span>
+            <div class="status"><span id="clock">9:41</span><span class="r"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 11.5l2.4-2.9a3.8 3.8 0 0 0-4.8 0z"/><path d="M8 5.2a7 7 0 0 1 4.9 2l1.3-1.6A9 9 0 0 0 8 3.2a9 9 0 0 0-6.2 2.4l1.3 1.6a7 7 0 0 1 4.9-2z"/></svg><svg viewBox="0 0 27 12" aria-hidden="true"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="2"/><path d="M25 4v4c.8-.3 1.3-1.1 1.3-2S25.8 4.3 25 4z" opacity=".5"/></svg></span></div>
+            <iframe id="phoneFrame" title="Lectern student app" src="lectern-app.html?mode=student"></iframe>
+            <span class="home-ind"></span>
+          </div>
+        </div>
+      </div>
+      <p class="dev-label"><b>Phone</b>Student app</p>
+    </div>
+
+    <div class="dev laptop" id="laptop">
+      <div class="scaler">
+        <div class="frame">
+          <div class="lid"><span class="cam-dot"></span>
+            <div class="screen"><iframe id="laptopFrame" title="Lectern academy dashboard" src="lectern-app.html?mode=admin"></iframe></div>
+          </div>
+          <div class="deck"></div>
+        </div>
+      </div>
+      <p class="dev-label"><b>Laptop</b>Academy Admin &amp; Super Admin dashboard</p>
+    </div>
+
+    <svg class="sync" id="sync" aria-hidden="true"><path id="syncPath"/><circle class="packet" id="packet" r="5"/></svg>
+    <span class="sync-chip" id="syncChip" hidden><i></i><span>Live sync</span></span>
+  </section>
+
+  <section class="guide" aria-labelledby="guideH">
+    <p class="eyebrow">Try it in a minute</p>
+    <h2 id="guideH">Change something on one screen, watch the other.</h2>
+    <div class="steps">
+      <div class="step"><strong>Log in as a student</strong><p>On the phone, tap the free demo student. Paid lectures are locked; unlock one with the simulated ₹499 payment.</p><span class="where">Phone</span></div>
+      <div class="step"><strong>Go live as the academy</strong><p>On the laptop, open “Live class” and flip the switch. The phone shows LIVE straight away. Join as a paid student and chat.</p><span class="where">Laptop → phone</span></div>
+      <div class="step"><strong>Run the platform</strong><p>Switch the laptop to Super Admin. Move SkillCraft to Pro, add a new academy, then log into it on the phone with its code.</p><span class="where">Laptop → phone</span></div>
+    </div>
+  </section>
+
+  <section class="bz-about" aria-labelledby="bzAbout">
+    <p class="eyebrow">About this build</p>
+    <h2 id="bzAbout">One platform, many academies.</h2>
+    <p>Lectern is a multi-tenant online classes platform (B2B2C SaaS) designed and built by Bazozo Studio as a working sample. Coaching institutes and academies sign up on a plan, upload their lectures, and their students get an app branded with the academy's own name and colour.</p>
+    <ul>
+      <li><b>Students</b> log in with an academy code, watch free lectures, unlock paid ones and join live classes with chat.</li>
+      <li><b>Academy admins</b> build playlists, add YouTube lectures, go live and move students between Free and Paid.</li>
+      <li><b>The platform owner</b> sees every academy, switches plans between Basic and Pro and adds new academies.</li>
+    </ul>
+    <p>This demo runs entirely in your browser: changes are saved on your device only and payments are simulated. The production version runs on a server with real accounts, payments and live streaming, as an installable app for students. Use “Reset demo” at the top to start fresh.</p>
+    <p>Want a platform like this for your academy or business? Bazozo Studio takes apps from first sketch to launch, with a written quote before any work starts and full code ownership on final payment.</p>
+    <nav class="bz-links" aria-label="Related"><a href="../index.html#services">What we build &rarr;</a><a href="../index.html#contact">Start a project</a></nav>
+  </section>
+</main>
+<footer class="foot">© <span id="year"></span> · <b>Created by Bazozo Studio</b> · Product design &amp; build · Concept project · <a href="../index.html#work">← Back to Bazozo</a></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="lectern-showcase.js" defer></script>
+</body>
+</html>

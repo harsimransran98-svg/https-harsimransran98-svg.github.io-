@@ -1,0 +1,14 @@
+{
+  "name": "Academy",
+  "short_name": "Academy",
+  "description": "Your academy's own learning app: courses, live classes and announcements.",
+  "start_url": "academyapp.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F7FB",
+  "theme_color": "#2952E3",
+  "icons": [
+    { "src": "academyapp-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
