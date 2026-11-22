@@ -11,6 +11,7 @@
   const uid = () => Math.random().toString(36).slice(2, 10);
   const rs = n => '₹' + Number(n).toLocaleString('en-IN');
   const params = new URLSearchParams(location.search);
+  const REEL = params.has('reel');   // recording mode for the promo reel: poster instead of a live YouTube embed, start on cue
 
   /* ================= brand presets ================= */
   const PRESETS = {
@@ -345,7 +346,8 @@
     sheet((box) => {
       const wm = el('span', { class: 'wm', text: S.user.contact + ' · ' + S.user.name });
       const player = el('div', { class: 'player' },
-        el('iframe', { src: `https://www.youtube-nocookie.com/embed/${l.yt}?autoplay=1&rel=0&modestbranding=1`, title: l.title, allow: 'autoplay; encrypted-media; picture-in-picture', allowfullscreen: true, referrerpolicy: 'strict-origin-when-cross-origin' }),
+        REEL ? el('div', { class: 'reel-poster' }, el('img', { src: thumb(l.yt), alt: '' }), el('span', { class: 'reel-bar' }, el('i')))
+          : el('iframe', { src: `https://www.youtube-nocookie.com/embed/${l.yt}?autoplay=1&rel=0&modestbranding=1`, title: l.title, allow: 'autoplay; encrypted-media; picture-in-picture', allowfullscreen: true, referrerpolicy: 'strict-origin-when-cross-origin' }),
         el('span', { class: 'wm-tile', 'aria-hidden': 'true' }), wm);
       // anti-piracy watermark: drifts to a new random spot every few seconds
       const move = () => { if (!wm.isConnected) return clearInterval(t); wm.style.left = (4 + Math.random() * 52) + '%'; wm.style.top = (8 + Math.random() * 76) + '%'; };
@@ -636,5 +638,6 @@
 
   loadState();
   applyBrand();
-  render(true);
+  if (REEL) window.academyApp.boot = () => render(true);
+  else render(true);
 })();
