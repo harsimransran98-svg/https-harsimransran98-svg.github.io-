@@ -8,10 +8,10 @@ const categories = [
   {key:'safari', label:'Safari App Extensions', mono:'SE', color:'#5c7cfa'},
   {key:'wordpress', label:'WordPress Plugins', mono:'WP', color:'#9c6ade'},
   {key:'android', label:'Android Apps', mono:'AN', color:'#3ed598'},
-  {key:'ios', label:'iOS Apps', mono:'IO', color:'#c9cdd3'},
+  {key:'ios', label:'iOS Apps', mono:'IO', color:'#5E6B80'},
   {key:'windows', label:'Windows Applications', mono:'WN', color:'#00b4d8'},
   {key:'mac', label:'macOS Applications', mono:'MC', color:'#a9adb3'},
-  {key:'androidgames', label:'Android Games', mono:'AG', color:'#b5ff3d'},
+  {key:'androidgames', label:'Android Games', mono:'AG', color:'#4F8A10'},
   {key:'iosgames', label:'iOS Games', mono:'IG', color:'#ff3d9a'},
 ];
 const catMap = Object.fromEntries(categories.map(c => [c.key, c]));
@@ -298,7 +298,7 @@ const services = [
 ];
 
 /* the first 134 entries above are finished custom builds; they get the "Live interactive build" badge */
-const FINISHED_COUNT = 134;
+const FINISHED_COUNT = 142;
 /* demo builds finished after the first 134 (keys are <category>/<slug>) */
 const liveBuilds = new Set(['firefox/pixelruler','firefox/quiettabs','firefox/readertone','firefox/sessionkeeper','firefox/speedtrim','firefox/tabharbor','firefox/typospot','safari/cliptonotes','safari/colorlift','safari/focusveil','safari/gesturebar','safari/handofftabs','safari/linklatch','safari/nightshelf','safari/pasteplain','safari/quicktranslate','safari/quietscroll','safari/readpane','safari/screentime','safari/tabcompass','safari/tabfolders','safari/trackoff','safari/zoomkeeper','android/coinkeeper','android/commutesense','android/focusjar','android/gardenlog','android/habitgrid','android/ledgerly','android/quietalarm','android/recipebox','android/ridelog','android/scanstack','android/shiftboard','android/trailmarker','android/weightwatch','ios/driftlist','ios/focusdial','ios/fuelog','ios/homesort','ios/inkwell','ios/nightframe','ios/notekeep','ios/petframe','ios/pulseform','ios/quiettimer','ios/skyframe','ios/steadyroute','ios/storyboardlite','ios/tidewatch','mac/batterybar','mac/disksweep','mac/focusbar','mac/fontbar','mac/handoffnotes','mac/mailtriage','mac/menubarledger','mac/netgauge','mac/notefloat','mac/quietdock','mac/screentimebar','mac/sleepguard','mac/wallpaperly','mac/windowsnap','windows/taskdock']);
 projects.forEach((p,i) => { p.live = i < FINISHED_COUNT || liveBuilds.has(p.cat + '/' + p.title.toLowerCase().replace(/[^a-z0-9]/g, '')); });
