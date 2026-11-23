@@ -29,6 +29,17 @@ const pad = (n, l = 2) => String(n).padStart(l, '0');
 function seeded(seed){ let t = (seed * 2654435761) >>> 0; return () => { t += 0x6D2B79F5; let r = Math.imul(t ^ t >>> 15, 1 | t); r ^= r + Math.imul(r ^ r >>> 7, 61 | r); return ((r ^ r >>> 14) >>> 0) / 4294967296; }; }
 const countFor = cats => projects.filter(p => cats.includes(p.cat)).length;
 const comingSoonHref = label => 'coming-soon.html?topic=' + encodeURIComponent(label).replace(/%20/g, '+');
+/* hero: "Watch our 30-second intro" opens the studio intro in a native dialog */
+(() => {
+  const dlg = document.getElementById('introDlg'), vid = document.getElementById('introVid'), open = document.getElementById('introOpen');
+  if(!dlg || !vid || !open || typeof dlg.showModal !== 'function'){ if(open) open.addEventListener('click', () => { location.href = 'demo/video/bazozo-intro.mp4'; }); return; }
+  open.addEventListener('click', () => { dlg.showModal(); vid.currentTime = 0; vid.play().catch(() => {}); });
+  const close = () => { vid.pause(); if(dlg.open) dlg.close(); };
+  document.getElementById('introClose').addEventListener('click', close);
+  dlg.addEventListener('click', e => { if(e.target === dlg) close(); });   // click outside the video
+  dlg.addEventListener('close', () => vid.pause());                          // Esc
+})();
+
 const hrefFor = p => p.url ? p.url : p.cat === 'web' ? `work/${slugFor(p)}.html` : `demo/${p.cat}/${slugFor(p)}.html`;
 
 /* 24px line icons */
@@ -299,7 +310,7 @@ function pvVideo(p, r){
     const v = document.createElement('video');
     v.className = 'pv-vid'; v.muted = true; v.defaultMuted = true; v.playsInline = true; v.preload = 'none';
     v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true'); v.disablePictureInPicture = true;
-    v.dataset.src = 'https://videos.pexels.com/video-files/' + clip;
+    v.dataset.src = clip.startsWith('demo/') ? clip : 'https://videos.pexels.com/video-files/' + clip;
     scr.append(v);
   }
   scr.append(mk('span', 'pv-grade'), mk('span', 'pv-ghost', p.title.replace(/["“”]/g, '').toUpperCase()));

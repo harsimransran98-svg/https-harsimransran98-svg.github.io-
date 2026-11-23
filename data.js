@@ -164,6 +164,8 @@ const projects = [
 {cat:'video',title:'"Payload"',desc:'Esports film inside a tactical HUD: high-G shake, scope-masked footage, a bracket that draws to a champion, rival radars and a kill feed.'},
 {cat:'video',title:'"Static Hours"',desc:'16mm memory film with gate weave, dust and scratches: clickable memory nodes pan the camera across camcorder frames with whispered subtitles.'},
 {cat:'video',title:'"Low Tide"',desc:'Clean-tech and maritime film in 2.39:1: an anamorphic glide over slow ocean footage, live tide and thermal curves and spatial ocean sound.'},
+{cat:'video',title:'"Bazozo Reel"',url:'demo/video/bazozo-reel.html',desc:'Instagram reel of the studio process in one clean story: a dot becomes a wireframe, a design, then a live site, cut on every beat to an original house track.'},
+{cat:'video',title:'"Academy App Reel"',url:'demo/video/academyapp-reel.html',desc:'Vertical app promo reel for the Academy school app: the real app screens tapped through on the beat, with its own soundtrack.'},
 // Old shared template, queued for upgrade (77) — shown last
 {cat:'firefox',title:'TabHarbor',desc:'Archives inactive tabs into a searchable harbor list.'},
 {cat:'firefox',title:'ReaderTone',desc:'Adjusts article contrast and warmth for easier reading.'},
@@ -301,7 +303,7 @@ const services = [
 ];
 
 /* the first 134 entries above are finished custom builds; they get the "Live interactive build" badge */
-const FINISHED_COUNT = 145;
+const FINISHED_COUNT = 147;
 /* demo builds finished after the first 134 (keys are <category>/<slug>) */
 const liveBuilds = new Set(['firefox/pixelruler','firefox/quiettabs','firefox/readertone','firefox/sessionkeeper','firefox/speedtrim','firefox/tabharbor','firefox/typospot','safari/cliptonotes','safari/colorlift','safari/focusveil','safari/gesturebar','safari/handofftabs','safari/linklatch','safari/nightshelf','safari/pasteplain','safari/quicktranslate','safari/quietscroll','safari/readpane','safari/screentime','safari/tabcompass','safari/tabfolders','safari/trackoff','safari/zoomkeeper','android/coinkeeper','android/commutesense','android/focusjar','android/gardenlog','android/habitgrid','android/ledgerly','android/quietalarm','android/recipebox','android/ridelog','android/scanstack','android/shiftboard','android/trailmarker','android/weightwatch','ios/driftlist','ios/focusdial','ios/fuelog','ios/homesort','ios/inkwell','ios/nightframe','ios/notekeep','ios/petframe','ios/pulseform','ios/quiettimer','ios/skyframe','ios/steadyroute','ios/storyboardlite','ios/tidewatch','mac/batterybar','mac/disksweep','mac/focusbar','mac/fontbar','mac/handoffnotes','mac/mailtriage','mac/menubarledger','mac/netgauge','mac/notefloat','mac/quietdock','mac/screentimebar','mac/sleepguard','mac/wallpaperly','mac/windowsnap','windows/taskdock']);
 projects.forEach((p,i) => { p.live = i < FINISHED_COUNT || liveBuilds.has(p.cat + '/' + p.title.toLowerCase().replace(/[^a-z0-9]/g, '')); });
@@ -321,6 +323,7 @@ const videoPreviews = {
   concretebloom:'17860868/17860868-sd_360_640_30fps.mp4', fieldnotes:'3195394/3195394-sd_640_360_25fps.mp4',
   payload:'3209828/3209828-sd_640_360_25fps.mp4', statichours:'3015510/3015510-sd_640_360_24fps.mp4',
   lowtide:'1918465/1918465-sd_640_360_24fps.mp4',
+  bazozoreel:'demo/video/previews/bazozo-reel.mp4',
 };
 
 /* contact scope pills: label -> line used in the pre-filled WhatsApp / email message */
