@@ -406,7 +406,7 @@
             const g = G(); if (g) g.from(tk, { scale: 0, rotation: -90, duration: .7, ease: 'back.out(2)' });
           }, 1500);
         } }, 'Pay with UPI'),
-        el('p', { class: 'lead', css: { 'text-align': 'center', 'font-size': '12px', 'margin-top': '10px' }, text: 'Demo: no money moves.' }));
+        el('p', { class: 'lead', css: { 'text-align': 'center', 'font-size': '13px', 'margin-top': '10px' }, text: 'Demo: no money moves.' }));
       box.append(body);
     }, () => render(false));
   }
@@ -460,7 +460,7 @@
     const frag = el('div', { 'data-in': '' });
     frag.append(el('div', { class: 'mtools' }, icon('zap'), 'Switch a dish off when it runs out. It shows “Sold out” on every guest phone instantly.'));
     CATS.forEach(cat => {
-      frag.append(el('h3', { text: cat, css: { margin: '16px 0 10px', 'font-size': '20px' } }));
+      frag.append(el('h3', { text: cat, css: { margin: '16px 0 10px', 'font-size': '21px' } }));
       frag.append(el('div', { class: 'mgrid' }, ...db.menu.filter(m => m.cat === cat).map(m => {
         const sw = el('button', { class: 'k-switch', role: 'switch', 'aria-checked': String(m.avail), 'aria-label': m.name + ' available', onclick: () => {
           m.avail = !m.avail; save(); render(false); toast(m.name + (m.avail ? ' back in stock' : ' marked sold out'), m.avail ? 'check' : 'fire');

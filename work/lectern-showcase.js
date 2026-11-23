@@ -24,7 +24,7 @@
     const scaler = dev.querySelector('.scaler'), frame = dev.querySelector('.frame');
     scaler.style.width = size.w * scale + 'px';
     scaler.style.height = size.h * scale + 'px';
-    frame.style.transform = `scale(${scale})`;
+    frame.style.zoom = String(scale);
   }
   function layout() {
     if (solo()) {

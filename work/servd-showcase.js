@@ -18,7 +18,7 @@
   function fit(dev, size, scale) {
     dev.querySelector('.scaler').style.width = size.w * scale + 'px';
     dev.querySelector('.scaler').style.height = size.h * scale + 'px';
-    dev.querySelector('.frame').style.transform = `scale(${scale})`;
+    dev.querySelector('.frame').style.zoom = String(scale);
   }
   function layout() {
     if (!deskMQ.matches) { $$('.scaler, .frame').forEach(n => n.removeAttribute('style')); phone.style.marginLeft = ''; return; }

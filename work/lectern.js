@@ -321,7 +321,7 @@
         el('p', { class: 'eyebrow', text: 'Lectern · classes for every academy' }),
         el('h1', { text: 'Your academy, in your students’ pocket.' }),
         el('p', { text: 'Each academy gets its own branded classroom: recorded lectures, paid courses and live classes. Log in with the code your academy gave you.' }),
-        el('div', { class: 'tenants' }, ...db.academies.slice(0, 3).map(a => el('span', { class: 'tenant' }, el('span', { class: 'av', css: { '--c': a.color, width: '26px', height: '26px', 'border-radius': '50%', 'font-size': '10px' }, text: initials(a.name) }), a.name.split(' ')[0], el('b', { text: a.code }))))),
+        el('div', { class: 'tenants' }, ...db.academies.slice(0, 3).map(a => el('span', { class: 'tenant' }, el('span', { class: 'av', css: { '--c': a.color, width: '26px', height: '26px', 'border-radius': '50%', 'font-size': '11px' }, text: initials(a.name) }), a.name.split(' ')[0], el('b', { text: a.code }))))),
       el('div', { class: 'card login-card', 'data-in': '' },
         el('h2', { text: 'Student login' }),
         el('p', { text: 'Enter your academy code and the email or phone you registered with. New here? You will be enrolled as a free student.' }),
@@ -505,7 +505,7 @@
     const form = el('form', { class: 'chat-form', onsubmit: e => { e.preventDefault(); const t = input.value.trim(); if (!t) return; postChat(a, s.name, 'student', t); input.value = ''; } }, input, el('button', { class: 'btn btn-solid', 'aria-label': 'Send' }, icon('send')));
     const reacts = el('div', { class: 'reacts' }, ...['👍', '👏', '🔥', '❓'].map(r => el('button', { type: 'button', class: 'react', text: r, onclick: () => floatEmoji(stage, r) })));
     const room = el('div', { class: 'room', role: 'dialog', 'aria-label': 'Live class' },
-      el('div', { class: 'room-top' }, el('span', { class: 'crest', css: { width: '34px', height: '34px', 'font-size': '13px', 'border-radius': '10px', '--c': a.color }, text: initials(a.name) }), el('strong', { text: a.live.title || 'Live class' }), viewers,
+      el('div', { class: 'room-top' }, el('span', { class: 'crest', css: { width: '34px', height: '34px', 'font-size': '14px', 'border-radius': '10px', '--c': a.color }, text: initials(a.name) }), el('strong', { text: a.live.title || 'Live class' }), viewers,
         el('button', { class: 'btn btn-sm btn-solid btn-danger', onclick: () => leaveRoom() }, 'Leave')),
       el('div', { class: 'room-body' }, stage, el('div', { class: 'chat' }, el('div', { class: 'chat-h', text: 'Live chat' }), msgs, reacts, form)));
     document.body.append(room); document.body.style.overflow = 'hidden'; if (lenis) lenis.stop();
@@ -688,7 +688,7 @@
         l.access = l.access === 'paid' ? 'free' : 'paid'; save();
         sw.setAttribute('aria-checked', String(l.access === 'paid')); lab.textContent = l.access === 'paid' ? 'Paid' : 'Free'; lab.style.color = l.access === 'paid' ? '#9A5B00' : 'var(--ok)';
       } });
-      const lab = el('span', { css: { 'font-size': '12px', 'font-weight': '800', width: '32px', color: l.access === 'paid' ? '#9A5B00' : 'var(--ok)' }, text: l.access === 'paid' ? 'Paid' : 'Free' });
+      const lab = el('span', { css: { 'font-size': '13px', 'font-weight': '800', width: '32px', color: l.access === 'paid' ? '#9A5B00' : 'var(--ok)' }, text: l.access === 'paid' ? 'Paid' : 'Free' });
       card.append(el('div', { class: 'lec-row' },
         el('span', { class: 'mini' }, el('img', { src: thumbUrl(l.yt), alt: '', loading: 'lazy' })),
         el('div', { class: 't' }, el('strong', { text: l.title }), el('span', { text: 'youtu.be/' + l.yt + (l.dur ? ' · ' + l.dur : '') })),
@@ -749,7 +749,7 @@
     const paid = a.students.filter(s => s.tier === 'paid').length;
     const box = el('section', { class: 'card golive' },
       el('div', { class: 'golive-top' }, toggle,
-        el('div', { class: 'grow' }, el('p', { class: 'eyebrow', text: on ? 'On air' : 'Off air' }), el('h3', { css: { 'font-size': '20px', 'margin-top': '4px' }, text: on ? 'You are live: ' + a.live.title : 'Start a live class' })),
+        el('div', { class: 'grow' }, el('p', { class: 'eyebrow', text: on ? 'On air' : 'Off air' }), el('h3', { css: { 'font-size': '21px', 'margin-top': '4px' }, text: on ? 'You are live: ' + a.live.title : 'Start a live class' })),
         on ? el('span', { class: 'chip chip-live' }, el('span', { class: 'dot' }), 'LIVE') : null),
       on ? null : el('div', { class: 'field', css: { margin: 0 } }, el('label', { text: 'Class title' }), titleIn),
       el('div', { class: 'stat-row' },
@@ -814,7 +814,7 @@
         toast(a.name + (v === 'PRO' ? ' upgraded to Pro: live classes on' : ' moved to Basic: live classes off'), v === 'PRO' ? null : 'warn');
       } })));
       return el('div', { class: 'ac-row' },
-        el('span', { class: 'crest', css: { '--c': a.color, width: '44px', height: '44px', 'font-size': '16px', 'border-radius': '13px' }, text: initials(a.name) }),
+        el('span', { class: 'crest', css: { '--c': a.color, width: '44px', height: '44px', 'font-size': '17px', 'border-radius': '13px' }, text: initials(a.name) }),
         el('div', { class: 't' }, el('strong', { text: a.name }), el('span', { text: a.code + ' · ' + rupees(PLAN_PRICE[a.plan]) + '/mo' })),
         seg,
         el('div', { class: 'ac-meta' },

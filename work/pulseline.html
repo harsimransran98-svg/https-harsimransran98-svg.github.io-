@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pulseline — doctor booking and live clinic queue · Built by Bazozo Studio</title>
+<meta name="description" content="Pulseline: patients book doctors, pay by UPI, follow a live token queue, join video consults and receive e-prescriptions on their phone, while the clinic runs reception, queue and prescriptions on a desktop. Interactive demo by Bazozo Studio.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#DDEFE8">
+<link rel="canonical" href="https://bazozo.in/work/pulseline.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Petrona:wght@500;600;700&family=Wix+Madefor+Text:wght@400;500;600;700;800&family=Kode+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#DDEFE8;
+  --text:#0E2B29;
+  --accent:#FF7A59;
+  --teal:#0B4F4A;
+  --teal-2:#137A70;
+  --mint:#BFE6D8;
+  --card:#F4FAF8;
+  --dim:#4F6B68;
+  --faint:#86A09C;
+  --line:#C7E0D7;
+  --serif:'Petrona', Georgia, serif;
+  --body:'Wix Madefor Text', system-ui, sans-serif;
+  --mono:'Kode Mono', ui-monospace, monospace;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --head-h:66px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html{ background:var(--bg); -webkit-text-size-adjust:100%; }
+body{ background:var(--bg); color:var(--text); font-family:var(--body); font-size:16px; line-height:1.5; overflow-x:clip; -webkit-font-smoothing:antialiased; }
+a{ color:inherit; text-decoration:none; } button{ font:inherit; color:inherit; cursor:pointer; border:0; background:none; }
+h1,h2,h3{ font-family:var(--serif); font-weight:600; letter-spacing:-.015em; line-height:1.1; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:12px; }
+.blob{ border-radius:58% 42% 55% 45% / 48% 56% 44% 52%; }
+
+/* header */
+.head{ position:sticky; top:0; z-index:40; height:var(--head-h); display:flex; align-items:center; gap:12px; padding:0 clamp(14px,3vw,34px); background:rgba(221,239,232,.86); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--line); }
+.brand{ display:flex; align-items:center; gap:10px; font-family:var(--serif); font-weight:700; font-size:24px; }
+.brand .mk{ width:38px; height:38px; display:grid; place-items:center; background:var(--teal); color:#fff; }
+.brand .mk svg{ width:22px; height:22px; }
+.by{ font-size:13.5px; color:var(--dim); padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--card); white-space:nowrap; transition:border-color .25s, box-shadow .25s; }
+.by b{ color:var(--text); }
+.by:hover{ border-color:var(--teal-2); box-shadow:0 0 0 4px rgba(19,122,112,.12); }
+.ecg-mini{ display:none; width:110px; height:26px; }
+.ecg-mini path{ fill:none; stroke:var(--accent); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:160; stroke-dashoffset:160; animation:ecg 2.2s linear infinite; }
+@keyframes ecg{ to{ stroke-dashoffset:-160; } }
+
+/* radial menu (replaces a hamburger) */
+.radial{ position:relative; margin-left:auto; width:50px; height:50px; }
+.rbtn{ position:relative; z-index:3; width:50px; height:50px; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-items:center; box-shadow:0 10px 24px -10px rgba(11,79,74,.7); transition:transform .5s var(--spring), background .3s; }
+.rbtn:hover{ transform:scale(1.06); }
+.rbtn .pip{ position:absolute; width:7px; height:7px; border-radius:50%; background:#fff; transition:transform .5s var(--spring), background .3s; }
+.rbtn .pip:nth-child(1){ transform:translate(0,-9px); } .rbtn .pip:nth-child(2){ transform:translate(8px,5px); } .rbtn .pip:nth-child(3){ transform:translate(-8px,5px); }
+.radial.open .rbtn{ background:var(--accent); transform:rotate(180deg); }
+.radial.open .rbtn .pip{ transform:translate(0,0) scale(1.3); }
+.ritem{ position:absolute; z-index:2; left:4px; top:4px; width:42px; height:42px; border-radius:50%; background:var(--card); border:1px solid var(--line); color:var(--teal); display:grid; place-items:center; box-shadow:0 10px 24px -12px rgba(11,79,74,.55); opacity:0; pointer-events:none; transform:scale(.4); }
+.ritem svg{ width:19px; height:19px; }
+.ritem span{ position:absolute; right:calc(100% + 8px); top:50%; transform:translateY(-50%); white-space:nowrap; padding:5px 10px; border-radius:999px; background:var(--teal); color:#fff; font-size:13px; font-weight:700; opacity:0; transition:opacity .25s; pointer-events:none; }
+.ritem:hover span, .ritem:focus-visible span{ opacity:1; }
+.ritem:hover{ background:#fff; border-color:var(--teal-2); }
+.radial.open .ritem{ pointer-events:auto; }
+.rscrim{ position:fixed; inset:0; z-index:35; background:rgba(14,43,41,.12); opacity:0; pointer-events:none; transition:opacity .3s; }
+.rscrim.on{ opacity:1; pointer-events:auto; }
+
+/* mobile switch */
+.switch{ position:sticky; top:var(--head-h); z-index:20; display:flex; gap:4px; margin:10px 12px; padding:5px; border-radius:999px; background:var(--card); border:1px solid var(--line); }
+.switch button{ flex:1; height:42px; border-radius:999px; font-size:14px; font-weight:800; color:var(--dim); display:flex; align-items:center; justify-content:center; gap:7px; transition:background .3s, color .3s; }
+.switch button svg{ width:17px; height:17px; }
+.switch button[aria-selected="true"]{ background:var(--teal); color:#fff; }
+.dev iframe{ display:block; border:0; background:#EAF5F1; }
+.dev-label{ display:none; }
+.dev-label b{ font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:3px 9px; border-radius:999px; background:rgba(11,79,74,.08); color:var(--dim); }
+
+@media (max-width:999px){
+  .dev{ display:none; } .dev.on{ display:block; }
+  .scaler, .frame, .screen, .bezel{ width:auto !important; height:auto !important; transform:none !important; position:static !important; padding:0 !important; margin:0 !important; border-radius:0 !important; background:none !important; box-shadow:none !important; }
+  .dev iframe{ width:100% !important; height:calc(100vh - var(--head-h) - 74px) !important; height:calc(100dvh - var(--head-h) - 74px) !important; }
+  .island, .status, .home-ind, .btn-side, .chin, .neck, .base, .ecg, .ecg-chip, .cam, .bg-blob{ display:none !important; }
+}
+@media (min-width:1000px){
+  .ecg-mini{ display:block; }
+  .stage{ position:relative; display:flex; align-items:center; justify-content:center; gap:clamp(40px,5vw,90px); padding:clamp(18px,3vh,36px) clamp(16px,3vw,44px) 16px; min-height:calc(100vh - var(--head-h)); min-height:calc(100dvh - var(--head-h)); overflow:hidden; isolation:isolate; }
+  .switch{ display:none; }
+  .dev{ display:block; position:relative; z-index:2; }
+  .dev-label{ display:flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; font-size:14px; font-weight:700; color:var(--dim); }
+  .scaler{ position:relative; }
+  .frame{ position:absolute; left:0; top:0; }
+  .phone .scaler{ width:330px; height:692px; } .phone .frame{ zoom:.797; }
+  .monitor .scaler{ width:921px; height:713px; } .monitor .frame{ zoom:.7; }
+}
+/* soft organic blobs behind the devices */
+.bg-blob{ position:absolute; z-index:-1; pointer-events:none; }
+.bg-blob.a{ width:520px; height:480px; left:-120px; top:8%; background:#CBE8DD; }
+.bg-blob.b{ width:420px; height:380px; right:-80px; bottom:-60px; background:#FFD9CD; opacity:.7; }
+
+/* phone */
+.phone .frame{ width:414px; height:868px; padding:12px; border-radius:62px; background:linear-gradient(145deg,#F3F6F5,#C9D3D1 40%,#EEF2F1); box-shadow:inset 0 0 0 2px #fff, 0 0 0 1px rgba(11,79,74,.18), 0 50px 80px -30px rgba(11,79,74,.55); }
+.phone .screen{ position:relative; width:390px; height:844px; border-radius:50px; overflow:hidden; background:#EAF5F1; }
+.phone .status{ height:50px; display:flex; align-items:center; justify-content:space-between; padding:8px 30px 0 36px; font-family:-apple-system, 'SF Pro Text', var(--body); font-weight:700; font-size:17px; color:#0E2B29; background:#EAF5F1; }
+.phone .status svg{ height:13px; fill:#0E2B29; } .phone .status .r{ display:flex; gap:6px; align-items:center; }
+.phone .island{ position:absolute; top:11px; left:50%; width:122px; height:35px; margin-left:-61px; border-radius:20px; background:#000; z-index:2; }
+.phone iframe{ width:390px; height:794px; }
+.phone .home-ind{ position:absolute; bottom:8px; left:50%; width:136px; height:5px; margin-left:-68px; border-radius:4px; background:rgba(14,43,41,.7); z-index:3; pointer-events:none; }
+.phone .btn-side{ position:absolute; width:4px; border-radius:2px; background:#B9C5C2; }
+
+/* desktop monitor (all-in-one) */
+.monitor .frame{ width:1316px; height:1018px; }
+.monitor .bezel{ position:relative; width:1316px; padding:18px 18px 0; border-radius:30px 30px 0 0; background:#141A19; box-shadow:0 0 0 1px rgba(0,0,0,.4); }
+.monitor .cam{ position:absolute; top:6px; left:50%; width:6px; height:6px; margin-left:-3px; border-radius:50%; background:#2E3A38; }
+.monitor .screen{ width:1280px; height:800px; overflow:hidden; background:#EAF5F1; }
+.monitor iframe{ width:1280px; height:800px; }
+.monitor .chin{ width:1316px; height:74px; border-radius:0 0 30px 30px; background:linear-gradient(180deg,#E6EEEC,#C9D6D3); display:grid; place-items:center; box-shadow:0 30px 60px -30px rgba(11,79,74,.5); }
+.monitor .chin i{ width:26px; height:26px; background:var(--teal); opacity:.18; }
+.monitor .neck{ width:250px; height:110px; margin:0 auto; background:linear-gradient(90deg,#BFCBC8,#E3EAE8 40%,#C3CFCC); clip-path:polygon(14% 0, 86% 0, 100% 100%, 0 100%); }
+.monitor .base{ width:420px; height:16px; margin:0 auto; border-radius:0 0 14px 14px; background:linear-gradient(180deg,#D6DFDD,#AEBBB8); box-shadow:0 18px 30px -12px rgba(11,79,74,.45); }
+
+/* ECG sync line between devices */
+.ecg{ position:absolute; z-index:1; pointer-events:none; overflow:visible; }
+.ecg .track{ fill:none; stroke:rgba(11,79,74,.22); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.ecg .beat{ fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 6px rgba(255,122,89,.8)); }
+.ecg-chip{ position:absolute; z-index:3; transform:translate(-50%,-50%); display:flex; align-items:center; gap:7px; padding:7px 13px; border-radius:999px; background:var(--card); border:1px solid var(--line); font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); white-space:nowrap; transition:color .3s, border-color .3s, box-shadow .3s; }
+.ecg-chip i{ width:8px; height:8px; border-radius:50%; background:#1E9E6A; }
+.ecg-chip.flash{ color:#C2482A; border-color:var(--accent); box-shadow:0 0 20px -4px rgba(255,122,89,.7); }
+
+/* guide + about */
+.guide{ max-width:1180px; margin:0 auto; padding:70px 20px 10px; }
+.eyebrow{ font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--teal-2); margin-bottom:12px; }
+.guide h2{ font-size:clamp(28px,4.4vw,44px); max-width:20ch; }
+.steps{ display:grid; gap:14px; margin-top:26px; }
+.step{ position:relative; padding:22px 22px 22px 88px; border-radius:32px; background:var(--card); border:1px solid var(--line); transition:transform .4s var(--spring), box-shadow .3s; }
+.step:hover{ transform:translateY(-4px); box-shadow:0 22px 40px -26px rgba(11,79,74,.55); }
+.step .n{ position:absolute; left:20px; top:20px; width:50px; height:50px; display:grid; place-items:center; background:var(--teal); color:#fff; font-family:var(--serif); font-size:24px; }
+.step:nth-child(2) .n{ background:var(--accent); } .step:nth-child(3) .n{ background:#6C63FF; } .step:nth-child(4) .n{ background:#D98A1F; }
+.step strong{ display:block; font-size:17px; margin-bottom:6px; }
+.step p{ color:var(--dim); font-size:15px; }
+.bz-about{ max-width:780px; margin:0 auto; padding:70px 20px 30px; }
+.bz-about h2{ font-size:clamp(28px,4vw,38px); margin-bottom:16px; }
+.bz-about p{ color:var(--dim); margin-bottom:12px; }
+.bz-about ul{ color:var(--dim); margin:0 0 14px 18px; display:grid; gap:7px; font-size:15.5px; }
+.bz-about li b{ color:var(--text); }
+.bz-links{ display:flex; gap:18px; flex-wrap:wrap; margin-top:18px; font-weight:800; }
+.bz-links a{ color:var(--teal-2); } .bz-links a:hover{ text-decoration:underline; }
+.foot{ padding:24px 20px 44px; text-align:center; font-size:13.5px; color:var(--faint); border-top:1px solid var(--line); margin-top:30px; }
+.foot a{ font-weight:700; color:var(--dim); }
+@media (min-width:640px){ .steps{ grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1100px){ .steps{ grid-template-columns:repeat(4,1fr); } .step{ padding:84px 22px 22px; } }
+@media (max-width:460px){ .by{ display:none; } }
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+<header class="head">
+  <a class="brand" href="../index.html#work" aria-label="Back to Bazozo work"><span class="mk blob"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg></span>Pulseline</a>
+  <a class="by" href="../index.html">by <b>Bazozo Studio</b></a>
+  <svg class="ecg-mini" viewBox="0 0 110 26" aria-hidden="true"><path d="M0 15 H34 L40 15 L45 4 L52 24 L57 9 L61 15 H110"/></svg>
+  <div class="radial" id="radial">
+    <button class="rbtn" id="rbtn" aria-expanded="false" aria-controls="ritems" aria-label="Open menu"><i class="pip"></i><i class="pip"></i><i class="pip"></i></button>
+    <div id="ritems">
+      <button class="ritem" data-go="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M11 18h2"/></svg><span>Patient app</span></button>
+      <button class="ritem" data-go="monitor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v12H3z"/><path d="M9 20h6"/><path d="M12 16v4"/></svg><span>Clinic desktop</span></button>
+      <button class="ritem" data-go="guide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></svg><span>How to try it</span></button>
+      <button class="ritem" data-go="reset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Reset demo</span></button>
+      <a class="ritem" href="../index.html#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg><span>Back to Bazozo</span></a>
+    </div>
+  </div>
+</header>
+<div class="rscrim" id="rscrim"></div>
+
+<main>
+  <section class="stage" id="stage" aria-label="Live demo">
+    <span class="bg-blob a blob" aria-hidden="true"></span><span class="bg-blob b blob" aria-hidden="true"></span>
+    <div class="switch" role="tablist" aria-label="Choose screen">
+      <button role="tab" aria-selected="true" data-dev="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M11 18h2"/></svg>Patient app</button>
+      <button role="tab" aria-selected="false" data-dev="monitor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v12H3z"/><path d="M9 20h6"/><path d="M12 16v4"/></svg>Clinic desktop</button>
+    </div>
+
+    <div class="dev phone on" id="phone">
+      <div class="scaler"><div class="frame">
+        <span class="btn-side" style="left:-3px;top:170px;height:32px"></span>
+        <span class="btn-side" style="left:-3px;top:225px;height:62px"></span>
+        <span class="btn-side" style="right:-3px;top:250px;height:96px"></span>
+        <div class="screen">
+          <span class="island"></span>
+          <div class="status"><span id="clock">9:41</span><span class="r"><svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 27 12" aria-hidden="true"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="#0E2B29" opacity=".4"/><rect x="2.5" y="2.5" width="17" height="7" rx="2"/></svg></span></div>
+          <iframe id="phoneFrame" title="Pulseline patient app" src="pulseline-app.html?mode=patient"></iframe>
+          <span class="home-ind"></span>
+        </div>
+      </div></div>
+      <p class="dev-label"><b>Phone</b>Patient · Riya</p>
+    </div>
+
+    <div class="dev monitor" id="monitor">
+      <div class="scaler"><div class="frame">
+        <div class="bezel"><span class="cam"></span><div class="screen"><iframe id="deskFrame" title="Pulseline clinic desktop" src="pulseline-app.html?mode=clinic"></iframe></div></div>
+        <div class="chin"><i class="blob"></i></div>
+        <div class="neck"></div><div class="base"></div>
+      </div></div>
+      <p class="dev-label"><b>Desktop</b>Clinic reception &amp; doctor</p>
+    </div>
+
+    <svg class="ecg" id="ecg" aria-hidden="true"><path class="track" id="ecgTrack"/><path class="beat" id="ecgBeat"/></svg>
+    <span class="ecg-chip" id="ecgChip" hidden><i></i><span>In sync</span></span>
+  </section>
+
+  <section class="guide" id="guide" aria-labelledby="guideH">
+    <p class="eyebrow">Try it in two minutes</p>
+    <h2 id="guideH">Book on the phone. Run the clinic on the desktop.</h2>
+    <div class="steps">
+      <div class="step"><span class="n blob">1</span><strong>Follow the live queue</strong><p>Riya holds token 7. On the desktop, press “Call next” and watch her phone count down until it says “It’s your turn”.</p></div>
+      <div class="step"><span class="n blob">2</span><strong>Book &amp; pay</strong><p>Tap the coral + on the phone, choose a doctor and a slot, pay with UPI. The booking lands in the clinic schedule instantly.</p></div>
+      <div class="step"><span class="n blob">3</span><strong>Video consult</strong><p>Book a video visit, call it in on the desktop and press “Start video call”. Accept on the phone and you are both in the room.</p></div>
+      <div class="step"><span class="n blob">4</span><strong>E-prescription</strong><p>On the desktop, add medicines and press “Send prescription”. It appears in Records on the phone, with a WhatsApp-style alert.</p></div>
+    </div>
+  </section>
+
+  <section class="bz-about" aria-labelledby="bzAbout">
+    <p class="eyebrow">About this build</p>
+    <h2 id="bzAbout">A calmer waiting room.</h2>
+    <p>Pulseline is a booking and queue system for clinics and multi-doctor practices, designed and built by Bazozo Studio as a working sample. Patients stop waiting in the lobby: they book, pay and track their turn from home, and the reception desk runs the day from one screen.</p>
+    <ul>
+      <li><b>Patients</b> book a doctor, pay by UPI, follow a live token queue, join video consults, receive e-prescriptions and get WhatsApp reminders.</li>
+      <li><b>Reception</b> calls the next token, sees every doctor’s schedule and patient history, and new bookings appear on their own.</li>
+      <li><b>Doctors</b> write prescriptions from quick-pick medicines and send them straight to the patient’s phone.</li>
+    </ul>
+    <p>This demo runs entirely in your browser: data stays on your device and payments are simulated. The production version runs on a server with real accounts, payments, WhatsApp messages and secure video.</p>
+    <p>Want this for your clinic or hospital? Bazozo Studio takes apps from first sketch to launch, with a written quote before any work starts and full code ownership on final payment.</p>
+    <nav class="bz-links" aria-label="Related"><a href="../index.html#services">What we build &rarr;</a><a href="../index.html#contact">Start a project</a></nav>
+  </section>
+</main>
+<footer class="foot">© <span id="year"></span> · <b>Created by Bazozo Studio</b> · Product design &amp; build · Concept project, fictional clinic · <a href="../index.html#work">← Back to Bazozo</a></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" integrity="sha512-lhK7xTsFM6DPXOtQQyPe+NmpoFEheKDHjM/5QzpFRiE1KySgtBfEzYz4XowvB+CAWcBLBGWinhh41uNaOtrSZA==" crossorigin="anonymous" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" integrity="sha512-qG59UiGmT9yxSnga9Fo0TnkA4t+BDP6/mHFejuCbP7+sLfNC1fDUINcztr0lzoY4w8YDGWnUFdeXgiKqW07xxw==" crossorigin="anonymous" defer></script>
+<script src="pulseline-showcase.js" defer></script>
+</body>
+</html>
