@@ -32,7 +32,7 @@ const comingSoonHref = label => 'coming-soon.html?topic=' + encodeURIComponent(l
 /* hero: "Watch our 30-second intro" opens the studio intro in a native dialog */
 (() => {
   const dlg = document.getElementById('introDlg'), vid = document.getElementById('introVid'), open = document.getElementById('introOpen');
-  if(!dlg || !vid || !open || typeof dlg.showModal !== 'function'){ if(open) open.addEventListener('click', () => { location.href = 'demo/video/bazozo-intro.mp4'; }); return; }
+  if(!dlg || !vid || !open || typeof dlg.showModal !== 'function'){ if(open) open.addEventListener('click', () => { location.href = 'demo/video/bazozo-intro.mp4?v=1'; }); return; }
   open.addEventListener('click', () => { dlg.showModal(); vid.currentTime = 0; vid.play().catch(() => {}); });
   const close = () => { vid.pause(); if(dlg.open) dlg.close(); };
   document.getElementById('introClose').addEventListener('click', close);
