@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex">
+<title>Bazozo Reel</title>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="bazozo-reel.css">
+</head>
+<body>
+<div class="fit" id="fit">
+  <div class="stage" id="stage">
+    <p class="cap mono" id="cap"></p>
+    <div class="frame" id="frame">
+      <i class="blk" style="--x:5;--y:3;--w:90;--h:3"></i>
+      <i class="blk t" style="--x:8;--y:12;--w:72;--h:5"></i>
+      <i class="blk t" style="--x:8;--y:19;--w:50;--h:5"></i>
+      <i class="blk s" style="--x:8;--y:27;--w:60;--h:1.6"></i>
+      <i class="blk b" style="--x:8;--y:31;--w:26;--h:4"></i>
+      <i class="blk i" style="--x:8;--y:39;--w:84;--h:26"></i>
+      <i class="blk c" style="--x:8;--y:69;--w:26;--h:20"></i>
+      <i class="blk c" style="--x:37;--y:69;--w:26;--h:20"></i>
+      <i class="blk c" style="--x:66;--y:69;--w:26;--h:20"></i>
+      <div class="shots" id="shots"></div>
+    </div>
+    <p class="label" id="label"></p>
+    <div class="end" id="end">
+      <h1 class="word" id="word" aria-label="bazozo"></h1>
+      <p class="tag mono" id="tag">websites · apps · extensions · games</p>
+      <p class="url" id="url">bazozo.in</p>
+    </div>
+  </div>
+</div>
+<button type="button" class="play" id="play" aria-label="Play with sound">Play with sound</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" defer></script>
+<script src="bazozo-reel.js" defer></script>
+</body>
+</html>
