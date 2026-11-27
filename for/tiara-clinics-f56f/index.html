@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tiara Clinics · demo by Bazozo Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#FBF7F4; --text:#1F2430; --accent:#C2477A; --accent2:#5B8DEF; --soft:#F3E6EC; --r:26px; --head:'Fraunces', Georgia, serif; --body:'Inter', system-ui, sans-serif; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ background:var(--bg); color:var(--text); font-family:var(--body); overflow-x:clip; }
+body{ background:var(--bg); line-height:1.6; }
+a{ color:inherit; }
+.demo-bar{ position:sticky; top:0; z-index:30; background:var(--text); color:var(--bg); font-size:13px; text-align:center; padding:8px 16px; }
+header{ position:sticky; top:34px; z-index:20; display:flex; align-items:center; justify-content:space-between; padding:14px clamp(16px,5vw,56px); background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:blur(10px); }
+.logo{ font-family:var(--head); font-weight:800; font-size:clamp(18px,2.4vw,24px); letter-spacing:-.01em; text-decoration:none; }
+nav{ display:flex; gap:26px; }
+nav a{ text-decoration:none; font-weight:500; position:relative; }
+nav a::after{ content:''; position:absolute; left:0; right:100%; bottom:-4px; height:2px; background:var(--accent); transition:right .35s cubic-bezier(.2,.8,.2,1); }
+nav a:hover::after{ right:0; }
+.burger{ display:none; width:44px; height:44px; border-radius:50%; border:1px solid color-mix(in srgb, var(--text) 25%, transparent); background:transparent; cursor:pointer; position:relative; }
+.burger span{ position:absolute; left:12px; right:12px; height:2px; background:var(--text); transition:transform .45s cubic-bezier(.68,-.6,.32,1.6), opacity .2s; }
+.burger span:nth-child(1){ top:16px; } .burger span:nth-child(2){ top:21px; } .burger span:nth-child(3){ top:26px; }
+.burger[aria-expanded="true"] span:nth-child(1){ transform:translateY(5px) rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+.burger[aria-expanded="true"] span:nth-child(3){ transform:translateY(-5px) rotate(-45deg); }
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:999px; font-weight:600; text-decoration:none; border:1.5px solid var(--accent); background:var(--accent); color:#fff; transition:transform .25s, box-shadow .3s, background .3s; will-change:transform; }
+.btn:hover{ box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent), 0 12px 30px -10px var(--accent); }
+.btn.ghost{ background:transparent; color:var(--text); border-color:color-mix(in srgb, var(--text) 30%, transparent); }
+.btn.ghost:hover{ border-color:var(--accent); }
+.hero{ min-height:78vh; display:grid; align-content:center; gap:22px; padding:60px clamp(16px,5vw,56px) 40px; position:relative; overflow:hidden; }
+.hero .blob{ position:absolute; width:min(60vw,620px); aspect-ratio:1; right:-12%; top:-10%; border-radius:42% 58% 63% 37% / 41% 44% 56% 59%; background:radial-gradient(circle at 30% 30%, var(--accent2), var(--accent)); opacity:.18; filter:blur(4px); }
+.kicker{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+h1{ font-family:var(--head); font-size:clamp(40px,8vw,96px); line-height:.98; letter-spacing:-.02em; max-width:14ch; }
+.lead{ font-size:clamp(17px,2vw,20px); max-width:52ch; opacity:.85; }
+.proof{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; font-size:16px; }
+.proof .st{ color:#F5A623; letter-spacing:2px; font-size:18px; }
+.ctas{ display:flex; flex-wrap:wrap; gap:12px; }
+section{ padding:80px clamp(16px,5vw,56px); }
+h2{ font-family:var(--head); font-size:clamp(30px,5vw,54px); line-height:1.05; margin-bottom:28px; letter-spacing:-.01em; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; }
+.card{ background:var(--soft); border-radius:var(--r); padding:26px; transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; }
+.card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px -22px color-mix(in srgb, var(--text) 45%, transparent); }
+.card b{ display:block; font-size:19px; margin-bottom:6px; }
+.card .n{ font-family:var(--head); color:var(--accent); font-size:14px; }
+.rev{ border:1.5px dashed color-mix(in srgb, var(--text) 25%, transparent); background:transparent; }
+.visit{ display:grid; grid-template-columns:1.2fr 1fr; gap:24px; align-items:start; }
+.big{ font-family:var(--head); font-size:clamp(26px,4vw,40px); line-height:1.1; }
+footer{ padding:40px clamp(16px,5vw,56px) 60px; border-top:1px solid color-mix(in srgb, var(--text) 15%, transparent); font-size:14px; opacity:.8; }
+.sticky-cta{ position:fixed; left:16px; right:16px; bottom:16px; z-index:25; display:none; justify-content:center; }
+@media (max-width:760px){
+  nav{ position:fixed; inset:0; top:0; flex-direction:column; justify-content:center; align-items:center; gap:30px; font-size:26px; background:var(--bg); transform:translateY(-100%); transition:transform .6s cubic-bezier(.7,0,.2,1); z-index:15; }
+  nav.open{ transform:none; }
+  .burger{ display:block; z-index:16; }
+  .visit{ grid-template-columns:1fr; }
+  .sticky-cta{ display:flex; }
+  .hero{ min-height:auto; padding-top:40px; }
+}
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="demo-bar">Demo made for Tiara Clinics by Bazozo Studio · not live yet</div>
+<header>
+  <a class="logo" href="#top">Tiara Clinics</a>
+  <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+  <nav id="nav"><a href="#services">Services</a><a href="#reviews">Reviews</a><a href="#visit">Visit</a></nav>
+</header>
+<main id="top">
+  <div class="hero">
+    <div class="blob" aria-hidden="true"></div>
+    <p class="kicker rv">Appointments in two taps · Birmingham</p>
+    <h1 class="rv">Tiara Clinics</h1>
+    <p class="lead rv">Medical spa in Birmingham. Everything your customers look for, on one fast page that works perfectly on a phone.</p>
+    <div class="rv"><div class="proof"><span class="st" aria-hidden="true">★★★★★</span><b>4.8</b><span>from 175 Google reviews</span></div></div>
+    <div class="ctas rv"><a class="btn mag" href="#visit">Book an appointment</a><a class="btn ghost mag" href="tel:+447379027375">Call +447379027375</a><a class="btn ghost mag" href="https://wa.me/447379027375" rel="noopener">WhatsApp us</a></div>
+  </div>
+  <section id="services">
+    <h2 class="rv">What we offer</h2>
+    <div class="grid"><div class="card rv"><span class="n">01</span><b>Consultations</b><span>A short line about consultations, written with you.</span></div><div class="card rv"><span class="n">02</span><b>Treatments</b><span>A short line about treatments, written with you.</span></div><div class="card rv"><span class="n">03</span><b>Aftercare</b><span>A short line about aftercare, written with you.</span></div><div class="card rv"><span class="n">04</span><b>Online booking</b><span>A short line about online booking, written with you.</span></div><div class="card rv"><span class="n">05</span><b>Reminders by WhatsApp</b><span>A short line about reminders by whatsapp, written with you.</span></div><div class="card rv"><span class="n">06</span><b>Easy rescheduling</b><span>A short line about easy rescheduling, written with you.</span></div></div>
+  </section>
+  <section id="reviews">
+    <h2 class="rv">Rated 4.8 by 175 customers</h2>
+    <div class="grid"><div class="card rev rv"><span class="st" aria-hidden="true">★★★★★</span><b>Your best Google review</b><span>Your real reviews appear here, pulled from your Google listing.</span></div><div class="card rev rv"><span class="st" aria-hidden="true">★★★★★</span><b>Your best Google review</b><span>Your real reviews appear here, pulled from your Google listing.</span></div><div class="card rev rv"><span class="st" aria-hidden="true">★★★★★</span><b>Your best Google review</b><span>Your real reviews appear here, pulled from your Google listing.</span></div></div>
+  </section>
+  <section id="visit">
+    <h2 class="rv">Visit or get in touch</h2>
+    <div class="visit">
+      <div class="rv"><p class="big">1559 Stratford Road</p><p style="margin-top:14px"><a class="btn ghost mag" href="https://www.google.com/maps/place/Tiara+Clinics?ftid=0x4870bdfd583c320b:0x5d08918c2573f335" rel="noopener">Open in Google Maps</a></p></div>
+      <div class="card rv"><b>Book an appointment</b><span>One tap to call, message or book. Opening hours and the booking form go here.</span><div class="ctas" style="margin-top:16px"><a class="btn ghost mag" href="tel:+447379027375">Call +447379027375</a><a class="btn ghost mag" href="https://wa.me/447379027375" rel="noopener">WhatsApp us</a></div></div>
+    </div>
+  </section>
+</main>
+<footer>Demo built for Tiara Clinics by Bazozo Studio. Like it? Reply to my message: it can be live on your own domain in about a week, with your photos, services and real reviews.</footer>
+<div class="sticky-cta"><a class="btn mag" href="#visit">Book an appointment</a></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+  const b = document.querySelector('.burger'), n = document.getElementById('nav');
+  b.addEventListener('click', () => { const o = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', String(o)); n.classList.toggle('open', o); });
+  n.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { b.setAttribute('aria-expanded', 'false'); n.classList.remove('open'); }));
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+  if(window.Lenis){ const lenis = new Lenis(); lenis.on('scroll', ScrollTrigger.update); gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 761px)', () => {
+    gsap.utils.toArray('.rv').forEach(el => gsap.from(el, { y:40, opacity:0, duration:.9, ease:'power3.out', scrollTrigger:{ trigger:el, start:'top 88%' } }));
+    gsap.to('.blob', { rotate:120, yPercent:30, ease:'none', scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:1 } });
+    document.querySelectorAll('.mag').forEach(el => {
+      el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(); gsap.to(el, { x:(e.clientX - r.left - r.width / 2) * .25, y:(e.clientY - r.top - r.height / 2) * .35, duration:.3 }); });
+      el.addEventListener('mouseleave', () => gsap.to(el, { x:0, y:0, duration:.5, ease:'elastic.out(1,.4)' }));
+    });
+  });
+  mm.add('(max-width: 760px)', () => { gsap.utils.toArray('.rv').forEach(el => gsap.from(el, { y:20, opacity:0, duration:.6, scrollTrigger:{ trigger:el, start:'top 92%' } })); });
+})();
+</script>
+</body>
+</html>

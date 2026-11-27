@@ -1,56 +1,74 @@
 User-agent: *
+Disallow: /for/
 Allow: /
 
 User-agent: GPTBot
+Disallow: /for/
 Allow: /
 
 User-agent: ChatGPT-User
+Disallow: /for/
 Allow: /
 
 User-agent: ClaudeBot
+Disallow: /for/
 Allow: /
 
 User-agent: Claude-Web
+Disallow: /for/
 Allow: /
 
 User-agent: PerplexityBot
+Disallow: /for/
 Allow: /
 
 User-agent: Google-Extended
+Disallow: /for/
 Allow: /
 
 User-agent: CCBot
+Disallow: /for/
 Allow: /
 
 # AI search engines (ChatGPT search, Claude, Perplexity, Apple, Bing Copilot, DuckDuckGo, Meta, Amazon)
 User-agent: OAI-SearchBot
+Disallow: /for/
 Allow: /
 
 User-agent: Claude-SearchBot
+Disallow: /for/
 Allow: /
 
 User-agent: Claude-User
+Disallow: /for/
 Allow: /
 
 User-agent: Perplexity-User
+Disallow: /for/
 Allow: /
 
 User-agent: Applebot
+Disallow: /for/
 Allow: /
 
 User-agent: Applebot-Extended
+Disallow: /for/
 Allow: /
 
 User-agent: Bingbot
+Disallow: /for/
 Allow: /
 
 User-agent: DuckAssistBot
+Disallow: /for/
 Allow: /
 
 User-agent: Meta-ExternalAgent
+Disallow: /for/
 Allow: /
 
 User-agent: Amazonbot
+Disallow: /for/
 Allow: /
 
 Sitemap: https://bazozo.in/sitemap.xml
